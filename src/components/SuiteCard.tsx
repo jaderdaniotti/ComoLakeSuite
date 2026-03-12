@@ -20,27 +20,27 @@ export default function SuiteCard({
   alt,
 }: SuiteCardProps) {
   return (
-    <article className="group overflow-hidden rounded-lg bg-bianco border border-grigio shadow-sm hover:shadow-md transition-shadow">
+    <article className="group relative aspect-4/3 rounded-lg bg-bianco border border-grigio shadow-sm hover:shadow-md transition-shadow">
       <Link href={href} className="block">
-        <div className="relative aspect-[4/3] overflow-hidden bg-grigio">
+        <div className="absolute inset-0  overflow-hidden bg-grigio border border-blu">
           <Image
             src={src}
             alt={alt}
             fill
-            className="object-cover transition-transform group-hover:scale-105"
+            className="object-cover group-hover:scale-103 transition-all duration-300 "
             sizes="(max-width: 768px) 100vw, 50vw"
           />
         </div>
-        <div className="p-5">
-          <p className="text-sm font-medium text-scuro/70 uppercase tracking-wide">
+        <div className="px-2 py-1 absolute -top-5 left-1/2 -translate-x-1/2 right-0 bg-bianco border border-blu z-20 w-fit">
+          {/* <p className="text-sm font-medium text-scuro/70 uppercase tracking-wide">
             {sottotitolo}
-          </p>
-          <h2 className="mt-1 text-xl font-semibold text-scuro">{titolo}</h2>
-          <p className="mt-3 text-sm text-scuro/80 line-clamp-2">{descrizione}</p>
+          </p> */}
+          <h2 className=" text-xl font-light text-blu ">{titolo}</h2>
+          {/* <p className="mt-3 text-sm text-scuro/80 line-clamp-2">{descrizione}</p>
           <span className="mt-4 inline-flex items-center gap-1 text-sm font-medium text-scuro group-hover:underline">
             Leggi tutto e prenota
             <ArrowRight size={16} className="transition-transform group-hover:translate-x-1" />
-          </span>
+          </span> */}
         </div>
       </Link>
     </article>

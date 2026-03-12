@@ -3,7 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useState } from "react";
-import { Menu, X } from "lucide-react";
+import { Menu } from "lucide-react";
 import images from "@/src/images";
 
 const suiteLinks = [
@@ -16,124 +16,114 @@ const suiteLinks = [
 ];
 
 export default function Header() {
-  const [menuAperto, setMenuAperto] = useState(false);
   const [suiteAperto, setSuiteAperto] = useState(false);
 
+  const chiudiDrawer = () => {
+    const checkbox = document.getElementById("drawer-nav") as HTMLInputElement | null;
+    if (checkbox) checkbox.checked = false;
+  };
+
   return (
-    <header className="sticky top-0 z-50 bg-scuro text-bianco border-b border-scuro ">
-      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-        <Link href="/" className="flex items-center shrink-0" onClick={() => setMenuAperto(false)}>
-          <Image
-            src={images.logobianco}
-            alt="Como Lake Suites"
-            width={160}
-            height={48}
-            className="h-10 w-auto object-contain"
-          />
-        </Link>
+    <div className="drawer drawer-end">
+      <input id="drawer-nav" type="checkbox" className="drawer-toggle" />
+      <div className="drawer-content flex flex-col">
+        <header className="fixed w-full top-0 z-50 glassbg text-bianco border-b border-scuro">
+          <div className="mx-auto flex h-25 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+            <Link href="/" className="flex items-center shrink-0">
+              <Image
+                src={images.logobianco}
+                alt="Como Lake Suites"
+                className="h-20 w-auto object-contain"
+              />
+            </Link>
 
-        <nav className="hidden md:flex md:items-center md:gap-8">
-          <Link
-            href="/"
-            className="text-bianco hover:bg-bianco hover:text-scuro px-3 py-2 rounded transition-colors text-sm font-medium"
-          >
-            Home
-          </Link>
-          <div className="relative">
-            <button
-              type="button"
-              onClick={() => setSuiteAperto(!suiteAperto)}
-              className="flex items-center gap-1 text-bianco hover:bg-bianco hover:text-scuro px-3 py-2 rounded transition-colors text-sm font-medium"
-            >
-              Le Suites
-            </button>
-            {suiteAperto && (
-              <div className="absolute left-0 top-full mt-0 w-56 rounded border border-grigio bg-bianco py-2 shadow-lg">
-                {suiteLinks.map((link) => (
-                  <Link
-                    key={link.href}
-                    href={link.href}
-                    className="block px-4 py-2 text-sm text-scuro hover:bg-chiaro"
-                    onClick={() => setSuiteAperto(false)}
-                  >
-                    {link.label}
-                  </Link>
-                ))}
+            <nav className="hidden md:flex md:items-center md:gap-8 font-light tracking-wide text-md">
+              <Link href="/" className="link-nav text-bianco">
+                Home
+              </Link>
+              <div className="relative">
+                <button
+                  type="button"
+                  onClick={() => setSuiteAperto(!suiteAperto)}
+                  className="link-nav text-bianco"
+                >
+                  Le Suites
+                </button>
+                {suiteAperto && (
+                  <div className="absolute left-0 top-full mt-0 w-56 rounded border border-white glassbg py-2 shadow-lg">
+                    {suiteLinks.map((link) => (
+                      <Link
+                        key={link.href}
+                        href={link.href}
+                        className="block px-4 py-2 text-bianco link-nav"
+                        onClick={() => setSuiteAperto(false)}
+                      >
+                        {link.label}
+                      </Link>
+                    ))}
+                  </div>
+                )}
               </div>
-            )}
-          </div>
-          <Link
-            href="/i-nostri-servizi"
-            className="text-bianco hover:bg-bianco hover:text-scuro px-3 py-2 rounded transition-colors text-sm font-medium"
-          >
-            Servizi
-          </Link>
-          <Link
-            href="/contatti"
-            className="text-bianco hover:bg-bianco hover:text-scuro px-3 py-2 rounded transition-colors text-sm font-medium"
-          >
-            Contatti
-          </Link>
-        </nav>
+              <Link href="/i-nostri-servizi" className="link-nav text-bianco">
+                Servizi
+              </Link>
+              <Link href="/contatti" className="link-nav text-bianco">
+                Contatti
+              </Link>
+            </nav>
 
-        <button
-          type="button"
-          className="md:hidden rounded p-2 text-bianco hover:bg-bianco/10"
-          onClick={() => setMenuAperto(!menuAperto)}
-          aria-label="Menu"
-        >
-          {menuAperto ? <X size={24} /> : <Menu size={24} />}
-        </button>
+            <label
+              htmlFor="drawer-nav"
+              aria-label="Apri menu"
+              className="btn btn-square btn-ghost md:hidden text-bianco hover:bg-bianco/10 hover:text-bianco"
+            >
+              <Menu className="h-6 w-6" />
+            </label>
+          </div>
+        </header>
       </div>
 
-      {menuAperto && (
-        <div className="md:hidden border-t border-bianco/20 bg-scuro px-4 py-4">
-          <div className="flex flex-col gap-1">
-            <Link
-              href="/"
-              className="px-3 py-2 text-bianco hover:bg-bianco/10 rounded"
-              onClick={() => setMenuAperto(false)}
-            >
+      <div className="drawer-side z-[60] md:hidden">
+        <label
+          htmlFor="drawer-nav"
+          aria-label="Chiudi menu"
+          className="drawer-overlay"
+        />
+        <ul className="menu p-4 w-80 min-h-full bg-blu text-2xl font-extralight pt-12 tracking-wide">
+          <li>
+            <Link href="/" className="text-bianco hover:bg-bianco/10" onClick={chiudiDrawer}>
               Home
             </Link>
-            <div className="py-2">
-              <span className="block px-3 py-1 text-sm font-semibold text-bianco">Le Suites</span>
-              {suiteLinks.map((link) => (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  className="block px-6 py-2 text-bianco hover:bg-bianco/10 rounded"
-                  onClick={() => setMenuAperto(false)}
-                >
-                  {link.label}
-                </Link>
-              ))}
-            </div>
-            <Link
-              href="/i-nostri-servizi"
-              className="px-3 py-2 text-bianco hover:bg-bianco/10 rounded"
-              onClick={() => setMenuAperto(false)}
-            >
+          </li>
+         
+          <li>
+            <Link href="/i-nostri-servizi" className="text-bianco hover:bg-bianco/10" onClick={chiudiDrawer}>
               Servizi
             </Link>
-            <Link
-              href="/contatti"
-              className="px-3 py-2 text-bianco hover:bg-bianco/10 rounded"
-              onClick={() => setMenuAperto(false)}
-            >
+          </li>
+          <li>
+            <Link href="/contatti" className="text-bianco hover:bg-bianco/10" onClick={chiudiDrawer}>
               Contatti
             </Link>
-            <a
-              href="https://www.comolakesuites.com/en/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="px-3 py-2 text-bianco hover:bg-bianco/10 rounded"
-            >
-              English
-            </a>
-          </div>
-        </div>
-      )}
-    </header>
+          </li>
+          <li className="menu-title">
+            <span className="text-bianco/80 text-sm uppercase tracking-widest">
+              Le Suites
+            </span>
+          </li>
+          {suiteLinks.map((link) => (
+            <li key={link.href}>
+              <Link
+                href={link.href}
+                className="text-bianco hover:bg-bianco/10 pl-6"
+                onClick={chiudiDrawer}
+              >
+                {link.label}
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
   );
 }

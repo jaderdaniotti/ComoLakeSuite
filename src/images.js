@@ -193,6 +193,8 @@ import duomo_24 from "./images/duomo/_MG_5411a.webp";
 import duomo_25 from "./images/duomo/_MG_5419a.webp";
 import duomo_26 from "./images/duomo/_MG_5431a.webp";
 import duomo_27 from "./images/duomo/_MG_5435a.webp";
+import marilena from "./images/marilena.webp";
+import massimiliano from "./images/max.webp";
 
 /**
  * Immagini per suite, generate da scripts/generate-images.js
@@ -200,15 +202,16 @@ import duomo_27 from "./images/duomo/_MG_5435a.webp";
  */
 const images = {
   logobianco,
-
+  marilena,
+  massimiliano,
   // Home – sostituire quando hai le immagini in public/images/
-  heroHome: "https://www.comolakesuites.com/wp-content/uploads/hero-home.jpg",
+  heroHome: volta_5,
   esperienzaVideo: "https://www.comolakesuites.com/wp-content/uploads/esperienza-video.jpg",
 
   // Suite Volta
-  suiteVoltaHero: volta_0,
+  suiteVoltaHero: volta_5,
   suiteVoltaGallery: [volta_0, volta_1, volta_2, volta_3, volta_4, volta_5, volta_6, volta_7, volta_8, volta_9, volta_10, volta_11, volta_12, volta_13, volta_14, volta_15, volta_16, volta_17, volta_18, volta_19, volta_20, volta_21, volta_22, volta_23, volta_24, volta_25, volta_26, volta_27, volta_28, volta_29, volta_30, volta_31, volta_32, volta_33, volta_34, volta_35, volta_36],
-  thumbVolta: volta_0,
+  thumbVolta: volta_5,
 
   // Suite Cavour
   suiteCavourHero: cavour_0,
@@ -226,9 +229,9 @@ const images = {
   thumbComoSole: "https://www.comolakesuites.com/wp-content/uploads/placeholder-suite.jpg",
 
   // Suite Dante
-  suiteDanteHero: dante_0,
+  suiteDanteHero: dante_38,
   suiteDanteGallery: [dante_0, dante_1, dante_2, dante_3, dante_4, dante_5, dante_6, dante_7, dante_8, dante_9, dante_10, dante_11, dante_12, dante_13, dante_14, dante_15, dante_16, dante_17, dante_18, dante_19, dante_20, dante_21, dante_22, dante_23, dante_24, dante_25, dante_26, dante_27, dante_28, dante_29, dante_30, dante_31, dante_32, dante_33, dante_34, dante_35, dante_36, dante_37, dante_38, dante_39, dante_40, dante_41, dante_42, dante_43, dante_44, dante_45, dante_46, dante_47, dante_48, dante_49, dante_50],
-  thumbDante: dante_0,
+  thumbDante: dante_38,
 
   // Suite VistaDuomo
   suiteVistaDuomoHero: duomo_0,
