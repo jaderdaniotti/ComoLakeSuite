@@ -117,7 +117,7 @@ export default function Footer() {
         className="absolute bottom-6 right-6 flex h-12 w-12 items-center justify-center rounded-full bg-[#1e3a5f] text-blu hover:bg-[#2a4a6f] transition-colors"
         aria-label="Torna su"
       >
-        <ChevronUp size={24} />
+        <ChevronUp size={24} className="text-bianco" />
       </button>
     </footer>
   );

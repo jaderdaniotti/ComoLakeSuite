@@ -3,7 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useState } from "react";
-import { Menu } from "lucide-react";
+import { Menu, Hotel } from "lucide-react";
 import images from "@/src/images";
 
 const suiteLinks = [
@@ -89,7 +89,15 @@ export default function Header() {
           aria-label="Chiudi menu"
           className="drawer-overlay"
         />
-        <ul className="menu p-4 w-80 min-h-full bg-blu text-2xl font-extralight pt-12 tracking-wide">
+        <ul className="pt-6 menu p-4 w-80 min-h-full bg-blu text-2xl font-extralight tracking-wide justify-center items-center ">
+        <div className="flex mb-4 justify-center pb-6 border-b border-bianco">
+          <Image
+            src={images.logobianco}
+            alt="Como Lake Suites"
+            width={100}
+            height={100}
+          />
+        </div>
           <li>
             <Link href="/" className="text-bianco hover:bg-bianco/10" onClick={chiudiDrawer}>
               Home
@@ -107,21 +115,22 @@ export default function Header() {
             </Link>
           </li>
           <li className="menu-title">
-            <span className="text-bianco/80 text-sm uppercase tracking-widest">
-              Le Suites
+            <span className="text-bianco/80 uppercase tracking-widest flex items-center gap-2 font-normal text-xl">
+               Le Suites <Hotel className="w-4 h-4" />
             </span>
           </li>
           {suiteLinks.map((link) => (
             <li key={link.href}>
               <Link
                 href={link.href}
-                className="text-bianco hover:bg-bianco/10 pl-6"
+                className="text-bianco hover:bg-bianco/10 pl-6 text-lg"
                 onClick={chiudiDrawer}
               >
                 {link.label}
               </Link>
             </li>
           ))}
+
         </ul>
       </div>
     </div>
