@@ -48,7 +48,7 @@ export default function HeroCarousel({ slides }: Props) {
   if (total === 0) return null;
 
   return (
-    <section className=" h-screen min-h-[400px] bg-scuro overflow-hidden ">
+    <section className=" h-screen min-h-[400px] overflow-hidden ">
       {/* Immagini: tutte in stack, solo quella attiva visibile */}
       {slides.map((s, i) => (
         <div

@@ -57,7 +57,7 @@ export default function ApartmentsMap({ apartments }: Props) {
   if (list.length === 0) return null;
 
   return (
-    <section className="w-full overflow-hidden rounded-2xl border border-grigio bg-bianco shadow-sm">
+    <section className="w-full overflow-hidden rounded-2xl border border-grigio bg-bianco shadow-sm" data-lenis-prevent>
       <div className="h-[420px] w-full [&_.leaflet-container]:h-full [&_.leaflet-container]:w-full [&_.leaflet-container]:rounded-2xl">
         <MapContainer
           center={[45.824, 9.077]}

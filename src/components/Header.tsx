@@ -27,7 +27,7 @@ export default function Header() {
     <div className="drawer drawer-end z-[9999] ">
       <input id="drawer-nav" type="checkbox" className="drawer-toggle" />
       <div className="drawer-content flex flex-col">
-        <header className="fixed w-full top-0 z-50 bg-blu text-bianco border-b border-scuro">
+        <header className="relative w-full top-0 z-50 bg-blu text-bianco border-b border-scuro">
           <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
             <Link href="/" className="flex items-center shrink-0">
               <Image

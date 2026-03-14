@@ -181,7 +181,7 @@ export default function LayoutSuite({
                       key={i}
                       type="button"
                       onClick={() => setActiveIndex(i)}
-                      className={`relative h-20 w-28 flex-shrink-0 overflow-hidden rounded-md border ${
+                      className={`relative lg:h-20 lg:w-28 h-12 w-18 flex-shrink-0 overflow-hidden rounded-md border ${
                         i === activeIndex
                           ? "border-blu border"
                           : "border-transparent"
