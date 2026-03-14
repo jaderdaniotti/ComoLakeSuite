@@ -196,12 +196,14 @@ import duomo_27 from "./images/duomo/_MG_5435a.webp";
 import marilena from "./images/marilena.webp";
 import massimiliano from "./images/max.webp";
 import fotocomo from "./images/fotocomo.webp";
+import logonero from "./images/logo-verticale.webp";
 
 /**
  * Immagini per suite, generate da scripts/generate-images.js
  * Hero = prima immagine, Gallery = tutte in ordine, Thumb = prima immagine.
  */
 const images = {
+  logonero,
   logobianco,
   marilena,
   massimiliano,

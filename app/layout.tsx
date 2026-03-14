@@ -14,6 +14,9 @@ export const metadata: Metadata = {
   title: "Como Lake Suites - Luxury Suites sul Lago di Como",
   description:
     "Alloggi di charme a Como e dintorni. Suite Volta, Cavour, Cernobbio, Como Sole, Dante, Vista Duomo. Servizi di qualità e vista lago.",
+  icons: {
+    icon: "/icon.webp",
+  },
 };
 
 export default function RootLayout({
