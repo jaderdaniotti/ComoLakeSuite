@@ -195,6 +195,7 @@ import duomo_26 from "./images/duomo/_MG_5431a.webp";
 import duomo_27 from "./images/duomo/_MG_5435a.webp";
 import marilena from "./images/marilena.webp";
 import massimiliano from "./images/max.webp";
+import fotocomo from "./images/fotocomo.webp";
 
 /**
  * Immagini per suite, generate da scripts/generate-images.js
@@ -204,6 +205,7 @@ const images = {
   logobianco,
   marilena,
   massimiliano,
+  fotocomo,
   // Home – sostituire quando hai le immagini in public/images/
   heroHome: volta_5,
   esperienzaVideo: "https://www.comolakesuites.com/wp-content/uploads/esperienza-video.jpg",
@@ -239,14 +241,7 @@ const images = {
   thumbVistaDuomo: duomo_0,
 
   // Servizi (placeholder – aggiungere in public/images/ se necessario)
-  serviziParcheggio: "https://www.comolakesuites.com/wp-content/uploads/servizi-parcheggio.jpg",
-  serviziWifi: "https://www.comolakesuites.com/wp-content/uploads/servizi-wifi.jpg",
-  serviziTerrazza: "https://www.comolakesuites.com/wp-content/uploads/servizi-terrazza.jpg",
-  serviziPulizie: "https://www.comolakesuites.com/wp-content/uploads/servizi-pulizie.jpg",
-  serviziColazione: "https://www.comolakesuites.com/wp-content/uploads/servizi-colazione.jpg",
-  serviziCucina: "https://www.comolakesuites.com/wp-content/uploads/servizi-cucina.jpg",
-  serviziBiancheria: "https://www.comolakesuites.com/wp-content/uploads/servizi-biancheria.jpg",
-  serviziClima: "https://www.comolakesuites.com/wp-content/uploads/servizi-clima.jpg",
+  serviziHero: volta_4,
 };
 
 export default images;

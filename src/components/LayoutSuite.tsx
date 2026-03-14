@@ -103,17 +103,18 @@ export default function LayoutSuite({
 
   return (
     <div className="bg-bianco">
-      <section className="relative h-screen min-h-[400px] bg-scuro">
+      {/* hero */}
+      <section className="relative md:min-h-screen min-h-[600px] bg-scuro">
         <Image
           src={heroSrc}
           alt={altHero}
           fill
           className="object-cover"
           priority
-          sizes="100vw"
+          sizes=""
         />
         <div className="absolute inset-0 flex flex-col justify-center bg-gradient-to-t items-center from-scuro/80 to-transparent p-6 md:p-10">
-          <p className="text-sm font-medium uppercase tracking-wide text-bianco/70 ">
+          <p className="text-sm font-medium uppercase tracking-wide  text-bianco/70 ">
             {sottotitolo}
           </p>
           <h1 className="text-3xl font-extralight tracking-tighter text-bianco md:text-9xl">
@@ -122,6 +123,87 @@ export default function LayoutSuite({
         </div>
       </section>
 
+{/* descrizione */}
+      <section className="mx-auto  px-4 py-16 sm:px-6 lg:px-8 bg-grigio">
+        <div className="max-w-7xl mx-auto flex flex-col items-center justify-center">
+          <p className="text-sm font-medium uppercase tracking-wide text-scuro/70">
+            Stile italiano
+          </p>
+          <h2 className="mt-2 text-5xl font-normal text-blu text-center">
+            {dettagliTitolo}
+          </h2>
+          <p className="mt-4 text-scuro/90 leading-relaxed max-w-2xl text-center">
+            {dettagliTesto}
+          </p>
+        </div>
+      </section>
+
+      {/* immagini */}
+      <section className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8 border-t border-blu mt-6">
+        <p className="text-4xl font-light uppercase tracking-wide text-center text-scuro/70">
+          Immagini della suite
+        </p>
+        {gallery.length > 0 && (
+          <section className=" py-12">
+            <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+              <div className="space-y-4">
+                <div className="relative aspect-[4/3] overflow-hidden rounded-lg bg-grigio">
+                  <Image
+                    src={gallery[activeIndex]}
+                    alt={`${titolo} - immagine ${activeIndex + 1}`}
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 768px) 100vw, 75vw"
+                  />
+
+                  <button
+                    type="button"
+                    onClick={showPrev}
+                    className="absolute left-3 top-1/2 -translate-y-1/2 rounded-full bg-scuro/70 px-3 py-2 text-sm font-medium text-bianco hover:bg-scuro/90 focus:outline-none focus:ring-2 focus:ring-bianco/80"
+                  >
+                    <span className="sr-only">Immagine precedente</span>
+                    <ChevronLeft size={24} className="text-bianco" />
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={showNext}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 rounded-full bg-scuro/70 px-3 py-2 text-sm font-medium text-bianco hover:bg-scuro/90 focus:outline-none focus:ring-2 focus:ring-bianco/80"
+                  >
+                    <span className="sr-only">Immagine successiva</span>
+                    <ChevronRight size={24} className="text-bianco" />
+                  </button>
+                </div>
+
+                <div className="mt-2 flex gap-2 overflow-x-auto pb-2">
+                  {gallery.map((src, i) => (
+                    <button
+                      key={i}
+                      type="button"
+                      onClick={() => setActiveIndex(i)}
+                      className={`relative h-20 w-28 flex-shrink-0 overflow-hidden rounded-md border ${
+                        i === activeIndex
+                          ? "border-blu border"
+                          : "border-transparent"
+                      }`}
+                    >
+                      <Image
+                        src={src}
+                        alt={`${titolo} - miniatura ${i + 1}`}
+                        fill
+                        className="object-cover"
+                        sizes="112px"
+                      />
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </section>
+        )}
+      </section>
+
+      {/* prenotazione */}
       <section className="bg-grigio/40">
         <div className="mx-auto flex max-w-7xl flex-col gap-8 px-4 py-10 sm:px-6 lg:px-8">
           <div className="space-y-2">
@@ -204,7 +286,8 @@ export default function LayoutSuite({
               </button>
 
               <p className="text-xs text-scuro/60">
-                In futuro questo calendario sarà sincronizzato con Airbnb, Booking.com ed Expedia.
+                In futuro questo calendario sarà sincronizzato con Airbnb,
+                Booking.com ed Expedia.
               </p>
             </div>
 
@@ -248,7 +331,9 @@ export default function LayoutSuite({
 
                   return (
                     <div key={monthLabel} className="space-y-2">
-                      <p className="text-sm font-medium text-scuro">{monthLabel}</p>
+                      <p className="text-sm font-medium text-scuro">
+                        {monthLabel}
+                      </p>
                       <div className="grid grid-cols-7 gap-1 text-center text-[11px] uppercase tracking-wide text-scuro/60">
                         {["Lu", "Ma", "Me", "Gi", "Ve", "Sa", "Do"].map((d) => (
                           <span key={d}>{d}</span>
@@ -275,8 +360,8 @@ export default function LayoutSuite({
                                 isSelected
                                   ? "bg-blu text-bianco"
                                   : inRange
-                                  ? "bg-blu/10 text-scuro"
-                                  : "text-scuro hover:bg-grigio/40"
+                                    ? "bg-blu/10 text-scuro"
+                                    : "text-scuro hover:bg-grigio/40"
                               }`}
                             >
                               {day.getDate()}
@@ -299,86 +384,6 @@ export default function LayoutSuite({
           </div>
         </div>
       </section>
-      <section className="mx-auto  px-4 py-16 sm:px-6 lg:px-8 bg-grigio">
-        <div className="max-w-7xl mx-auto flex flex-col items-center justify-center">
-          <p className="text-sm font-medium uppercase tracking-wide text-scuro/70">
-            Stile italiano
-          </p>
-          <h2 className="mt-2 text-5xl font-normal text-blu  ">
-            {dettagliTitolo}
-          </h2>
-          <p className="mt-4 text-scuro/90 leading-relaxed max-w-2xl text-center">
-            {dettagliTesto}
-          </p>
-        </div>
-      </section>
-
-      <section className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8 border-t border-blu mt-6">
-        <p className="text-4xl font-light uppercase tracking-wide text-center text-scuro/70">
-          Immagini della suite
-        </p>
-        {gallery.length > 0 && (
-          <section className=" py-12">
-            <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-              <div className="space-y-4">
-                <div className="relative aspect-[4/3] overflow-hidden rounded-lg bg-grigio">
-                  <Image
-                    src={gallery[activeIndex]}
-                    alt={`${titolo} - immagine ${activeIndex + 1}`}
-                    fill
-                    className="object-cover"
-                    sizes="(max-width: 768px) 100vw, 75vw"
-                  />
-
-                  <button
-                    type="button"
-                    onClick={showPrev}
-                    className="absolute left-3 top-1/2 -translate-y-1/2 rounded-full bg-scuro/70 px-3 py-2 text-sm font-medium text-bianco hover:bg-scuro/90 focus:outline-none focus:ring-2 focus:ring-bianco/80"
-                  >
-                    <span className="sr-only">Immagine precedente</span>
-                    <ChevronLeft size={24} className="text-bianco" />
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={showNext}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 rounded-full bg-scuro/70 px-3 py-2 text-sm font-medium text-bianco hover:bg-scuro/90 focus:outline-none focus:ring-2 focus:ring-bianco/80"
-                  >
-                    <span className="sr-only">Immagine successiva</span>
-                    <ChevronRight size={24} className="text-bianco" />
-                  </button>
-                </div>
-
-                <div className="mt-2 flex gap-2 overflow-x-auto pb-2">
-                  {gallery.map((src, i) => (
-                    <button
-                      key={i}
-                      type="button"
-                      onClick={() => setActiveIndex(i)}
-                      className={`relative h-20 w-28 flex-shrink-0 overflow-hidden rounded-md border ${
-                        i === activeIndex
-                          ? "border-blu border"
-                          : "border-transparent"
-                      }`}
-                    >
-                      <Image
-                        src={src}
-                        alt={`${titolo} - miniatura ${i + 1}`}
-                        fill
-                        className="object-cover"
-                        sizes="112px"
-                      />
-                    </button>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </section>
-        )}
-      </section>
-
-
-
     </div>
   );
 }

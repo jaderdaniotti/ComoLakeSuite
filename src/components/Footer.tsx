@@ -1,11 +1,13 @@
 "use client";
 
+import Image from "next/image";
 import {
   Phone,
   Mail,
   MapPin,
   ChevronUp,
 } from "lucide-react";
+import images from "@/src/images";
 
 export default function Footer() {
   const scrollToTop = () => window.scrollTo({ top: 0, behavior: "smooth" });

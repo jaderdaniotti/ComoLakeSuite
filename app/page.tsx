@@ -16,10 +16,19 @@ import {
   Bath,
   UtensilsCrossed,
   EggFried,
+  
 } from "lucide-react";
 import SuiteCard from "@/src/components/SuiteCard";
 import HeroCarousel from "@/src/components/HeroCarousel";
+import HomeMapSection from "@/src/components/HomeMapSection";
 import images from "@/src/images";
+
+const mapThumbnailSrcs = [
+  (images.thumbVolta as { src: string }).src,
+  (images.thumbDante as { src: string }).src,
+  (images.thumbVistaDuomo as { src: string }).src,
+  (images.thumbCernobbio as { src: string }).src,
+];
 
 const suiteCards = [
   {
@@ -342,6 +351,19 @@ export default function HomePage() {
               </div>
             </article>
           </div>
+        </div>
+      </section>
+
+      {/* Mappa Google – Dove siamo */}
+      <section className="bg-bianco py-16 md:py-24 min-h-screen">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <h2 className="mb-2 text-center text-2xl font-semibold text-scuro md:text-3xl">
+            Dove siamo
+          </h2>
+          <p className="mx-auto mb-10 max-w-2xl text-center text-scuro/80">
+            Le nostre suite a Como e Cernobbio: Via Albertolli 22, Via Dante 25, Via Cinque Giornate 26, Via Giuseppe Garibaldi 15.
+          </p>
+          <HomeMapSection thumbnailSrcs={mapThumbnailSrcs} />
         </div>
       </section>
     </>

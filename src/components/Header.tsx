@@ -24,16 +24,16 @@ export default function Header() {
   };
 
   return (
-    <div className="drawer drawer-end">
+    <div className="drawer drawer-end z-[9999] ">
       <input id="drawer-nav" type="checkbox" className="drawer-toggle" />
       <div className="drawer-content flex flex-col">
-        <header className="fixed w-full top-0 z-50 glassbg text-bianco border-b border-scuro">
-          <div className="mx-auto flex h-25 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+        <header className="fixed w-full top-0 z-50 bg-blu text-bianco border-b border-scuro">
+          <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
             <Link href="/" className="flex items-center shrink-0">
               <Image
                 src={images.logobianco}
                 alt="Como Lake Suites"
-                className="h-20 w-auto object-contain"
+                className="h-18 w-auto object-contain"
               />
             </Link>
 
@@ -50,7 +50,7 @@ export default function Header() {
                   Le Suites
                 </button>
                 {suiteAperto && (
-                  <div className="absolute left-0 top-full mt-0 w-56 rounded border border-white glassbg py-2 shadow-lg">
+                  <div className="absolute left-0 top-full mt-0 w-56 rounded border border-white bg-blu py-2 shadow-lg">
                     {suiteLinks.map((link) => (
                       <Link
                         key={link.href}
