@@ -1,6 +1,5 @@
 import Link from "next/link";
 import Image, { type StaticImageData } from "next/image";
-import { ArrowRight } from "lucide-react";
 
 type SuiteCardProps = {
   titolo: string;
@@ -20,29 +19,33 @@ export default function SuiteCard({
   alt,
 }: SuiteCardProps) {
   return (
-    <article className="group relative aspect-4/3 rounded-lg bg-bianco border border-grigio shadow-sm hover:shadow-md transition-shadow">
-      <Link href={href} className="block">
-        <div className="absolute inset-0  overflow-hidden bg-grigio border border-blu">
+    <article className="grid grid-cols-1 lg:grid-cols-2 justify-center items-center bg-bianco">
+      <div className=" pb-8">
+        <div className="relative aspect-4/3 w-full max-w-lg overflow-hidden">
           <Image
             src={src}
             alt={alt}
             fill
-            className="object-cover group-hover:scale-103 transition-all duration-300 "
-            sizes="(max-width: 768px) 100vw, 50vw"
+            className="object-cover"
+            sizes="(max-width: 768px) 100vw, 512px"
           />
         </div>
-        <div className="px-2 py-1 absolute -top-5 left-1/2 -translate-x-1/2 right-0 bg-grigio border border-blu z-20 w-fit">
-          {/* <p className="text-sm font-medium text-scuro/70 uppercase tracking-wide">
-            {sottotitolo}
-          </p> */}
-          <h2 className=" text-xl font-light text-blu ">{titolo}</h2>
-          {/* <p className="mt-3 text-sm text-scuro/80 line-clamp-2">{descrizione}</p>
-          <span className="mt-4 inline-flex items-center gap-1 text-sm font-medium text-scuro group-hover:underline">
-            Leggi tutto e prenota
-            <ArrowRight size={16} className="transition-transform group-hover:translate-x-1" />
-          </span> */}
-        </div>
-      </Link>
+      </div>
+      <div className="px-8 pb-4">
+        <p className="text-sm font-normal text-scuro">{sottotitolo}</p>
+        <h2 className="mt-1.5 text-3xl font-extralight uppercase tracking-wide text-scuro md:text-4xl">
+          {titolo}
+        </h2>
+        <p className="mt-4 text-sm leading-relaxed text-scuro/80">
+          {descrizione}
+        </p>
+        <Link
+          href={href}
+          className="mt-8 inline-block rounded-sm bg-blu px-6 py-3.5 text-center text-sm font-medium uppercase tracking-wide text-bianco hover:bg-blu/90 transition-colors"
+        >
+          Leggi tutto e prenota
+        </Link>
+      </div>
     </article>
   );
 }

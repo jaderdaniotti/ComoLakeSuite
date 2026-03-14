@@ -231,7 +231,7 @@ export default function HomePage() {
           <p className="mx-auto mt-4 max-w-2xl text-center text-scuro/80">
             Scegli e vivi la tua vacanza in un&apos;atmosfera unica.
           </p>
-          <div className="grid gap-8 grid-cols-1 md:grid-cols-2 mt-12 justify-center items-center">
+          <div className="grid gap-8 grid-cols-1  mt-12 justify-center items-center">
             {suiteCards.map((suite) => (
               <SuiteCard key={suite.href} {...suite} />
             ))}
