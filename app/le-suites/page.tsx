@@ -1,7 +1,4 @@
 import type { Metadata } from "next";
-import Link from "next/link";
-import Image from "next/image";
-import { ArrowRight } from "lucide-react";
 import SuiteCard from "@/src/components/SuiteCard";
 import images from "@/src/images";
 
@@ -14,6 +11,7 @@ const suites = [
     href: "/le-suites/suite-cavour",
     src: images.thumbCavour,
     alt: "Suite Cavour",
+    
   },
   {
     titolo: "Suites Volta",
@@ -80,8 +78,8 @@ export default function LeSuitesPage() {
       <section className="py-16 md:py-24">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-3">
-            {suites.map((suite) => (
-              <SuiteCard key={suite.href} {...suite} />
+            {suites.map((suite, indice) => (
+              <SuiteCard key={suite.href} {...suite} indice={indice} />
             ))}
           </div>
         </div>
