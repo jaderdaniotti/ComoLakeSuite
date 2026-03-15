@@ -3,7 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useState } from "react";
-import { Menu, Hotel } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import images from "@/src/images";
 
 const suiteLinks = [
@@ -19,21 +19,23 @@ export default function Header() {
   const [suiteAperto, setSuiteAperto] = useState(false);
 
   const chiudiDrawer = () => {
-    const checkbox = document.getElementById("drawer-nav") as HTMLInputElement | null;
+    const checkbox = document.getElementById(
+      "drawer-nav",
+    ) as HTMLInputElement | null;
     if (checkbox) checkbox.checked = false;
   };
 
   return (
-    <div className="drawer drawer-end z-[9999] ">
+    <div className="drawer drawer-end z-9999 ">
       <input id="drawer-nav" type="checkbox" className="drawer-toggle" />
       <div className="drawer-content flex flex-col">
-        <header className="relative w-full top-0 z-50 bg-blu text-bianco border-b border-scuro">
-          <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+        <header className=" w-full z-50 glassbg  sticky top-0">
+          <div className="mx-auto flex h-20 items-center justify-between px-4 sm:px-6 lg:px-8">
             <Link href="/" className="flex items-center shrink-0">
               <Image
                 src={images.logobianco}
                 alt="Como Lake Suites"
-                className="h-18 w-auto object-contain"
+                className="h-16 w-auto object-contain"
               />
             </Link>
 
@@ -50,16 +52,19 @@ export default function Header() {
                   Le Suites
                 </button>
                 {suiteAperto && (
-                  <div className="absolute left-0 top-full mt-0 w-56 rounded border border-white bg-blu py-2 shadow-lg">
+                  <div className="absolute left-0 top-full mt-5 w-56 glassbg py-2 p-4 shadow-sm">
                     {suiteLinks.map((link) => (
-                      <Link
-                        key={link.href}
-                        href={link.href}
-                        className="block px-4 py-2 text-bianco link-nav"
-                        onClick={() => setSuiteAperto(false)}
-                      >
-                        {link.label}
-                      </Link>
+                      <>
+                        <Link
+                          key={link.href}
+                          href={link.href}
+                          className="block px-4 py-2 text-bianco link-nav"
+                          onClick={() => setSuiteAperto(false)}
+                        >
+                          {link.label}
+                        </Link>
+                        <hr className="border-bianco/10" />
+                      </>
                     ))}
                   </div>
                 )}
@@ -83,54 +88,76 @@ export default function Header() {
         </header>
       </div>
 
-      <div className="drawer-side z-[60] md:hidden">
+      <div className="drawer-side w-full z-60 md:hidden">
         <label
           htmlFor="drawer-nav"
           aria-label="Chiudi menu"
           className="drawer-overlay"
         />
-        <ul className="pt-6 menu p-4 w-80 min-h-full bg-blu text-2xl font-extralight tracking-wide justify-center items-center ">
-        <div className="flex mb-4 justify-center pb-6 border-b border-bianco">
-          <Image
-            src={images.logobianco}
-            alt="Como Lake Suites"
-            width={100}
-            height={100}
-          />
-        </div>
-          <li>
-            <Link href="/" className="text-bianco hover:bg-bianco/10" onClick={chiudiDrawer}>
-              Home
-            </Link>
-          </li>
-         
-          <li>
-            <Link href="/i-nostri-servizi" className="text-bianco hover:bg-bianco/10" onClick={chiudiDrawer}>
-              Servizi
-            </Link>
-          </li>
-          <li>
-            <Link href="/contatti" className="text-bianco hover:bg-bianco/10" onClick={chiudiDrawer}>
-              Contatti
-            </Link>
-          </li>
-          <li className="menu-title">
-            <span className="text-bianco/80 uppercase tracking-widest flex items-center gap-2 font-normal text-xl">
-               Le Suites <Hotel className="w-4 h-4" />
-            </span>
-          </li>
-          {suiteLinks.map((link) => (
-            <li key={link.href}>
+        <label
+          htmlFor="drawer-nav"
+          aria-label="Chiudi menu"
+          className="absolute right-4 top-4 z-10 flex h-10 w-10 cursor-pointer items-center justify-center text-bianco hover:bg-bianco/10"
+        >
+          <X className="h-6 w-6" />
+        </label>
+        <ul className=" menu p-4 w-full min-h-full bg-blu/90 text-2xl font-normal rounded-none uppercase tracking-wide items-center ">
+          <div className="flex mt-3 justify-center pb-6 border-b border-bianco w-full ">
+            <Image
+              src={images.logobianco}
+              alt="Como Lake Suites"
+              width={100}
+              height={100}
+            />
+          </div>
+
+          <div className="flex flex-col gap-1 border-b border-bianco w-full py-6 justify-center items-center">
+            <li>
               <Link
-                href={link.href}
-                className="text-bianco hover:bg-bianco/10 pl-6 text-lg"
+                href="/"
+                className="text-bianco rounded-none"
                 onClick={chiudiDrawer}
               >
-                {link.label}
+                Home
               </Link>
             </li>
-          ))}
-
+            <li>
+              <Link
+                href="/i-nostri-servizi"
+                className="text-bianco rounded-none"
+                onClick={chiudiDrawer}
+              >
+                Servizi
+              </Link>
+            </li>
+            <li>
+              <Link
+                href="/contatti"
+                className="text-bianco rounded-none"
+                onClick={chiudiDrawer}
+              >
+                Contatti
+              </Link>
+            </li>
+          </div>
+          <div className="flex flex-col gap-2 border-b border-bianco w-full py-3 justify-center items-center">
+            <li className="menu-title">
+              <span className="text-bianco border-b border-bianco rounded-none pb-0 tracking-wide uppercase tracking-widest flex items-center gap-2 font-medium text-2xl">
+                Le Suites
+              </span>
+            </li>
+            {suiteLinks.map((link) => (
+              <li key={link.href}>
+                <Link
+                  href={link.href}
+                  className="text-lg text-bianco m-0 p-0 tracking-wide"
+                  onClick={chiudiDrawer}
+                >
+                  {link.label}
+                </Link>
+              </li>
+            ))}
+          </div>
         </ul>
       </div>
     </div>

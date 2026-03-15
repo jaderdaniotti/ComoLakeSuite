@@ -81,7 +81,7 @@ const suiteCards = [
 const serviziHome = [
   {
     icon: CircleParking,
-    titolo: "Parcheggio gratuito",
+    titolo: "Parcheggio",
     testo: "Parcheggio custodito adiacente alle suites.",
   },
   {
@@ -272,15 +272,6 @@ export default function HomePage() {
               <iframe
                 src="https://www.youtube.com/embed/NExwdwH2_eU?rel=0"
                 title="Video esperienza Lago di Como 1"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-                className="h-full w-full"
-              />
-            </div>
-            <div className="aspect-video w-full overflow-hidden rounded-lg bg-scuro">
-              <iframe
-                src="https://www.youtube.com/embed/dDRx1i1kumg?rel=0"
-                title="Video esperienza Lago di Como 2"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowFullScreen
                 className="h-full w-full"

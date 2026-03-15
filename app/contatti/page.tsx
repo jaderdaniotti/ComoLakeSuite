@@ -11,9 +11,9 @@ export const metadata: Metadata = {
 
 export default function ContattiPage() {
   return (
-    <div className="bg-bianco">
+    <div className="">
       {/* Hero */}
-      <section className="relative min-h-[600px] md:min-h-screen  bg-scuro">
+      <section className="relative min-h-[600px] md:min-h-screen overflow-hidden">
         <Image
           src={images.fotocomo}
           alt="Como Lake Suites - Contatti"
@@ -33,7 +33,7 @@ export default function ContattiPage() {
       </section>
 
       {/* Contattaci + intro */}
-      <section className="py-14 md:py-20">
+      <section className="relative z-10 bg-bianco py-14 md:py-20">
         <div className="mx-auto max-w-4xl px-4 text-center sm:px-6 lg:px-8">
           <h2 className="text-2xl font-light uppercase tracking-wide text-blu md:text-3xl">
             Contattaci

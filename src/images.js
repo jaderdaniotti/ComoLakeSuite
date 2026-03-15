@@ -37,6 +37,7 @@ import volta_33 from "./images/volta/_MG_0921a.webp";
 import volta_34 from "./images/volta/_MG_0933a.webp";
 import volta_35 from "./images/volta/_MG_0937a.webp";
 import volta_36 from "./images/volta/_MG_0941a.webp";
+import volta_37 from "./images/volta/DSC_9640.webp";
 import cavour_0 from "./images/cavour/DJI_0480a.webp";
 import cavour_1 from "./images/cavour/DJI_0481a.webp";
 import cavour_2 from "./images/cavour/DJI_0483a.webp";
@@ -67,6 +68,7 @@ import cavour_26 from "./images/cavour/_MG_1645a.webp";
 import cavour_27 from "./images/cavour/_MG_1657a.webp";
 import cavour_28 from "./images/cavour/_MG_1661a.webp";
 import cavour_29 from "./images/cavour/_MG_1673a.webp";
+import cavour_30 from "./images/cavour/13.webp";
 import cernobbio_0 from "./images/cernobbio/DJI_0445a.webp";
 import cernobbio_1 from "./images/cernobbio/DJI_0446a.webp";
 import cernobbio_2 from "./images/cernobbio/DJI_0450a.webp";
@@ -213,19 +215,19 @@ const images = {
   esperienzaVideo: "https://www.comolakesuites.com/wp-content/uploads/esperienza-video.jpg",
 
   // Suite Volta
-  suiteVoltaHero: volta_5,
-  suiteVoltaGallery: [volta_0, volta_1, volta_2, volta_3, volta_4, volta_5, volta_6, volta_7, volta_8, volta_9, volta_10, volta_11, volta_12, volta_13, volta_14, volta_15, volta_16, volta_17, volta_18, volta_19, volta_20, volta_21, volta_22, volta_23, volta_24, volta_25, volta_26, volta_27, volta_28, volta_29, volta_30, volta_31, volta_32, volta_33, volta_34, volta_35, volta_36],
-  thumbVolta: volta_5,
+  suiteVoltaHero: volta_37,
+  suiteVoltaGallery: [volta_0, volta_1, volta_2, volta_3, volta_4, volta_5, volta_6, volta_7, volta_8, volta_9, volta_10, volta_11, volta_12, volta_13, volta_14, volta_15, volta_16, volta_17, volta_18, volta_19, volta_20, volta_21, volta_22, volta_23, volta_24, volta_25, volta_26, volta_27, volta_28, volta_29, volta_30, volta_31, volta_32, volta_33, volta_34, volta_35, volta_36, volta_37],
+  thumbVolta: volta_37,
 
   // Suite Cavour
-  suiteCavourHero: cavour_0,
-  suiteCavourGallery: [cavour_0, cavour_1, cavour_2, cavour_3, cavour_4, cavour_5, cavour_6, cavour_7, cavour_8, cavour_9, cavour_10, cavour_11, cavour_12, cavour_13, cavour_14, cavour_15, cavour_16, cavour_17, cavour_18, cavour_19, cavour_20, cavour_21, cavour_22, cavour_23, cavour_24, cavour_25, cavour_26, cavour_27, cavour_28, cavour_29],
-  thumbCavour: cavour_0,
+  suiteCavourHero: cavour_30,
+  suiteCavourGallery: [cavour_0, cavour_1, cavour_2, cavour_3, cavour_4, cavour_5, cavour_6, cavour_7, cavour_8, cavour_9, cavour_10, cavour_11, cavour_12, cavour_13, cavour_14, cavour_15, cavour_16, cavour_17, cavour_18, cavour_19, cavour_20, cavour_21, cavour_22, cavour_23, cavour_24, cavour_25, cavour_26, cavour_27, cavour_28, cavour_29, cavour_30],
+  thumbCavour: cavour_30,
 
   // Suite Cernobbio
-  suiteCernobbioHero: cernobbio_0,
+  suiteCernobbioHero: cernobbio_29,
   suiteCernobbioGallery: [cernobbio_0, cernobbio_1, cernobbio_2, cernobbio_3, cernobbio_4, cernobbio_5, cernobbio_6, cernobbio_7, cernobbio_8, cernobbio_9, cernobbio_10, cernobbio_11, cernobbio_12, cernobbio_13, cernobbio_14, cernobbio_15, cernobbio_16, cernobbio_17, cernobbio_18, cernobbio_19, cernobbio_20, cernobbio_21, cernobbio_22, cernobbio_23, cernobbio_24, cernobbio_25, cernobbio_26, cernobbio_27, cernobbio_28, cernobbio_29, cernobbio_30, cernobbio_31, cernobbio_32, cernobbio_33, cernobbio_34, cernobbio_35, cernobbio_36, cernobbio_37, cernobbio_38, cernobbio_39, cernobbio_40, cernobbio_41, cernobbio_42, cernobbio_43, cernobbio_44, cernobbio_45, cernobbio_46],
-  thumbCernobbio: cernobbio_0,
+  thumbCernobbio: cernobbio_29,
 
   // Suite ComoSole
   suiteComoSoleHero: "https://www.comolakesuites.com/wp-content/uploads/placeholder-suite.jpg",
@@ -233,9 +235,9 @@ const images = {
   thumbComoSole: "https://www.comolakesuites.com/wp-content/uploads/placeholder-suite.jpg",
 
   // Suite Dante
-  suiteDanteHero: dante_38,
+  suiteDanteHero: dante_34,
   suiteDanteGallery: [dante_0, dante_1, dante_2, dante_3, dante_4, dante_5, dante_6, dante_7, dante_8, dante_9, dante_10, dante_11, dante_12, dante_13, dante_14, dante_15, dante_16, dante_17, dante_18, dante_19, dante_20, dante_21, dante_22, dante_23, dante_24, dante_25, dante_26, dante_27, dante_28, dante_29, dante_30, dante_31, dante_32, dante_33, dante_34, dante_35, dante_36, dante_37, dante_38, dante_39, dante_40, dante_41, dante_42, dante_43, dante_44, dante_45, dante_46, dante_47, dante_48, dante_49, dante_50],
-  thumbDante: dante_38,
+  thumbDante: dante_34,
 
   // Suite VistaDuomo
   suiteVistaDuomoHero: duomo_0,
