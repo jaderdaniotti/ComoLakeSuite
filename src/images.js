@@ -1,5 +1,12 @@
 import logobianco from "./images/logobianco.png";
-
+import asciugamani from "./images/home/asciugamani.webp";
+import biancheria from "./images/home/biancheria.webp";
+import caffe from "./images/home/caffe.webp";
+import comfort from "./images/home/comfort.webp";
+import cucina from "./images/home/cucina.webp";
+import design from "./images/home/design.webp";
+import dettagli from "./images/home/dettagli.webp";
+import sapone from "./images/home/sapone.webp";
 import volta_0 from "./images/volta/DSC_9645.webp";
 import volta_1 from "./images/volta/DSC_9649.webp";
 import volta_2 from "./images/volta/DSC_9659.webp";
@@ -210,6 +217,14 @@ const images = {
   marilena,
   massimiliano,
   fotocomo,
+  asciugamani,
+  biancheria,
+  caffe,
+  comfort,
+  cucina,
+  design,
+  dettagli,
+  sapone,
   // Home – sostituire quando hai le immagini in public/images/
   heroHome: volta_5,
   esperienzaVideo: "https://www.comolakesuites.com/wp-content/uploads/esperienza-video.jpg",

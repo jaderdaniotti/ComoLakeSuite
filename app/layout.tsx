@@ -3,7 +3,6 @@ import { Montserrat } from "next/font/google";
 import "./globals.css";
 import Header from "@/src/components/Header";
 import Footer from "@/src/components/Footer";
-import SmoothScroll from "@/src/components/SmoothScroll";
 
 const montserrat = Montserrat({
   variable: "--font-montserrat",
@@ -31,11 +30,9 @@ export default function RootLayout({
         className={`${montserrat.variable} font-sans antialiased min-h-screen flex flex-col`}
         suppressHydrationWarning
       >
-        <SmoothScroll>
           <Header />
           <main className="flex-1">{children}</main>
           <Footer />
-        </SmoothScroll>
       </body>
     </html>
   );

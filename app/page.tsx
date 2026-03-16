@@ -125,46 +125,46 @@ const serviziHome = [
 
 const esperienze = [
   {
-    icon: LayoutGrid,
+    src: images.design,
     titolo: "Design italiano",
     testo:
       "Un ambiente di classe, dove la tradizione del design italiano rende lo spazio caldo e accogliente.",
   },
   {
-    icon: Shirt,
+    src: images.biancheria,
     titolo: "Biancheria pregiata",
     testo: "Biancheria di alta qualità, pensata per il benessere personale.",
   },
   {
-    icon: Sofa,
+    src: images.comfort,
     titolo: "Comfort superior",
     testo:
       "Un alloggio signorile e spazioso, arredato con cura e dotato dei più moderni comfort.",
   },
   {
-    icon: Sparkles,
+    src: images.dettagli,
     titolo: "Attenzione ai dettagli",
     testo:
       "La cura di ogni dettaglio crea un perfetto connubio tra design e comodità.",
   },
   {
-    icon: Bath,
+    src: images.asciugamani,
     titolo: "Asciugamani personalizzati",
     testo: "La cura e l'attenzione sono presenti in ogni ambiente e dettaglio.",
   },
   {
-    icon: Sparkles,
+    src: images.sapone,
     titolo: "Sapone artigianale",
     testo: "Saponi artigianali a base di prodotti naturali ed oli essenziali.",
   },
   {
-    icon: UtensilsCrossed,
+    src: images.cucina,
     titolo: "Cucina attrezzata",
     testo:
       "La cucina ha uno spazio dedicato che la rende bella, pratica e funzionale.",
   },
   {
-    icon: Coffee,
+    src: images.caffe,
     titolo: "Caffè italiano",
     testo: "Lo stile italiano è rappresentato anche dal caffè.",
   },
@@ -251,17 +251,27 @@ export default function HomePage() {
           <p className="mx-auto mt-4 max-w-2xl text-center text-scuro/80">
             Immersione nell&apos;atmosfera del Lago di Como con i nostri video.
           </p>
-          <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="mt-12 grid gap-10 sm:grid-cols-2 lg:grid-cols-4 justify-center items-start">
             {esperienze.map((e) => (
               <div
                 key={e.titolo}
-                className="rounded-lg bg-bianco p-6 shadow-sm border border-grigio"
+                className="mx-auto flex w-full max-w-xs flex-col"
               >
-                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-chiaro text-scuro">
-                  <e.icon size={20} />
+                <div className="relative w-full overflow-hidden">
+                  <div className="relative w-full overflow-hidden" style={{ aspectRatio: "3/4" }}>
+                    <Image
+                      src={e.src}
+                      alt={e.titolo}
+                      fill
+                      className="object-cover"
+                      sizes="(min-width: 1024px) 20vw, (min-width: 640px) 40vw, 80vw"
+                    />
+                  </div>
                 </div>
-                <h3 className="mt-4 font-medium text-scuro">{e.titolo}</h3>
-                <p className="mt-2 text-sm font-light text-scuro/80">
+                <h3 className="mt-4 text-2xl font-normal uppercase tracking-wide text-scuro">
+                  {e.titolo}
+                </h3>
+                <p className="mt-2 text-sm font-light text-scuro/90">
                   {e.testo}
                 </p>
               </div>

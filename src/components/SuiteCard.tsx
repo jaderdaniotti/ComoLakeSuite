@@ -21,19 +21,19 @@ export default function SuiteCard({
   indice
 }: SuiteCardProps) {
   return (
-    <article className={`grid grid-cols-1 lg:grid-cols-2 justify-center items-center bg-grigio shadow-3xl border-t border-scuro sticky top-10 z-[${indice}] `}>
+    <article className={`grid grid-cols-1 lg:grid-cols-2 justify-center items-center bg-grigio shadow-3xl border-t border-scuro sticky top-10 z-[${indice}] h-screen`}>
       <div className="py-10 h-full bg-grigio flex items-center justify-center">
-        <div className="relative aspect-4/3 w-full max-w-lg overflow-hidden mx-auto">
+        <div className="relative aspect-4/3 w-full max-w-2xl overflow-hidden mx-auto">
           <Image
             src={src}
             alt={alt}
             fill
             className="object-cover"
-            sizes="(max-width: 768px) 100vw, 512px"
+            sizes=""
           />
         </div>
       </div>
-      <div className="px-8 pb-4 max-w-lg bg-grigio mx-auto h-full flex flex-col justify-center">
+      <div className="px-8 pb-4 max-w-2xl bg-grigio md:mx-auto h-full flex flex-col md:justify-center ">
         <p className="text-sm font-normal text-scuro">{sottotitolo}</p>
         <h2 className="mt-1.5 text-3xl font-extralight uppercase tracking-wide text-scuro md:text-4xl">
           {titolo}

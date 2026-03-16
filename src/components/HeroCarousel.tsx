@@ -69,7 +69,7 @@ export default function HeroCarousel({ slides }: Props) {
 
       {/* Overlay e contenuto */}
       <div
-        className="absolute inset-0 bg-black/60 z-3"
+        className="absolute inset-0 bg-black/20 z-3"
         aria-hidden
       />
       {slides.map((s, i) =>
