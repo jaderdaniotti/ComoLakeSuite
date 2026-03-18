@@ -26,7 +26,7 @@ export default function Header() {
   };
 
   return (
-    <div className="drawer drawer-end z-9999 ">
+    <div className="drawer drawer-end z-9999 absolute">
       <input id="drawer-nav" type="checkbox" className="drawer-toggle" />
       <div className="drawer-content flex flex-col">
         <header className=" w-full z-50 flex">

@@ -2,7 +2,7 @@
 
 import { useMemo } from "react";
 import dynamic from "next/dynamic";
-import { APARTMENTS } from "@/src/data/apartmentsMapData";
+import { CONTATTI_MARKER } from "@/src/data/apartmentsMapData";
 
 const ApartmentsMap = dynamic(
   () => import("@/src/components/ApartmentsMap").then((m) => m.default),
@@ -10,17 +10,14 @@ const ApartmentsMap = dynamic(
 );
 
 type Props = {
-  thumbnailSrcs: string[];
+  /** URL dell'immagine usata come thumbnail del marker (es. logo) */
+  thumbnailSrc: string;
 };
 
-export default function ContattiMapSection({ thumbnailSrcs }: Props) {
+export default function ContattiMapSection({ thumbnailSrc }: Props) {
   const apartments = useMemo(
-    () =>
-      APARTMENTS.map((apt, i) => ({
-        ...apt,
-        thumbnailSrc: thumbnailSrcs[i] ?? "",
-      })),
-    [thumbnailSrcs]
+    () => [{ ...CONTATTI_MARKER, thumbnailSrc }],
+    [thumbnailSrc]
   );
   return <ApartmentsMap apartments={apartments} />;
 }

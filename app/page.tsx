@@ -297,9 +297,9 @@ export default function HomePage() {
           <h2 className="mt-2 text-center text-3xl md:text-5xl text-blu font-light">
             Host
           </h2>
-          <div className="mt-12 grid gap-10 grid-cols-1 lg:grid-cols-4">
+          <div className="mt-12 grid gap-10 grid-cols-1 xl:grid-cols-2 ">
             {/* Card Marilena */}
-            <article className="group py-3 overflow-hidden flex flex-col md:grid grid-cols-2 md:col-span-2 w-full border-y">
+            <article className="group py-3 overflow-hidden flex flex-col md:grid grid-cols-2  w-full ">
               <div className="relative w-full max-w-96 mx-auto aspect-3/4 md:aspect-auto md:col-span-1">
                 <Image
                   src={images.marilena}
@@ -312,7 +312,7 @@ export default function HomePage() {
                 <p className="text-xs font-normal uppercase tracking-[0.2em] text-scuro/60">
                   Host
                 </p>
-                <h3 className="mt-1 text-2xl font-normal uppercase tracking-wide text-blu">
+                <h3 className="mt-1 text-4xl font-normal uppercase tracking-wide text-blu">
                   Marilena
                 </h3>
                 <p className="mt-4 text-sm leading-relaxed font-normal text-scuro/80">
@@ -323,15 +323,13 @@ export default function HomePage() {
                 </p>
               </div>
             </article>
-            <div className="hidden md:block md:col-span-2" />
-            <div className="hidden md:block md:col-span-2" />
             {/* Card Massimiliano */}
-            <article className="group py-3 overflow-hidden flex flex-col md:grid grid-cols-2 md:col-span-2 w-full border-y ">
+            <article className="group py-3 overflow-hidden flex flex-col md:grid grid-cols-2  w-full ">
               <div className="flex flex-1 flex-col justify-center px-6 py-8 md:px-8">
                 <p className="text-xs font-normal uppercase tracking-[0.2em] text-scuro/60">
                   Host
                 </p>
-                <h3 className="mt-1 text-2xl font-normal uppercase tracking-wide text-blu">
+                <h3 className="mt-1 text-4xl font-normal uppercase tracking-wide text-blu">
                   Massimiliano
                 </h3>
                 <p className="mt-4 text-sm leading-relaxed font-normal text-scuro/80">

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { MapPin, MessageSquare } from "lucide-react";
 import images from "@/src/images";
 import Image from "next/image";
+import ContattiMapSection from "@/src/components/ContattiMapSection";
 
 export const metadata: Metadata = {
   title: "Contatti - Como Lake Suites",
@@ -160,7 +161,7 @@ export default function ContattiPage() {
         </div>
       </section>
 
-      {/* Mappa Google Maps */}
+      {/* Mappa come in homepage – segnalibro su Piazza Cavour */}
       <section className="border-t border-grigio bg-grigio py-14 md:py-20">
         <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
           <h2 className="flex items-center justify-center gap-2 text-xl font-light uppercase tracking-wide text-blu md:text-2xl">
@@ -170,17 +171,9 @@ export default function ContattiPage() {
           <p className="mt-2 text-center text-sm text-scuro/70">
             Piazza Cavour ang. Via Albertolli 22 · 22100 Como, Italia
           </p>
-          <div className="mt-6 overflow-hidden rounded-lg border border-grigio shadow-sm">
-            <iframe
-              title="Como Lake Suites - Mappa"
-              src="https://www.google.com/maps?q=Piazza+Cavour+Via+Albertolli+22+22100+Como+Italia&output=embed"
-              width="100%"
-              height="400"
-              style={{ border: 0 }}
-              allowFullScreen
-              loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
-              className="block w-full"
+          <div className="mt-6">
+            <ContattiMapSection
+              thumbnailSrc={(images.logobianco as { src: string }).src}
             />
           </div>
         </div>

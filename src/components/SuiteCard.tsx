@@ -20,9 +20,10 @@ export default function SuiteCard({
   alt,
   indice
 }: SuiteCardProps) {
+  const isPhotoLeft = indice % 2 === 0;
   return (
-    <article className={`grid grid-cols-1 lg:grid-cols-2 justify-center items-center bg-grigio shadow-3xl border-t border-scuro sticky top-10 z-[${indice}] h-screen`}>
-      <div className="py-10 h-full bg-grigio flex items-center justify-center">
+    <article className={`grid grid-cols-1 lg:grid-cols-3 justify-center items-center  shadow-3xl  z-[${indice}] h-screen ${isPhotoLeft ? "bg-bianco" : "bg-grigio"}`}>
+      <div className={`py-10 lg:col-span-2 h-full  flex items-center justify-center ${isPhotoLeft ? "lg:order-1" : "lg:order-2"}`}>
         <div className="relative aspect-4/3 w-full max-w-2xl overflow-hidden mx-auto">
           <Image
             src={src}
@@ -33,9 +34,9 @@ export default function SuiteCard({
           />
         </div>
       </div>
-      <div className="px-8 pb-4 max-w-2xl bg-grigio md:mx-auto h-full flex flex-col md:justify-center ">
+      <div className={`px-8 pb-4 max-w-2xl  md:mx-auto h-full flex flex-col md:justify-center ${isPhotoLeft ? "lg:order-2" : "lg:order-1"}`}>
         <p className="text-sm font-normal text-scuro">{sottotitolo}</p>
-        <h2 className="mt-1.5 text-3xl font-extralight uppercase tracking-wide text-scuro md:text-4xl">
+        <h2 className="mt-1.5 text-4xl font-extralight uppercase tracking-wide text-scuro md:text-5xl">
           {titolo}
         </h2>
         <p className="mt-4 text-sm leading-relaxed text-scuro/80">
