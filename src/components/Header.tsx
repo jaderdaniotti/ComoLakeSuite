@@ -29,17 +29,25 @@ export default function Header() {
     <div className="drawer drawer-end z-9999 ">
       <input id="drawer-nav" type="checkbox" className="drawer-toggle" />
       <div className="drawer-content flex flex-col">
-        <header className=" w-full z-50 glassbg  sticky top-0">
-          <div className="mx-auto flex h-20 items-center justify-between px-4 sm:px-6 lg:px-8">
-            <Link href="/" className="flex items-center shrink-0">
+        <header className=" w-full z-50 flex">
+          <div className=" flex w-full md:w-min items-center justify-between px-4 sm:px-6 lg:px-8">
+            <Link href="/" className="flex items-center justify-center shrink-0">
               <Image
                 src={images.logobianco}
                 alt="Como Lake Suites"
-                className="h-16 w-auto object-contain"
+                className="h-40  object-contain"
               />
             </Link>
 
-            <nav className="hidden md:flex md:items-center md:gap-8 font-light tracking-wide text-md">
+            <label
+              htmlFor="drawer-nav"
+              aria-label="Apri menu"
+              className="btn btn-square btn-ghost md:hidden text-bianco hover:bg-bianco/10 hover:text-bianco"
+            >
+              <Menu className="h-6 w-6" />
+            </label>
+          </div>
+            <nav className="hidden mx-auto md:flex md:items-center md:gap-8 font-light tracking-wide text-md">
               <Link href="/" className="link-nav text-bianco">
                 Home
               </Link>
@@ -52,13 +60,13 @@ export default function Header() {
                   Le Suites
                 </button>
                 {suiteAperto && (
-                  <div className="absolute left-0 top-full mt-5 w-56 glassbg py-2 p-4 shadow-sm">
+                  <div className="absolute left-0 top-full mt-5 w-56 bg-grigio  py-2 p-4 shadow-sm">
                     {suiteLinks.map((link) => (
                       <>
                         <Link
                           key={link.href}
                           href={link.href}
-                          className="block px-4 py-2 text-bianco link-nav"
+                          className="block px-4 py-2 text-blu link-nav"
                           onClick={() => setSuiteAperto(false)}
                         >
                           {link.label}
@@ -76,15 +84,6 @@ export default function Header() {
                 Contatti
               </Link>
             </nav>
-
-            <label
-              htmlFor="drawer-nav"
-              aria-label="Apri menu"
-              className="btn btn-square btn-ghost md:hidden text-bianco hover:bg-bianco/10 hover:text-bianco"
-            >
-              <Menu className="h-6 w-6" />
-            </label>
-          </div>
         </header>
       </div>
 
