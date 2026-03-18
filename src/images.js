@@ -7,8 +7,8 @@ import cucina from "./images/home/cucina.webp";
 import design from "./images/home/design.webp";
 import dettagli from "./images/home/dettagli.webp";
 import sapone from "./images/home/sapone.webp";
-import volta_0 from "./images/volta/DSC_9645.webp";
-import volta_1 from "./images/volta/DSC_9649.webp";
+import volta_1 from "./images/volta/DSC_9645.webp";
+import volta_34 from "./images/volta/DSC_9649.webp";
 import volta_2 from "./images/volta/DSC_9659.webp";
 import volta_3 from "./images/volta/DSC_9666.webp";
 import volta_4 from "./images/volta/DSC_9667.webp";
@@ -41,7 +41,7 @@ import volta_30 from "./images/volta/_MG_0897a.webp";
 import volta_31 from "./images/volta/_MG_0905a.webp";
 import volta_32 from "./images/volta/_MG_0909a.webp";
 import volta_33 from "./images/volta/_MG_0921a.webp";
-import volta_34 from "./images/volta/_MG_0933a.webp";
+import volta_0 from "./images/volta/_MG_0933a.webp";
 import volta_35 from "./images/volta/_MG_0937a.webp";
 import volta_36 from "./images/volta/_MG_0941a.webp";
 import volta_37 from "./images/volta/DSC_9640.webp";
@@ -231,17 +231,17 @@ const images = {
 
   // Suite Volta
   suiteVoltaHero: volta_37,
-  suiteVoltaGallery: [volta_0, volta_1, volta_2, volta_3, volta_4, volta_5, volta_6, volta_7, volta_8, volta_9, volta_10, volta_11, volta_12, volta_13, volta_14, volta_15, volta_16, volta_17, volta_18, volta_19, volta_20, volta_21, volta_22, volta_23, volta_24, volta_25, volta_26, volta_27, volta_28, volta_29, volta_30, volta_31, volta_32, volta_33, volta_34, volta_35, volta_36, volta_37],
+  suiteVoltaGallery: [volta_0, volta_1, volta_3, volta_4, volta_5, volta_6, volta_8, volta_9, volta_10, volta_11, volta_12, volta_13, volta_14, volta_15, volta_16, volta_17, volta_18, volta_19, volta_20, volta_21, volta_23, volta_26, volta_27, volta_28, volta_29, volta_30, volta_32, volta_33, volta_34, volta_37, volta_36],
   thumbVolta: volta_37,
 
   // Suite Cavour
   suiteCavourHero: cavour_30,
-  suiteCavourGallery: [cavour_0, cavour_1, cavour_2, cavour_3, cavour_4, cavour_5, cavour_6, cavour_7, cavour_8, cavour_9, cavour_10, cavour_11, cavour_12, cavour_13, cavour_14, cavour_15, cavour_16, cavour_17, cavour_18, cavour_19, cavour_20, cavour_21, cavour_22, cavour_23, cavour_24, cavour_25, cavour_26, cavour_27, cavour_28, cavour_29, cavour_30],
-  thumbCavour: cavour_30,
+  suiteCavourGallery: [cavour_30,  cavour_7, cavour_8, cavour_9, cavour_10, cavour_11, cavour_12, cavour_13, cavour_14, cavour_15, cavour_16, cavour_17, cavour_18, cavour_19, cavour_20, cavour_21, cavour_22,  cavour_24, cavour_25, cavour_26, cavour_27, cavour_28, cavour_1, cavour_2, cavour_6,],
+  thumbCavour: cavour_0,
 
   // Suite Cernobbio
   suiteCernobbioHero: cernobbio_29,
-  suiteCernobbioGallery: [cernobbio_0, cernobbio_1, cernobbio_2, cernobbio_3, cernobbio_4, cernobbio_5, cernobbio_6, cernobbio_7, cernobbio_8, cernobbio_9, cernobbio_10, cernobbio_11, cernobbio_12, cernobbio_13, cernobbio_14, cernobbio_15, cernobbio_16, cernobbio_17, cernobbio_18, cernobbio_19, cernobbio_20, cernobbio_21, cernobbio_22, cernobbio_23, cernobbio_24, cernobbio_25, cernobbio_26, cernobbio_27, cernobbio_28, cernobbio_29, cernobbio_30, cernobbio_31, cernobbio_32, cernobbio_33, cernobbio_34, cernobbio_35, cernobbio_36, cernobbio_37, cernobbio_38, cernobbio_39, cernobbio_40, cernobbio_41, cernobbio_42, cernobbio_43, cernobbio_44, cernobbio_45, cernobbio_46],
+  suiteCernobbioGallery: [ cernobbio_24,cernobbio_23, cernobbio_25, cernobbio_26, cernobbio_27, cernobbio_28, cernobbio_29, cernobbio_30, cernobbio_31, cernobbio_32, cernobbio_33, cernobbio_34, cernobbio_35, cernobbio_36, cernobbio_37,  cernobbio_39, cernobbio_42, cernobbio_46, cernobbio_0, cernobbio_1, cernobbio_2, cernobbio_3,  cernobbio_7, cernobbio_8, cernobbio_9, cernobbio_11, ],
   thumbCernobbio: cernobbio_29,
 
   // Suite ComoSole

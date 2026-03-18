@@ -96,8 +96,8 @@ const serviziHome = [
   },
   {
     icon: Bubbles,
-    titolo: "Pulizie giornaliere",
-    testo: "Servizio di pulizia giornaliera incluso per gli ospiti.",
+    titolo: "Pulizie ogni 2 giorni",
+    testo: "Servizio di pulizia incluso per gli ospiti.",
   },
   {
     icon: EggFried,

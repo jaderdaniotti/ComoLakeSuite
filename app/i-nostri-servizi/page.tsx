@@ -42,7 +42,7 @@ import images from "@/src/images";
 export const metadata: Metadata = {
   title: "Servizi - Como Lake Suites",
   description:
-    "Parcheggio privato, Wi-fi, terrazza vista lago, pulizie giornaliere, colazione, cucina attrezzata, biancheria, climatizzatore e molti altri servizi.",
+    "Parcheggio privato, Wi-fi, terrazza vista lago, pulizie, colazione, cucina attrezzata, biancheria, climatizzatore e molti altri servizi.",
 };
 
 /** Servizi da Booking.com – elenco completo con grafica esistente */
@@ -136,7 +136,7 @@ const serviziBooking: { icon: LucideIcon; titolo: string }[] = [
   { icon: Car, titolo: "Servizio di parcheggio e riconsegna auto" },
   { icon: Shirt, titolo: "Servizio lavanderia" },
   { icon: Car, titolo: "Servizio navetta" },
-  { icon: Bubbles, titolo: "Servizio pulizie giornaliero" },
+  { icon: Bubbles, titolo: "Servizio pulizie" },
   { icon: Tv, titolo: "Servizio streaming (per es. Netflix)" },
   { icon: Sparkles, titolo: "Servizi spa" },
   { icon: ShieldCheck, titolo: "Sicurezza 24 ore su 24" },
@@ -244,7 +244,7 @@ const categorieServizi: CategoriaServizi[] = [
     id: "pulizie",
     label: "Servizi di pulizia",
     icon: Bubbles,
-    titoli: ["Servizio pulizie giornaliero", "Servizio lavanderia", "Prodotti per le pulizie"],
+    titoli: ["Servizio pulizie", "Servizio lavanderia", "Prodotti per le pulizie"],
   },
   {
     id: "negozi",
@@ -359,13 +359,13 @@ export default function ServiziPage() {
         </div>
       </section>
 
-      {/* Servizi per categoria con dropdown (stile Booking) */}
+      {/* Servizi per categoria – sezioni con titolo */}
       <section className="relative z-10 py-16 md:py-24 bg-bianco">
         <div className="mx-auto max-w-4xl xl:max-w-7xl px-4 sm:px-6 lg:px-8">
-          <h2 className="text-2xl font-light uppercase tracking-wide text-scuro text-center mb-10">
+          <h2 className="text-2xl font-light uppercase tracking-wide text-scuro text-center mb-14">
             Servizi in struttura
           </h2>
-          <div className="join join-vertical w-full">
+          <div className="space-y-3">
             {(() => {
               const byCat = groupServiziByCategoria(serviziBooking, categorieServizi);
               return categorieServizi.map((cat) => {
@@ -373,32 +373,26 @@ export default function ServiziPage() {
                 if (!list || list.length === 0) return null;
                 const IconCat = cat.icon;
                 return (
-                  <div key={cat.id} className="collapse collapse-arrow join-item border border-grigio/30 bg-bianco">
-                    <input type="checkbox" name="servizi-accordion" className="min-h-0" />
-                    <div className="collapse-title min-h-0 py-4 flex items-center gap-3 text-scuro font-medium">
-                      <span className="flex h-10 w-10 items-center justify-center rounded bg-grigio/50 text-scuro">
-                        <IconCat className="h-5 w-5" strokeWidth={1.5} />
+                  <div key={cat.id} className="border-y py-10 border-grigio/60 last:border-b-0 last:pb-0">
+                    <div className="flex flex-col items-center justify-center gap-3 mb-6">
+                      <span className="flex size-10 shrink-0 items-center justify-center  text-scuro">
+                        <IconCat className="size-full" strokeWidth={1} />
                       </span>
-                      {cat.label}
-                      <span className="ml-auto text-sm font-normal text-scuro/60">
-                        {list.length} {list.length === 1 ? "servizio" : "servizi"}
-                      </span>
+                      <h3 className="text-xl font-medium text-scuro">{cat.label}</h3>
                     </div>
-                    <div className="collapse-content">
-                      <ul className="pt-2 pb-4 pl-1 space-y-2 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2">
-                        {list.map((s, i) => {
-                          const IconS = s.icon;
-                          return (
-                            <li key={`${s.titolo}-${i}`} className="flex items-center my-auto gap-3 text-scuro/90">
-                              <span className="flex h-5 w-5 shrink-0 items-center justify-center text-blu">
-                                <IconS className="h-4 w-4" strokeWidth={1.5} />
-                              </span>
-                              <span className="font-medium">{s.titolo}</span>
-                            </li>
-                          );
-                        })}
-                      </ul>
-                    </div>
+                    <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-6 gap-y-3">
+                      {list.map((s, i) => {
+                        const IconS = s.icon;
+                        return (
+                          <li key={`${s.titolo}-${i}`} className="flex flex-col justify-center bg-grigio px-2 py-12 items-center gap-3 text-scuro/90">
+                            <span className="flex size-8 shrink-0 items-center justify-center text-blu">
+                              <IconS className="size-full" strokeWidth={1} />
+                            </span>
+                            <span className="font-normal text-center text-lg">{s.titolo}</span>
+                          </li>
+                        );
+                      })}
+                    </ul>
                   </div>
                 );
               });

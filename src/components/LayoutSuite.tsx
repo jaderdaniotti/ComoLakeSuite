@@ -2,7 +2,7 @@
 
 import Image, { type StaticImageData } from "next/image";
 import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 type Props = {
   titolo: string;
@@ -45,6 +45,23 @@ export default function LayoutSuite({
     if (gallery.length === 0) return;
     setActiveIndex((prev) => (prev + 1) % gallery.length);
   };
+
+  const toSrc = (img: string | StaticImageData) =>
+    typeof img === "string" ? img : img.src;
+
+  const preloadList = useMemo(() => gallery.map(toSrc), [gallery]);
+
+  // Precarica immagine precedente/successiva per cambio istantaneo
+  useEffect(() => {
+    if (preloadList.length <= 1) return;
+    const nextIdx = (activeIndex + 1) % preloadList.length;
+    const prevIdx = (activeIndex - 1 + preloadList.length) % preloadList.length;
+    const urls = [preloadList[nextIdx], preloadList[prevIdx]].filter(Boolean);
+    for (const url of urls) {
+      const img = new window.Image();
+      img.src = url;
+    }
+  }, [activeIndex, preloadList]);
 
   const addMonths = (date: Date, amount: number) =>
     new Date(date.getFullYear(), date.getMonth() + amount, 1);
@@ -113,7 +130,7 @@ export default function LayoutSuite({
           priority
           sizes=""
         />
-        <div className="absolute inset-0 flex flex-col justify-center bg-gradient-to-t items-center from-scuro/80 to-transparent p-6 md:p-10">
+        <div className="absolute inset-0 flex flex-col justify-center bg-linear-to-t items-center from-scuro/80 to-transparent p-6 md:p-10">
           <p className="text-sm font-medium uppercase tracking-wide  text-bianco/70 ">
             {sottotitolo}
           </p>
@@ -147,13 +164,15 @@ export default function LayoutSuite({
           <section className=" py-12">
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
               <div className="space-y-4">
-                <div className="relative aspect-[4/3] overflow-hidden rounded-lg bg-grigio">
+                <div className="relative aspect-4/3 overflow-hidden bg-grigio">
                   <Image
                     src={gallery[activeIndex]}
                     alt={`${titolo} - immagine ${activeIndex + 1}`}
                     fill
                     className="object-cover"
                     sizes="(max-width: 768px) 100vw, 75vw"
+                    priority
+                    loading="eager"
                   />
 
                   <button
@@ -175,13 +194,13 @@ export default function LayoutSuite({
                   </button>
                 </div>
 
-                <div className="mt-2 flex gap-2 overflow-x-auto pb-2">
+                <div className="mt-3 flex gap-2 overflow-x-auto pb-2">
                   {gallery.map((src, i) => (
                     <button
                       key={i}
                       type="button"
                       onClick={() => setActiveIndex(i)}
-                      className={`relative lg:h-20 lg:w-28 h-12 w-18apa flex-shrink-0 overflow-hidden rounded-md border ${
+                      className={`relative h-14 w-20 sm:h-16 sm:w-24 lg:h-20 lg:w-28 shrink-0 overflow-hidden border ${
                         i === activeIndex
                           ? "border-blu border"
                           : "border-transparent"
@@ -192,7 +211,7 @@ export default function LayoutSuite({
                         alt={`${titolo} - miniatura ${i + 1}`}
                         fill
                         className="object-cover"
-                        sizes="112px"
+                        sizes="(min-width: 1024px) 112px, (min-width: 640px) 96px, 80px"
                       />
                     </button>
                   ))}

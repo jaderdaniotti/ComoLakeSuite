@@ -25,13 +25,18 @@ export default function Header() {
     if (checkbox) checkbox.checked = false;
   };
 
+  const chiudiTutto = () => {
+    setSuiteAperto(false); // Chiude il dropdown desktop
+    chiudiDrawer();        // Chiude il drawer mobile (quello che già avevi)
+  };
+
   return (
     <div className="drawer drawer-end z-9999 absolute">
       <input id="drawer-nav" type="checkbox" className="drawer-toggle" />
       <div className="drawer-content flex flex-col">
         <header className=" w-full z-50 flex">
           <div className=" flex w-full md:w-min items-center justify-between px-4 sm:px-6 lg:px-8">
-            <Link href="/" className="flex items-center justify-center shrink-0">
+            <Link href="/" className="flex items-center justify-center shrink-0" onClick={chiudiTutto}>
               <Image
                 src={images.logobianco}
                 alt="Como Lake Suites"
@@ -48,7 +53,7 @@ export default function Header() {
             </label>
           </div>
             <nav className="hidden mx-auto md:flex md:items-center md:gap-8 font-light tracking-wide text-md">
-              <Link href="/" className="link-nav text-bianco">
+              <Link href="/" className="link-nav text-bianco" onClick={chiudiTutto}>
                 Home
               </Link>
               <div className="relative">
@@ -77,10 +82,10 @@ export default function Header() {
                   </div>
                 )}
               </div>
-              <Link href="/i-nostri-servizi" className="link-nav text-bianco">
+              <Link href="/i-nostri-servizi" className="link-nav text-bianco" onClick={chiudiTutto}>
                 Servizi
               </Link>
-              <Link href="/contatti" className="link-nav text-bianco">
+              <Link href="/contatti" className="link-nav text-bianco" onClick={chiudiTutto}>
                 Contatti
               </Link>
             </nav>

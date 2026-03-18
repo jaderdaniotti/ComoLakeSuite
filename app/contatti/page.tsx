@@ -173,7 +173,7 @@ export default function ContattiPage() {
           </p>
           <div className="mt-6">
             <ContattiMapSection
-              thumbnailSrc={(images.logobianco as { src: string }).src}
+              thumbnailSrc={(images.logonero as { src: string }).src}
             />
           </div>
         </div>
