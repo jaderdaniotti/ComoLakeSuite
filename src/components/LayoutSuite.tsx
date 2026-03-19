@@ -25,6 +25,7 @@ export default function LayoutSuite({
   gallery,
   altHero,
 }: Props) {
+  const [activeIndex, setActiveIndex] = useState(0);
   const [checkIn, setCheckIn] = useState<Date | null>(null);
   const [checkOut, setCheckOut] = useState<Date | null>(null);
   const [adults, setAdults] = useState(2);
@@ -135,64 +136,64 @@ export default function LayoutSuite({
         {gallery.length > 0 && (
           <section className="py-12 space-y-4">
             <div className="carousel w-full max-w-5xl mx-auto rounded-xl overflow-hidden bg-grigio flex justify-center items-center">
-              {gallery.map((src, index) => {
-                const id = `slide${index + 1}`;
-                const prevId =
-                  index === 0 ? `slide${gallery.length}` : `slide${index}`;
-                const nextId =
-                  index === gallery.length - 1
-                    ? "slide1"
-                    : `slide${index + 2}`;
-
-                return (
-                  <div
-                    key={id}
-                    id={id}
-                    className="carousel-item relative w-full"
+              <div className="carousel-item relative w-full">
+                <div className="relative w-full aspect-[4/3]">
+                  <Image
+                    src={gallery[activeIndex]}
+                    alt={`${titolo} - immagine ${activeIndex + 1}`}
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 768px) 100vw, 75vw"
+                    priority={activeIndex === 0}
+                  />
+                </div>
+                <div className="absolute left-5 right-5 top-1/2 flex -translate-y-1/2 transform justify-between">
+                  <button
+                    type="button"
+                    className="btn btn-circle"
+                    onClick={() =>
+                      setActiveIndex(
+                        (prev) => (prev - 1 + gallery.length) % gallery.length,
+                      )
+                    }
                   >
-                    <div className="relative w-full aspect-[4/3]">
-                      <Image
-                        src={src}
-                        alt={`${titolo} - immagine ${index + 1}`}
-                        fill
-                        className="object-cover"
-                        sizes="(max-width: 768px) 100vw, 75vw"
-                        priority={index === 0}
-                      />
-                    </div>
-                    <div className="absolute left-5 right-5 top-1/2 flex -translate-y-1/2 transform justify-between">
-                      <a href={`#${prevId}`} className="btn btn-circle">
-                        ❮
-                      </a>
-                      <a href={`#${nextId}`} className="btn btn-circle">
-                        ❯
-                      </a>
-                    </div>
-                  </div>
-                );
-              })}
+                    ❮
+                  </button>
+                  <button
+                    type="button"
+                    className="btn btn-circle"
+                    onClick={() =>
+                      setActiveIndex((prev) => (prev + 1) % gallery.length)
+                    }
+                  >
+                    ❯
+                  </button>
+                </div>
+              </div>
             </div>
 
             <div className="flex justify-center">
               <div className="flex gap-2 overflow-x-auto pb-2 max-w-5xl">
-                {gallery.map((src, index) => {
-                  const id = `slide${index + 1}`;
-                  return (
-                    <a
-                      key={id}
-                      href={`#${id}`}
-                      className="relative block h-16 w-24 sm:h-20 sm:w-28 lg:h-24 lg:w-32 shrink-0 rounded-md overflow-hidden border border-transparent hover:border-blu transition"
-                    >
-                      <Image
-                        src={src}
-                        alt={`${titolo} - miniatura ${index + 1}`}
-                        fill
-                        className="object-cover"
-                        sizes="(min-width: 1024px) 128px, (min-width: 640px) 112px, 96px"
-                      />
-                    </a>
-                  );
-                })}
+                {gallery.map((src, index) => (
+                  <button
+                    key={index}
+                    type="button"
+                    onClick={() => setActiveIndex(index)}
+                    className={`relative block h-16 w-24 sm:h-20 sm:w-28 lg:h-24 lg:w-32 shrink-0 rounded-md overflow-hidden border transition ${
+                      index === activeIndex
+                        ? "border-blu"
+                        : "border-transparent hover:border-blu/70"
+                    }`}
+                  >
+                    <Image
+                      src={src}
+                      alt={`${titolo} - miniatura ${index + 1}`}
+                      fill
+                      className="object-cover"
+                      sizes="(min-width: 1024px) 128px, (min-width: 640px) 112px, 96px"
+                    />
+                  </button>
+                ))}
               </div>
             </div>
           </section>
