@@ -112,7 +112,9 @@ export default function Footer() {
           </div>
         </div>
       </div>
-
+<div className="w-full text-center text-sm bottom-0 absolute pb-3">
+  <p>Made with ❤️ by <a href="https://jaderdaniotti.netlify.app/" target="_blank" rel="noopener noreferrer" className="text-blu hover:underline">Jader</a></p>
+</div>
       <button
         type="button"
         onClick={scrollToTop}

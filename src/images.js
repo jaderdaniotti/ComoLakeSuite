@@ -251,12 +251,12 @@ const images = {
 
   // Suite Dante
   suiteDanteHero: dante_34,
-  suiteDanteGallery: [dante_0, dante_1, dante_2, dante_3, dante_4, dante_5, dante_6, dante_7, dante_8, dante_9, dante_10, dante_11, dante_12, dante_13, dante_14, dante_15, dante_16, dante_17, dante_18, dante_19, dante_20, dante_21, dante_22, dante_23, dante_24, dante_25, dante_26, dante_27, dante_28, dante_29, dante_30, dante_31, dante_32, dante_33, dante_34, dante_35, dante_36, dante_37, dante_38, dante_39, dante_40, dante_41, dante_42, dante_43, dante_44, dante_45, dante_46, dante_47, dante_48, dante_49, dante_50],
+  suiteDanteGallery: [dante_34,dante_12, dante_13, dante_49, dante_50, dante_14, dante_15, dante_16,  dante_18, dante_19, dante_20, dante_21, dante_22, dante_23, dante_24, dante_25, dante_26, dante_27, dante_28, dante_29, dante_30, dante_31, dante_36, dante_37, dante_44,  dante_47,dante_45, dante_1, dante_2, dante_3, dante_4, dante_5, dante_6, dante_7,],
   thumbDante: dante_34,
 
   // Suite VistaDuomo
   suiteVistaDuomoHero: duomo_0,
-  suiteVistaDuomoGallery: [duomo_0, duomo_1, duomo_2, duomo_3, duomo_4, duomo_5, duomo_6, duomo_7, duomo_8, duomo_9, duomo_10, duomo_11, duomo_12, duomo_13, duomo_14, duomo_15, duomo_16, duomo_17, duomo_18, duomo_19, duomo_20, duomo_21, duomo_22, duomo_23, duomo_24, duomo_25, duomo_26, duomo_27],
+  suiteVistaDuomoGallery: [duomo_15, duomo_27, duomo_8, duomo_9, duomo_10, duomo_11, duomo_12, duomo_13, duomo_14,  duomo_16, duomo_17, duomo_18, duomo_19, duomo_20, duomo_21, duomo_22, duomo_23, duomo_6, duomo_7,duomo_24,  duomo_0, duomo_1, duomo_2, duomo_3, ],
   thumbVistaDuomo: duomo_0,
 
   // Servizi (placeholder – aggiungere in public/images/ se necessario)
