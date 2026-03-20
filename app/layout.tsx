@@ -1,14 +1,7 @@
 import type { Metadata } from "next";
-import { Montserrat } from "next/font/google";
 import "./globals.css";
 import Header from "@/src/components/Header";
 import Footer from "@/src/components/Footer";
-
-const montserrat = Montserrat({
-  variable: "--font-montserrat",
-  subsets: ["latin"],
-  display: "swap",
-});
 
 export const metadata: Metadata = {
   title: "Como Lake Suites - Luxury Suites sul Lago di Como",
@@ -27,7 +20,7 @@ export default function RootLayout({
   return (
     <html lang="it">
       <body
-        className={`${montserrat.variable} font-sans antialiased min-h-screen flex flex-col`}
+        className="font-sans antialiased min-h-screen flex flex-col"
         suppressHydrationWarning
       >
           <Header />

@@ -371,7 +371,7 @@ export default function ServiziPage() {
           <h2 className="text-2xl font-light uppercase tracking-wide text-scuro text-center mb-14">
             Servizi in struttura
           </h2>
-          <div className="space-y-3">
+          <div className="space-y-3 ">
             {(() => {
               const byCat = groupServiziByCategoria(serviziBooking, categorieServizi);
               return categorieServizi.map((cat) => {
