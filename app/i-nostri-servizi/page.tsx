@@ -38,6 +38,7 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import images from "@/src/images";
+import ServicesOneRowCarousel from "@/src/components/ServicesOneRowCarousel";
 
 export const metadata: Metadata = {
   title: "Servizi - Como Lake Suites",
@@ -338,6 +339,11 @@ function groupServiziByCategoria(
 }
 
 export default function ServiziPage() {
+  const getIconKey = (icon: LucideIcon) =>
+    (icon as unknown as { displayName?: string; name?: string }).displayName ??
+    (icon as unknown as { displayName?: string; name?: string }).name ??
+    "";
+
   return (
     <div className="">
       <section className=" min-h-[600px] md:min-h-screen">
@@ -380,19 +386,44 @@ export default function ServiziPage() {
                       </span>
                       <h3 className="text-xl font-medium text-scuro">{cat.label}</h3>
                     </div>
-                    <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-6 gap-y-3">
-                      {list.map((s, i) => {
-                        const IconS = s.icon;
-                        return (
-                          <li key={`${s.titolo}-${i}`} className="flex flex-col justify-center bg-grigio px-2 py-12 items-center gap-3 text-scuro/90">
-                            <span className="flex size-8 shrink-0 items-center justify-center text-blu">
-                              <IconS className="size-full" strokeWidth={1} />
-                            </span>
-                            <span className="font-normal text-center text-lg">{s.titolo}</span>
-                          </li>
-                        );
-                      })}
-                    </ul>
+                    <div className="relative">
+                      <ServicesOneRowCarousel
+                        items={list.map((s) => ({
+                          iconKey: getIconKey(s.icon),
+                          titolo: s.titolo,
+                        }))}
+                        cols={1}
+                        chunkSize={1}
+                        visibilityClass="sm:hidden"
+                      />
+                      <ServicesOneRowCarousel
+                        items={list.map((s) => ({
+                          iconKey: getIconKey(s.icon),
+                          titolo: s.titolo,
+                        }))}
+                        cols={2}
+                        chunkSize={2}
+                        visibilityClass="hidden sm:block lg:hidden"
+                      />
+                      <ServicesOneRowCarousel
+                        items={list.map((s) => ({
+                          iconKey: getIconKey(s.icon),
+                          titolo: s.titolo,
+                        }))}
+                        cols={3}
+                        chunkSize={3}
+                        visibilityClass="hidden lg:block xl:hidden"
+                      />
+                      <ServicesOneRowCarousel
+                        items={list.map((s) => ({
+                          iconKey: getIconKey(s.icon),
+                          titolo: s.titolo,
+                        }))}
+                        cols={4}
+                        chunkSize={4}
+                        visibilityClass="hidden xl:block"
+                      />
+                    </div>
                   </div>
                 );
               });

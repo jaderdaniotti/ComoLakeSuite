@@ -95,7 +95,7 @@ export default function Footer() {
                   rel="noopener noreferrer"
                   className="text-blu hover:underline"
                 >
-                  AirB&B
+                  AirBNB
                 </a>
               </li>
               <li>

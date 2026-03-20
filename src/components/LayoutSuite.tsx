@@ -2,7 +2,7 @@
 
 import Image, { type StaticImageData } from "next/image";
 import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 type Props = {
   titolo: string;
@@ -26,6 +26,7 @@ export default function LayoutSuite({
   altHero,
 }: Props) {
   const [activeIndex, setActiveIndex] = useState(0);
+  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
   const [checkIn, setCheckIn] = useState<Date | null>(null);
   const [checkOut, setCheckOut] = useState<Date | null>(null);
   const [adults, setAdults] = useState(2);
@@ -91,6 +92,19 @@ export default function LayoutSuite({
     setCheckOut(day);
   };
 
+  const closeLightbox = () => setLightboxIndex(null);
+
+  useEffect(() => {
+    if (lightboxIndex === null) return;
+
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") closeLightbox();
+    };
+
+    document.addEventListener("keydown", onKeyDown);
+    return () => document.removeEventListener("keydown", onKeyDown);
+  }, [lightboxIndex]);
+
   return (
     <div className="bg-bianco">
       {/* hero */}
@@ -137,7 +151,7 @@ export default function LayoutSuite({
           <section className="py-12 space-y-4">
             <div className="carousel w-full max-w-5xl mx-auto rounded-xl overflow-hidden bg-grigio flex justify-center items-center">
               <div className="carousel-item relative w-full">
-                <div className="relative w-full aspect-[4/3]">
+                <div className="relative w-full aspect-4/3">
                   <Image
                     src={gallery[activeIndex]}
                     alt={`${titolo} - immagine ${activeIndex + 1}`}
@@ -196,9 +210,79 @@ export default function LayoutSuite({
                 ))}
               </div>
             </div>
+<hr />
+            {/* Grid anteprime - click per lightbox a tutto schermo */}
+            <div className="pt-6">
+              <p className="text-xl font-light uppercase tracking-wide text-center text-scuro/70">
+                Anteprime della galleria
+              </p>
+
+              <div className="mt-6 grid grid-cols-2 md:grid-cols-4 gap-3 max-w-5xl mx-auto">
+                {gallery.map((src, index) => (
+                  <button
+                    key={index}
+                    type="button"
+                    onClick={() => {
+                      setActiveIndex(index);
+                      setLightboxIndex(index);
+                    }}
+                    className={`relative aspect-4/3 overflow-hidden rounded-lg bg-grigio border transition ${
+                      index === activeIndex
+                        ? "border-blu/70"
+                        : "border-transparent hover:border-grigio/80"
+                    }`}
+                    aria-label={`Apri immagine ${index + 1}`}
+                  >
+                    <Image
+                      src={src}
+                      alt={`${titolo} - foto ${index + 1}`}
+                      fill
+                      className="object-cover"
+                      sizes="(max-width: 768px) 45vw, 18vw"
+                    />
+                  </button>
+                ))}
+              </div>
+            </div>
           </section>
         )}
       </section>
+
+      {/* Lightbox */}
+      {lightboxIndex !== null && (
+        <div
+          className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Anteprima immagine"
+          onClick={closeLightbox}
+        >
+          <div
+            className="relative w-full max-w-7xl h-[80vh] md:h-[88vh]"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              type="button"
+              onClick={closeLightbox}
+              className="absolute right-2 top-2 z-10 btn btn-circle btn-sm bg-bianco/90 hover:bg-bianco"
+              aria-label="Chiudi"
+            >
+              ✕
+            </button>
+
+            <div className="relative w-full h-full  rounded-lg overflow-hidden">
+              <Image
+                src={gallery[lightboxIndex]}
+                alt={`${titolo} - immagine ${lightboxIndex + 1}`}
+                fill
+                className="object-contain"
+                sizes="(max-width: 768px) 95vw, 70vw"
+                priority
+              />
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* prenotazione */}
       <section className="bg-grigio/40">

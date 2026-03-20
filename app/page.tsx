@@ -1,22 +1,14 @@
 import Link from "next/link";
 import Image from "next/image";
 import {
-  ArrowRight,
   CircleParking,
   Wifi,
   Sun,
   Bubbles,
-  Coffee,
   ChefHat,
   Shirt,
   Thermometer,
-  LayoutGrid,
-  Sofa,
-  Sparkles,
-  Bath,
-  UtensilsCrossed,
   EggFried,
-  
 } from "lucide-react";
 import SuiteCard from "@/src/components/SuiteCard";
 import HeroCarousel from "@/src/components/HeroCarousel";
@@ -170,6 +162,15 @@ const esperienze = [
   },
 ];
 
+function chunkArray<T>(arr: T[], size: number): T[][] {
+  if (size <= 0) return [];
+  const pages: T[][] = [];
+  for (let i = 0; i < arr.length; i += size) {
+    pages.push(arr.slice(i, i + size));
+  }
+  return pages;
+}
+
 export default function HomePage() {
   return (
     <>
@@ -208,7 +209,7 @@ export default function HomePage() {
             >
               Visita
               <svg
-                className="w-8 h-8 justify-end group-hover:rotate-90 group-hover:bg-gray-50 text-gray-50 ease-linear duration-300 rounded-full border border-blu text-blu p-2 rotate-45"
+                className="w-8 h-8 justify-end group-hover:rotate-90 group-hover:bg-gray-50 ease-linear duration-300 rounded-full border border-blu text-blu p-2 rotate-45"
                 viewBox="0 0 16 19"
                 xmlns="http://www.w3.org/2000/svg"
               >
@@ -251,31 +252,275 @@ export default function HomePage() {
           <p className="mx-auto mt-4 max-w-2xl text-center text-scuro/80">
             Immersione nell&apos;atmosfera del Lago di Como con i nostri video.
           </p>
-          <div className="mt-12 grid gap-10 sm:grid-cols-2 lg:grid-cols-4 justify-center items-start">
-            {esperienze.map((e) => (
-              <div
-                key={e.titolo}
-                className="mx-auto flex w-full max-w-xs flex-col"
-              >
-                <div className="relative w-full overflow-hidden">
-                  <div className="relative w-full overflow-hidden" style={{ aspectRatio: "3/4" }}>
-                    <Image
-                      src={e.src}
-                      alt={e.titolo}
-                      fill
-                      className="object-cover"
-                      sizes="(min-width: 1024px) 20vw, (min-width: 640px) 40vw, 80vw"
-                    />
+          <div className="mt-12">
+            {/* Carosello "custom" via scroll orizzontale + snap.
+                Telefono: max 2 esperienze per pagina (1 colonna).
+                sm: 4 esperienze per pagina (2 colonne -> 2 righe).
+                lg+: 8 esperienze per pagina (4 colonne -> 2 righe). */}
+            {esperienze.length > 0 && (
+              <>
+                <div className="sm:hidden relative">
+                  <div
+                    id="exp-carousel-xs"
+                    data-exp-carousel
+                    className="overflow-x-auto snap-x snap-mandatory touch-pan-x"
+                  >
+                    <div className="flex">
+                      {chunkArray(esperienze, 1).map((pageItems, pageIndex) => (
+                        <div
+                          key={pageIndex}
+                          className="exp-page min-w-full snap-start px-0"
+                        >
+                          <div className="grid gap-10 grid-cols-1 justify-center items-start">
+                            {pageItems.map((e) => (
+                              <div
+                                key={e.titolo}
+                                className="mx-auto flex w-full max-w-xs flex-col"
+                              >
+                                <div className="relative w-full overflow-hidden">
+                                  <div
+                                    className="relative w-full overflow-hidden"
+                                    style={{ aspectRatio: "3/4" }}
+                                  >
+                                    <Image
+                                      src={e.src}
+                                      alt={e.titolo}
+                                      fill
+                                      className="object-cover"
+                                      sizes="(min-width: 1024px) 20vw, (min-width: 640px) 40vw, 80vw"
+                                    />
+                                  </div>
+                                </div>
+                                <h3 className="mt-4 text-2xl font-normal uppercase tracking-wide text-scuro">
+                                  {e.titolo}
+                                </h3>
+                                <p className="mt-2 text-sm font-light text-scuro/90">
+                                  {e.testo}
+                                </p>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
                   </div>
+
+                  {chunkArray(esperienze, 2).length > 1 && (
+                    <>
+                      <button
+                        type="button"
+                        data-exp-target="exp-carousel-xs"
+                        data-exp-dir="prev"
+                        className="btn btn-circle btn-sm pointer-events-auto absolute left-2 top-1/2 -translate-y-1/2"
+                        aria-label="Esperienze precedenti"
+                      >
+                        ❮
+                      </button>
+                      <button
+                        type="button"
+                        data-exp-target="exp-carousel-xs"
+                        data-exp-dir="next"
+                        className="btn btn-circle btn-sm pointer-events-auto absolute right-2 top-1/2 -translate-y-1/2"
+                        aria-label="Esperienze successive"
+                      >
+                        ❯
+                      </button>
+                    </>
+                  )}
                 </div>
-                <h3 className="mt-4 text-2xl font-normal uppercase tracking-wide text-scuro">
-                  {e.titolo}
-                </h3>
-                <p className="mt-2 text-sm font-light text-scuro/90">
-                  {e.testo}
-                </p>
-              </div>
-            ))}
+
+                <div className="hidden sm:block lg:hidden relative">
+                  <div
+                    id="exp-carousel-sm"
+                    data-exp-carousel
+                    className="overflow-x-auto snap-x snap-mandatory touch-pan-x"
+                  >
+                    <div className="flex">
+                      {chunkArray(esperienze, 4).map((pageItems, pageIndex) => (
+                        <div
+                          key={pageIndex}
+                          className="exp-page min-w-full snap-start px-0"
+                        >
+                          <div className="grid gap-10 grid-cols-2 justify-center items-start">
+                            {pageItems.map((e) => (
+                              <div
+                                key={e.titolo}
+                                className="mx-auto flex w-full max-w-xs flex-col"
+                              >
+                                <div className="relative w-full overflow-hidden">
+                                  <div
+                                    className="relative w-full overflow-hidden"
+                                    style={{ aspectRatio: "3/4" }}
+                                  >
+                                    <Image
+                                      src={e.src}
+                                      alt={e.titolo}
+                                      fill
+                                      className="object-cover"
+                                      sizes="(min-width: 1024px) 20vw, (min-width: 640px) 40vw, 80vw"
+                                    />
+                                  </div>
+                                </div>
+                                <h3 className="mt-4 text-2xl font-normal uppercase tracking-wide text-scuro">
+                                  {e.titolo}
+                                </h3>
+                                <p className="mt-2 text-sm font-light text-scuro/90">
+                                  {e.testo}
+                                </p>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {chunkArray(esperienze, 4).length > 1 && (
+                    <>
+                      <button
+                        type="button"
+                        data-exp-target="exp-carousel-sm"
+                        data-exp-dir="prev"
+                        className="btn btn-circle btn-sm pointer-events-auto absolute left-2 top-1/2 -translate-y-1/2"
+                        aria-label="Esperienze precedenti"
+                      >
+                        ❮
+                      </button>
+                      <button
+                        type="button"
+                        data-exp-target="exp-carousel-sm"
+                        data-exp-dir="next"
+                        className="btn btn-circle btn-sm pointer-events-auto absolute right-2 top-1/2 -translate-y-1/2"
+                        aria-label="Esperienze successive"
+                      >
+                        ❯
+                      </button>
+                    </>
+                  )}
+                </div>
+
+                <div className="hidden lg:block relative">
+                  <div
+                    id="exp-carousel-lg"
+                    data-exp-carousel
+                    className="overflow-x-auto snap-x snap-mandatory touch-pan-x"
+                  >
+                    <div className="flex">
+                      {chunkArray(esperienze, 8).map((pageItems, pageIndex) => (
+                        <div
+                          key={pageIndex}
+                          className="exp-page min-w-full snap-start px-0"
+                        >
+                          <div className="grid gap-10 grid-cols-4 justify-center items-start">
+                            {pageItems.map((e) => (
+                              <div
+                                key={e.titolo}
+                                className="mx-auto flex w-full max-w-xs flex-col"
+                              >
+                                <div className="relative w-full overflow-hidden">
+                                  <div
+                                    className="relative w-full overflow-hidden"
+                                    style={{ aspectRatio: "3/4" }}
+                                  >
+                                    <Image
+                                      src={e.src}
+                                      alt={e.titolo}
+                                      fill
+                                      className="object-cover"
+                                      sizes="(min-width: 1024px) 20vw, (min-width: 640px) 40vw, 80vw"
+                                    />
+                                  </div>
+                                </div>
+                                <h3 className="mt-4 text-2xl font-normal uppercase tracking-wide text-scuro">
+                                  {e.titolo}
+                                </h3>
+                                <p className="mt-2 text-sm font-light text-scuro/90">
+                                  {e.testo}
+                                </p>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {chunkArray(esperienze, 8).length > 1 && (
+                    <>
+                      <button
+                        type="button"
+                        data-exp-target="exp-carousel-lg"
+                        data-exp-dir="prev"
+                        className="btn btn-circle btn-sm pointer-events-auto absolute left-2 top-1/2 -translate-y-1/2"
+                        aria-label="Esperienze precedenti"
+                      >
+                        ❮
+                      </button>
+                      <button
+                        type="button"
+                        data-exp-target="exp-carousel-lg"
+                        data-exp-dir="next"
+                        className="btn btn-circle btn-sm pointer-events-auto absolute right-2 top-1/2 -translate-y-1/2"
+                        aria-label="Esperienze successive"
+                      >
+                        ❯
+                      </button>
+                    </>
+                  )}
+                </div>
+              </>
+            )}
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `
+                (function () {
+                  function setupCarousel(carouselEl) {
+                    if (!carouselEl || !carouselEl.id) return;
+                    var targetId = carouselEl.id;
+                    var pages = carouselEl.querySelectorAll('.exp-page');
+                    var pagesCount = pages ? pages.length : 0;
+                    if (!pagesCount || pagesCount <= 1) return;
+
+                    var btnPrev = document.querySelector('[data-exp-target="' + targetId + '"][data-exp-dir="prev"]');
+                    var btnNext = document.querySelector('[data-exp-target="' + targetId + '"][data-exp-dir="next"]');
+                    if (!btnPrev || !btnNext) return;
+
+                    function computeIndex() {
+                      var w = carouselEl.clientWidth || 1;
+                      return Math.max(0, Math.min(pagesCount - 1, Math.round(carouselEl.scrollLeft / w)));
+                    }
+
+                    var state = { index: computeIndex() };
+                    carouselEl.addEventListener('scroll', function () {
+                      state.index = computeIndex();
+                    }, { passive: true });
+
+                    function scrollToIndex(idx) {
+                      var w = carouselEl.clientWidth || 1;
+                      carouselEl.scrollTo({ left: w * idx, behavior: 'smooth' });
+                    }
+
+                    btnPrev.addEventListener('click', function () {
+                      var newIndex = state.index - 1;
+                      if (newIndex < 0) newIndex = pagesCount - 1;
+                      state.index = newIndex;
+                      scrollToIndex(newIndex);
+                    });
+
+                    btnNext.addEventListener('click', function () {
+                      var newIndex = state.index + 1;
+                      if (newIndex > pagesCount - 1) newIndex = 0;
+                      state.index = newIndex;
+                      scrollToIndex(newIndex);
+                    });
+                  }
+
+                  var carousels = document.querySelectorAll('[data-exp-carousel]');
+                  carousels.forEach(setupCarousel);
+                })();
+              `,
+            }}
+          />
           </div>
           <div className="mt-16 grid gap-6 sm:grid-cols-1 ">
             <div className="aspect-video w-full overflow-hidden rounded-lg bg-scuro">
