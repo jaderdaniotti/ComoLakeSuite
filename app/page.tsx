@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
+import Script from "next/script";
 import {
   CircleParking,
   Wifi,
@@ -254,7 +255,7 @@ export default function HomePage() {
           </p>
           <div className="mt-12">
             {/* Carosello "custom" via scroll orizzontale + snap.
-                Telefono: max 2 esperienze per pagina (1 colonna).
+                Telefono: 2 esperienze in 1 riga.
                 sm: 4 esperienze per pagina (2 colonne -> 2 righe).
                 lg+: 8 esperienze per pagina (4 colonne -> 2 righe). */}
             {esperienze.length > 0 && (
@@ -271,7 +272,7 @@ export default function HomePage() {
                           key={pageIndex}
                           className="exp-page min-w-full snap-start px-0"
                         >
-                          <div className="grid gap-10 grid-cols-1 justify-center items-start">
+                          <div className="grid gap-6 grid-cols-1 justify-center items-start">
                             {pageItems.map((e) => (
                               <div
                                 key={e.titolo}
@@ -470,57 +471,53 @@ export default function HomePage() {
                 </div>
               </>
             )}
-          <script
-            dangerouslySetInnerHTML={{
-              __html: `
-                (function () {
-                  function setupCarousel(carouselEl) {
-                    if (!carouselEl || !carouselEl.id) return;
-                    var targetId = carouselEl.id;
-                    var pages = carouselEl.querySelectorAll('.exp-page');
-                    var pagesCount = pages ? pages.length : 0;
-                    if (!pagesCount || pagesCount <= 1) return;
+          <Script id="exp-carousel-nav" strategy="afterInteractive">{`
+            (function () {
+              function setupCarousel(carouselEl) {
+                if (!carouselEl || !carouselEl.id) return;
+                var targetId = carouselEl.id;
+                var pages = carouselEl.querySelectorAll('.exp-page');
+                var pagesCount = pages ? pages.length : 0;
+                if (!pagesCount || pagesCount <= 1) return;
 
-                    var btnPrev = document.querySelector('[data-exp-target="' + targetId + '"][data-exp-dir="prev"]');
-                    var btnNext = document.querySelector('[data-exp-target="' + targetId + '"][data-exp-dir="next"]');
-                    if (!btnPrev || !btnNext) return;
+                var btnPrev = document.querySelector('[data-exp-target="' + targetId + '"][data-exp-dir="prev"]');
+                var btnNext = document.querySelector('[data-exp-target="' + targetId + '"][data-exp-dir="next"]');
+                if (!btnPrev || !btnNext) return;
 
-                    function computeIndex() {
-                      var w = carouselEl.clientWidth || 1;
-                      return Math.max(0, Math.min(pagesCount - 1, Math.round(carouselEl.scrollLeft / w)));
-                    }
+                function computeIndex() {
+                  var w = carouselEl.clientWidth || 1;
+                  return Math.max(0, Math.min(pagesCount - 1, Math.round(carouselEl.scrollLeft / w)));
+                }
 
-                    var state = { index: computeIndex() };
-                    carouselEl.addEventListener('scroll', function () {
-                      state.index = computeIndex();
-                    }, { passive: true });
+                var state = { index: computeIndex() };
+                carouselEl.addEventListener('scroll', function () {
+                  state.index = computeIndex();
+                }, { passive: true });
 
-                    function scrollToIndex(idx) {
-                      var w = carouselEl.clientWidth || 1;
-                      carouselEl.scrollTo({ left: w * idx, behavior: 'smooth' });
-                    }
+                function scrollToIndex(idx) {
+                  var w = carouselEl.clientWidth || 1;
+                  carouselEl.scrollTo({ left: w * idx, behavior: 'smooth' });
+                }
 
-                    btnPrev.addEventListener('click', function () {
-                      var newIndex = state.index - 1;
-                      if (newIndex < 0) newIndex = pagesCount - 1;
-                      state.index = newIndex;
-                      scrollToIndex(newIndex);
-                    });
+                btnPrev.addEventListener('click', function () {
+                  var newIndex = state.index - 1;
+                  if (newIndex < 0) newIndex = pagesCount - 1;
+                  state.index = newIndex;
+                  scrollToIndex(newIndex);
+                });
 
-                    btnNext.addEventListener('click', function () {
-                      var newIndex = state.index + 1;
-                      if (newIndex > pagesCount - 1) newIndex = 0;
-                      state.index = newIndex;
-                      scrollToIndex(newIndex);
-                    });
-                  }
+                btnNext.addEventListener('click', function () {
+                  var newIndex = state.index + 1;
+                  if (newIndex > pagesCount - 1) newIndex = 0;
+                  state.index = newIndex;
+                  scrollToIndex(newIndex);
+                });
+              }
 
-                  var carousels = document.querySelectorAll('[data-exp-carousel]');
-                  carousels.forEach(setupCarousel);
-                })();
-              `,
-            }}
-          />
+              var carousels = document.querySelectorAll('[data-exp-carousel]');
+              carousels.forEach(setupCarousel);
+            })();
+          `}</Script>
           </div>
           <div className="mt-16 grid gap-6 sm:grid-cols-1 ">
             <div className="aspect-video w-full overflow-hidden rounded-lg bg-scuro">
