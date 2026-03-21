@@ -170,7 +170,7 @@ export default function LayoutSuite({
           <h2 className="mt-2 text-5xl font-normal text-blu text-center">
             {dettagliTitolo}
           </h2>
-          <p className="mt-4 text-scuro/90 leading-relaxed max-w-2xl text-blu text-center">
+          <p className="mt-4 leading-relaxed max-w-2xl text-blu text-center">
             {dettagliTesto}
           </p>
         </div>

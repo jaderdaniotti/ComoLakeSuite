@@ -303,7 +303,7 @@ suiteVoltaGallery:[
 	cavour_23,
 	cavour_29
   ],
-  thumbCavour: cavour_0,
+  thumbCavour: cavour_30,
 
   // Suite Cernobbio
   suiteCernobbioHero: cernobbio_29,
@@ -371,7 +371,7 @@ suiteVoltaGallery:[
     thumbDante: dante_34,
     
   // Suite VistaDuomo
-  suiteVistaDuomoHero: duomo_0,
+  suiteVistaDuomoHero: duomo_15,
   suiteVistaDuomoGallery: [
     duomo_15, 
     duomo_27, 
@@ -402,7 +402,7 @@ suiteVoltaGallery:[
     duomo_5,
     duomo_26,
   ],
-  thumbVistaDuomo: duomo_0,
+  thumbVistaDuomo: duomo_15,
 
   // Servizi (placeholder – aggiungere in public/images/ se necessario)
   serviziHero: volta_5,
