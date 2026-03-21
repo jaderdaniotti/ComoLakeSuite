@@ -84,7 +84,7 @@ export default function HeroCarousel({ slides }: Props) {
             <h1 className="mt-2 text-4xl font-extralight tracking-tight sm:text-5xl md:text-7xl">
               {s.titolo}
             </h1>
-            <p className="mt-4 max-w-2xl text-lg text-bianco/90">
+            <p className="mt-4 max-w-2xl text-lg md:text-2xl leading-tight tracking-tight text-bianco/90">
               {s.descrizione}
             </p>
             <Link

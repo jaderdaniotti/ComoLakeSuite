@@ -38,7 +38,7 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import images from "@/src/images";
-import ServicesOneRowCarousel from "@/src/components/ServicesOneRowCarousel";
+import ServiziCategorieAccordion from "@/src/components/ServiziCategorieAccordion";
 
 export const metadata: Metadata = {
   title: "Servizi - Como Lake Suites",
@@ -157,7 +157,7 @@ const serviziBooking: { icon: LucideIcon; titolo: string }[] = [
   { icon: ChefHat, titolo: "Utensili da cucina" },
   { icon: Bath, titolo: "Vasca o doccia" },
   { icon: Coffee, titolo: "Vino/champagne" },
-  { icon: Sun, titolo: "Vista" },
+  { icon: Sun, titolo: "Vista Lago" },
   { icon: MapPin, titolo: "Vista città" },
   { icon: Star, titolo: "Vista luogo di interesse" },
   { icon: Mountain, titolo: "Vista montagna" },
@@ -293,7 +293,7 @@ const categorieServizi: CategoriaServizi[] = [
     id: "vista",
     label: "Esterni e vista",
     icon: MapPin,
-    titoli: ["Vista città", "Vista luogo di interesse", "Vista montagna", "Vista"],
+    titoli: ["Vista Lago", "Vista luogo di interesse", "Vista montagna", "Vista  città"],
   },
   {
     id: "edificio",
@@ -344,6 +344,24 @@ export default function ServiziPage() {
     (icon as unknown as { displayName?: string; name?: string }).name ??
     "";
 
+  const byCat = groupServiziByCategoria(serviziBooking, categorieServizi);
+  const categoriePerAccordion = categorieServizi
+    .map((cat) => {
+      const list = byCat.get(cat.id);
+      if (!list || list.length === 0) return null;
+      return {
+        id: cat.id,
+        label: cat.label,
+        items: list.map((s) => ({
+          iconKey: getIconKey(s.icon),
+          titolo: s.titolo,
+        })),
+      };
+    })
+    .filter(
+      (c): c is NonNullable<typeof c> => c !== null
+    );
+
   return (
     <div className="">
       <section className=" min-h-[600px] md:min-h-screen">
@@ -371,64 +389,7 @@ export default function ServiziPage() {
           <h2 className="text-2xl font-light uppercase tracking-wide text-scuro text-center mb-14">
             Servizi in struttura
           </h2>
-          <div className="space-y-3 ">
-            {(() => {
-              const byCat = groupServiziByCategoria(serviziBooking, categorieServizi);
-              return categorieServizi.map((cat) => {
-                const list = byCat.get(cat.id);
-                if (!list || list.length === 0) return null;
-                const IconCat = cat.icon;
-                return (
-                  <div key={cat.id} className="border-y py-10 border-grigio/60 last:border-b-0 last:pb-0">
-                    <div className="flex flex-col items-center justify-center gap-3 mb-6">
-                      <span className="flex size-10 shrink-0 items-center justify-center  text-scuro">
-                        <IconCat className="size-full" strokeWidth={1} />
-                      </span>
-                      <h3 className="text-xl font-medium text-scuro">{cat.label}</h3>
-                    </div>
-                    <div className="relative">
-                      <ServicesOneRowCarousel
-                        items={list.map((s) => ({
-                          iconKey: getIconKey(s.icon),
-                          titolo: s.titolo,
-                        }))}
-                        cols={1}
-                        chunkSize={1}
-                        visibilityClass="sm:hidden"
-                      />
-                      <ServicesOneRowCarousel
-                        items={list.map((s) => ({
-                          iconKey: getIconKey(s.icon),
-                          titolo: s.titolo,
-                        }))}
-                        cols={2}
-                        chunkSize={2}
-                        visibilityClass="hidden sm:block lg:hidden"
-                      />
-                      <ServicesOneRowCarousel
-                        items={list.map((s) => ({
-                          iconKey: getIconKey(s.icon),
-                          titolo: s.titolo,
-                        }))}
-                        cols={3}
-                        chunkSize={3}
-                        visibilityClass="hidden lg:block xl:hidden"
-                      />
-                      <ServicesOneRowCarousel
-                        items={list.map((s) => ({
-                          iconKey: getIconKey(s.icon),
-                          titolo: s.titolo,
-                        }))}
-                        cols={4}
-                        chunkSize={4}
-                        visibilityClass="hidden xl:block"
-                      />
-                    </div>
-                  </div>
-                );
-              });
-            })()}
-          </div>
+          <ServiziCategorieAccordion categorie={categoriePerAccordion} />
         </div>
       </section>
     </div>

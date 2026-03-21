@@ -9,12 +9,21 @@ import {
 } from "lucide-react";
 import images from "@/src/images";
 
+
 export default function Footer() {
   const scrollToTop = () => window.scrollTo({ top: 0, behavior: "smooth" });
 
   return (
-    <footer className="relative bg-bianco min-h-screen flex flex-col justify-center text-gray-800 border-t border-blu py-12">
-      <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+    <footer className="relative bg-bianco min-h-[60vh] flex flex-col justify-center text-gray-800 border-t border-blu py-12 ">
+
+      <div className="absolute inset-0 z-10">
+        <Image src={images.footer} alt="" fill className="object-cover" sizes="100vw" />
+        <div
+          className="pointer-events-none absolute inset-0 z-10 bg-white/30"
+          aria-hidden
+        />
+      </div>
+      <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8 z-20">
         <div className="grid gap-10 lg:grid-cols-4">
           <div>
             <p className="text-blu text-md">I nostri</p>

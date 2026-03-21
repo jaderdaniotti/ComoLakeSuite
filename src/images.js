@@ -123,6 +123,7 @@ import cernobbio_43 from "./images/cernobbio/_MG_1329a.webp";
 import cernobbio_44 from "./images/cernobbio/_MG_1342a.webp";
 import cernobbio_45 from "./images/cernobbio/_MG_1346a.webp";
 import cernobbio_46 from "./images/cernobbio/_MG_1354a.webp";
+import cernobbio_47 from "./images/cernobbio/_MG_1297a.webp";
 import dante_0 from "./images/dante/13A2C57A-BAD4-4645-86BE-4B353A035D24.webp";
 import dante_1 from "./images/dante/76ae2628-9562-4232-ae33-46b33d9ac623 3.webp";
 import dante_2 from "./images/dante/76ae2628-9562-4232-ae33-46b33d9ac623.webp";
@@ -206,6 +207,7 @@ import marilena from "./images/marilena.webp";
 import massimiliano from "./images/max.webp";
 import fotocomo from "./images/fotocomo.webp";
 import logonero from "./images/logo-verticale.webp";
+import footer from "./images/footer.webp";
 
 /**
  * Immagini per suite, generate da scripts/generate-images.js
@@ -214,6 +216,7 @@ import logonero from "./images/logo-verticale.webp";
 const images = {
   logonero,
   logobianco,
+  footer,
   marilena,
   massimiliano,
   fotocomo,
@@ -231,17 +234,80 @@ const images = {
 
   // Suite Volta
   suiteVoltaHero: volta_37,
-  suiteVoltaGallery: [volta_0, volta_1, volta_3, volta_4, volta_5, volta_6, volta_8, volta_9, volta_10, volta_11, volta_12, volta_13, volta_14, volta_15, volta_16, volta_17, volta_18, volta_19, volta_20, volta_21, volta_23, volta_26, volta_27, volta_28, volta_29, volta_30, volta_32, volta_33, volta_34, volta_37, volta_36],
+suiteVoltaGallery:[
+	volta_0,
+  volta_37,
+  volta_1,
+	volta_4,
+	volta_5,
+	volta_8,
+	volta_9,
+	volta_10,
+	volta_11,
+	volta_12,
+	volta_13,
+	volta_14,
+	volta_15,
+	volta_16,
+	volta_17,
+	volta_18,
+	volta_19,
+	volta_20,
+	volta_21,
+	volta_23,
+	volta_26,
+	volta_27,
+	volta_28,
+	volta_29,
+	volta_30,
+	volta_32,
+	volta_33,
+	volta_36,
+	volta_1,
+	volta_34,
+	volta_2
+],
   thumbVolta: volta_37,
 
   // Suite Cavour
   suiteCavourHero: cavour_30,
-  suiteCavourGallery: [cavour_30,  cavour_7, cavour_8, cavour_9, cavour_10, cavour_11, cavour_12, cavour_13, cavour_14, cavour_15, cavour_16, cavour_17, cavour_18, cavour_19, cavour_20, cavour_21, cavour_22,  cavour_24, cavour_25, cavour_26, cavour_27, cavour_28, cavour_1, cavour_2, cavour_6,],
+  suiteCavourGallery: [
+    cavour_30,
+	cavour_7,
+	cavour_8,
+	cavour_9,
+	cavour_10,
+	cavour_11,
+	cavour_12,
+	cavour_13,
+	cavour_14,
+	cavour_15,
+	cavour_16,
+	cavour_17,
+	cavour_18,
+	cavour_19,
+	cavour_20,
+	cavour_21,
+	cavour_22,
+	cavour_24,
+	cavour_25,
+	cavour_26,
+	cavour_27,
+	cavour_28,
+	cavour_1,
+	cavour_2,
+	cavour_6,
+	cavour_3,
+	cavour_4,
+	cavour_5,
+	cavour_23,
+	cavour_29
+  ],
   thumbCavour: cavour_0,
 
   // Suite Cernobbio
   suiteCernobbioHero: cernobbio_29,
-  suiteCernobbioGallery: [ cernobbio_24,cernobbio_23, cernobbio_25, cernobbio_26, cernobbio_27, cernobbio_28, cernobbio_29, cernobbio_30, cernobbio_31, cernobbio_32, cernobbio_33, cernobbio_34, cernobbio_35, cernobbio_36, cernobbio_37,  cernobbio_39, cernobbio_42, cernobbio_46, cernobbio_0, cernobbio_1, cernobbio_2, cernobbio_3,  cernobbio_7, cernobbio_8, cernobbio_9, cernobbio_11, ],
+  suiteCernobbioGallery: [cernobbio_47, cernobbio_24,cernobbio_23, cernobbio_25, cernobbio_26, cernobbio_27, cernobbio_28, cernobbio_29, cernobbio_30, cernobbio_31, cernobbio_32, cernobbio_33, cernobbio_34, cernobbio_35, cernobbio_36, cernobbio_37,  cernobbio_39, cernobbio_42, cernobbio_46, cernobbio_0, cernobbio_1, cernobbio_2, cernobbio_3,  cernobbio_7, cernobbio_8, cernobbio_9, cernobbio_11, cernobbio_4, cernobbio_5, cernobbio_6, cernobbio_10, cernobbio_12, cernobbio_13, cernobbio_14, cernobbio_15, cernobbio_16, cernobbio_17, cernobbio_18, cernobbio_19, cernobbio_20, cernobbio_21, cernobbio_22, cernobbio_38, cernobbio_40, cernobbio_41, cernobbio_43, cernobbio_44, cernobbio_45,],
   thumbCernobbio: cernobbio_29,
 
   // Suite ComoSole
@@ -251,16 +317,95 @@ const images = {
 
   // Suite Dante
   suiteDanteHero: dante_34,
-  suiteDanteGallery: [dante_34,dante_12, dante_13, dante_49, dante_50, dante_14, dante_15, dante_16,  dante_18, dante_19, dante_20, dante_21, dante_22, dante_23, dante_24, dante_25, dante_26, dante_27, dante_28, dante_29, dante_30, dante_31, dante_36, dante_37, dante_44,  dante_47,dante_45, dante_1, dante_2, dante_3, dante_4, dante_5, dante_6, dante_7,],
-  thumbDante: dante_34,
-
+  suiteDanteGallery: [ 
+    dante_27, 
+    dante_34, 
+    dante_28, 
+    dante_29, 
+    dante_30, 
+    dante_31, 
+    dante_0,
+    dante_9, 
+    dante_10, 
+    dante_11, 
+    dante_32, 
+    dante_33, 
+    dante_35, 
+    dante_12, 
+    dante_13, 
+    dante_23, 
+    dante_24, 
+    dante_49, 
+    dante_50,
+    dante_22, 
+    dante_46,  
+    dante_14, 
+    dante_15, 
+    dante_16,  
+    dante_18, 
+    dante_17,  
+    dante_19, 
+    dante_20, 
+    dante_21, 
+    dante_25, 
+    dante_26,  
+    dante_36, 
+    dante_37, 
+    dante_44,  
+    dante_47,
+    dante_45, 
+    dante_38, 
+    dante_39, 
+    dante_2, 
+    dante_3, 
+    dante_4, 
+    dante_5, 
+    dante_6, 
+    dante_40, 
+    dante_41, 
+    dante_42, 
+    dante_43, 
+    dante_7, 
+    dante_48,
+  ],
+    thumbDante: dante_34,
+    
   // Suite VistaDuomo
   suiteVistaDuomoHero: duomo_0,
-  suiteVistaDuomoGallery: [duomo_15, duomo_27, duomo_8, duomo_9, duomo_10, duomo_11, duomo_12, duomo_13, duomo_14,  duomo_16, duomo_17, duomo_18, duomo_19, duomo_20, duomo_21, duomo_22, duomo_23, duomo_6, duomo_7,duomo_24,  duomo_0, duomo_1, duomo_2, duomo_3, ],
+  suiteVistaDuomoGallery: [
+    duomo_15, 
+    duomo_27, 
+    duomo_8, 
+    duomo_9, 
+    duomo_10, 
+    duomo_11, 
+    duomo_12, 
+    duomo_13, 
+    duomo_14,  
+    duomo_16, 
+    duomo_17, 
+    duomo_18, 
+    duomo_19, 
+    duomo_20, 
+    duomo_21, 
+    duomo_22, 
+    duomo_23, 
+    duomo_25,
+    duomo_7,
+    duomo_6, 
+    duomo_24,  
+    duomo_0, 
+    duomo_1, 
+    duomo_2, 
+    duomo_3, 
+    duomo_4, 
+    duomo_5,
+    duomo_26,
+  ],
   thumbVistaDuomo: duomo_0,
 
   // Servizi (placeholder – aggiungere in public/images/ se necessario)
-  serviziHero: volta_4,
+  serviziHero: volta_5,
 };
 
 export default images;

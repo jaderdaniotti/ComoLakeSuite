@@ -181,3 +181,27 @@ backdrop-filter: blur(15.5px);
 .apartments-map-wrap .leaflet-tile-pane {
   filter: saturate(1.2) contrast(1.05);
 }
+
+/* Lightbox galleria LayoutSuite: shimmer e barra durante il caricamento */
+@keyframes lightbox-shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+@keyframes lightbox-bar {
+  0% {
+    transform: translateX(-120%);
+  }
+  100% {
+    transform: translateX(420%);
+  }
+}
+.animate-lightbox-shimmer {
+  animation: lightbox-shimmer 1.35s ease-in-out infinite;
+}
+.animate-lightbox-bar {
+  animation: lightbox-bar 1.05s ease-in-out infinite;
+}

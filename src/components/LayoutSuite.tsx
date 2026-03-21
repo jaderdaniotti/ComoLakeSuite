@@ -2,7 +2,7 @@
 
 import Image, { type StaticImageData } from "next/image";
 import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 type Props = {
   titolo: string;
@@ -27,6 +27,10 @@ export default function LayoutSuite({
 }: Props) {
   const [activeIndex, setActiveIndex] = useState(0);
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
+  const [lightboxLoading, setLightboxLoading] = useState(false);
+  const [lightboxNavDir, setLightboxNavDir] = useState<"next" | "prev" | null>(
+    null,
+  );
   const [checkIn, setCheckIn] = useState<Date | null>(null);
   const [checkOut, setCheckOut] = useState<Date | null>(null);
   const [adults, setAdults] = useState(2);
@@ -92,18 +96,48 @@ export default function LayoutSuite({
     setCheckOut(day);
   };
 
-  const closeLightbox = () => setLightboxIndex(null);
+  const closeLightbox = useCallback(() => {
+    setLightboxIndex(null);
+    setLightboxLoading(false);
+    setLightboxNavDir(null);
+  }, []);
+
+  const goLightboxPrev = useCallback(() => {
+    if (lightboxIndex === null || gallery.length === 0) return;
+    setLightboxLoading(true);
+    setLightboxNavDir("prev");
+    const prev = (lightboxIndex - 1 + gallery.length) % gallery.length;
+    setLightboxIndex(prev);
+    setActiveIndex(prev);
+  }, [lightboxIndex, gallery.length]);
+
+  const goLightboxNext = useCallback(() => {
+    if (lightboxIndex === null || gallery.length === 0) return;
+    setLightboxLoading(true);
+    setLightboxNavDir("next");
+    const next = (lightboxIndex + 1) % gallery.length;
+    setLightboxIndex(next);
+    setActiveIndex(next);
+  }, [lightboxIndex, gallery.length]);
 
   useEffect(() => {
     if (lightboxIndex === null) return;
 
     const onKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") closeLightbox();
+      if (e.key === "ArrowLeft") {
+        e.preventDefault();
+        goLightboxPrev();
+      }
+      if (e.key === "ArrowRight") {
+        e.preventDefault();
+        goLightboxNext();
+      }
     };
 
     document.addEventListener("keydown", onKeyDown);
     return () => document.removeEventListener("keydown", onKeyDown);
-  }, [lightboxIndex]);
+  }, [lightboxIndex, closeLightbox, goLightboxPrev, goLightboxNext]);
 
   return (
     <div className="bg-bianco">
@@ -127,7 +161,7 @@ export default function LayoutSuite({
         </div>
       </section>
 
-{/* descrizione */}
+      {/* descrizione */}
       <section className="mx-auto  px-4 py-16 sm:px-6 lg:px-8 bg-grigio">
         <div className="max-w-7xl mx-auto flex flex-col items-center justify-center">
           <p className="text-sm font-medium uppercase tracking-wide text-scuro/70">
@@ -136,7 +170,7 @@ export default function LayoutSuite({
           <h2 className="mt-2 text-5xl font-normal text-blu text-center">
             {dettagliTitolo}
           </h2>
-          <p className="mt-4 text-scuro/90 leading-relaxed max-w-2xl text-center">
+          <p className="mt-4 text-scuro/90 leading-relaxed max-w-2xl text-blu text-center">
             {dettagliTesto}
           </p>
         </div>
@@ -148,85 +182,22 @@ export default function LayoutSuite({
           Immagini della suite
         </p>
         {gallery.length > 0 && (
-          <section className="py-12 space-y-4">
-            <div className="carousel w-full max-w-5xl mx-auto rounded-xl overflow-hidden bg-grigio flex justify-center items-center">
-              <div className="carousel-item relative w-full">
-                <div className="relative w-full aspect-4/3">
-                  <Image
-                    src={gallery[activeIndex]}
-                    alt={`${titolo} - immagine ${activeIndex + 1}`}
-                    fill
-                    className="object-cover"
-                    sizes="(max-width: 768px) 100vw, 75vw"
-                    priority={activeIndex === 0}
-                  />
-                </div>
-                <div className="absolute left-5 right-5 top-1/2 flex -translate-y-1/2 transform justify-between">
-                  <button
-                    type="button"
-                    className="btn btn-circle"
-                    onClick={() =>
-                      setActiveIndex(
-                        (prev) => (prev - 1 + gallery.length) % gallery.length,
-                      )
-                    }
-                  >
-                    ❮
-                  </button>
-                  <button
-                    type="button"
-                    className="btn btn-circle"
-                    onClick={() =>
-                      setActiveIndex((prev) => (prev + 1) % gallery.length)
-                    }
-                  >
-                    ❯
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            <div className="flex justify-center">
-              <div className="flex gap-2 overflow-x-auto pb-2 max-w-5xl">
-                {gallery.map((src, index) => (
-                  <button
-                    key={index}
-                    type="button"
-                    onClick={() => setActiveIndex(index)}
-                    className={`relative block h-16 w-24 sm:h-20 sm:w-28 lg:h-24 lg:w-32 shrink-0 rounded-md overflow-hidden border transition ${
-                      index === activeIndex
-                        ? "border-blu"
-                        : "border-transparent hover:border-blu/70"
-                    }`}
-                  >
-                    <Image
-                      src={src}
-                      alt={`${titolo} - miniatura ${index + 1}`}
-                      fill
-                      className="object-cover"
-                      sizes="(min-width: 1024px) 128px, (min-width: 640px) 112px, 96px"
-                    />
-                  </button>
-                ))}
-              </div>
-            </div>
-<hr />
+          <section className="py-6 space-y-4">
             {/* Grid anteprime - click per lightbox a tutto schermo */}
-            <div className="pt-6">
-              <p className="text-xl font-light uppercase tracking-wide text-center text-scuro/70">
-                Anteprime della galleria
-              </p>
-
-              <div className="mt-6 grid grid-cols-2 md:grid-cols-4 gap-3 max-w-5xl mx-auto">
+            <div className="">
+              <div className="mt-6 grid grid-cols-2 md:grid-cols-4 max-w-5xl mx-auto">
                 {gallery.map((src, index) => (
+                  <div className="flex flex-col text-center" key={index}>
                   <button
                     key={index}
                     type="button"
                     onClick={() => {
                       setActiveIndex(index);
+                      setLightboxNavDir(null);
+                      setLightboxLoading(true);
                       setLightboxIndex(index);
                     }}
-                    className={`relative aspect-4/3 overflow-hidden rounded-lg bg-grigio border transition ${
+                    className={`relative aspect-4/3 overflow-hidden bg-grigio transition ${
                       index === activeIndex
                         ? "border-blu/70"
                         : "border-transparent hover:border-grigio/80"
@@ -237,10 +208,12 @@ export default function LayoutSuite({
                       src={src}
                       alt={`${titolo} - foto ${index + 1}`}
                       fill
-                      className="object-cover"
+                      className="object-cover hover:scale-105 transition-all duration-300"
                       sizes="(max-width: 768px) 45vw, 18vw"
                     />
                   </button>
+                  {/* <p className="text-sm text-scuro/70">{index + 1}</p> */}
+                  </div>
                 ))}
               </div>
             </div>
@@ -254,7 +227,7 @@ export default function LayoutSuite({
           className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4"
           role="dialog"
           aria-modal="true"
-          aria-label="Anteprima immagine"
+          aria-label={`Anteprima immagine ${lightboxIndex + 1} di ${gallery.length}`}
           onClick={closeLightbox}
         >
           <div
@@ -264,21 +237,88 @@ export default function LayoutSuite({
             <button
               type="button"
               onClick={closeLightbox}
-              className="absolute right-2 top-2 z-10 btn btn-circle btn-sm bg-bianco/90 hover:bg-bianco"
+              className="absolute right-2 top-2 z-20 btn btn-circle btn-sm bg-bianco/90 hover:bg-bianco"
               aria-label="Chiudi"
             >
               ✕
             </button>
 
-            <div className="relative w-full h-full  rounded-lg overflow-hidden">
-              <Image
-                src={gallery[lightboxIndex]}
-                alt={`${titolo} - immagine ${lightboxIndex + 1}`}
-                fill
-                className="object-contain"
-                sizes="(max-width: 768px) 95vw, 70vw"
-                priority
-              />
+            {gallery.length > 1 && (
+              <>
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    goLightboxPrev();
+                  }}
+                  className="absolute left-1 top-1/2 z-20 -translate-y-1/2 btn btn-circle btn-md border-0 bg-bianco/90 text-scuro shadow-md hover:bg-bianco md:left-2"
+                  aria-label="Immagine precedente"
+                >
+                  <ChevronLeft className="h-6 w-6" strokeWidth={1.75} />
+                </button>
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    goLightboxNext();
+                  }}
+                  className="absolute right-1 top-1/2 z-20 -translate-y-1/2 btn btn-circle btn-md border-0 bg-bianco/90 text-scuro shadow-md hover:bg-bianco md:right-2"
+                  aria-label="Immagine successiva"
+                >
+                  <ChevronRight className="h-6 w-6" strokeWidth={1.75} />
+                </button>
+              </>
+            )}
+
+            <p className="absolute bottom-2 left-1/2 z-20 -translate-x-1/2 rounded-full bg-black/50 px-3 py-1 text-xs text-bianco/90">
+              {lightboxIndex + 1} / {gallery.length}
+            </p>
+
+            <div className="relative w-full h-full rounded-lg overflow-hidden">
+              {/* Overlay animato: attivo per tutta la durata del caricamento */}
+              <div
+                className={`pointer-events-none absolute inset-0 z-10 transition-opacity duration-300 ${
+                  lightboxLoading ? "opacity-100" : "opacity-0"
+                }`}
+                aria-hidden
+              >
+                <div className="absolute inset-0 bg-scuro/25" />
+                <div
+                  className={`absolute inset-0 bg-linear-to-r from-transparent via-bianco/25 to-transparent ${
+                    lightboxLoading ? "animate-lightbox-shimmer" : ""
+                  }`}
+                />
+                <div className="absolute inset-x-0 top-0 h-0.5 overflow-hidden bg-bianco/10">
+                  <div
+                    className={`h-full w-2/5 rounded-full bg-bianco/70 shadow-[0_0_12px_rgba(255,255,255,0.6)] ${
+                      lightboxLoading ? "animate-lightbox-bar" : ""
+                    }`}
+                  />
+                </div>
+              </div>
+
+              <div
+                key={lightboxIndex}
+                className={`relative h-full w-full transition-[transform,opacity] duration-500 ease-out ${
+                  lightboxLoading && lightboxNavDir === "next"
+                    ? "translate-x-6 opacity-50 md:translate-x-8"
+                    : lightboxLoading && lightboxNavDir === "prev"
+                      ? "-translate-x-6 opacity-50 md:-translate-x-8"
+                      : lightboxLoading && lightboxNavDir === null
+                        ? "scale-[0.99] opacity-60"
+                        : "translate-x-0 scale-100 opacity-100"
+                }`}
+              >
+                <Image
+                  src={gallery[lightboxIndex]}
+                  alt={`${titolo} - immagine ${lightboxIndex + 1}`}
+                  fill
+                  className="object-contain"
+                  sizes="(max-width: 768px) 95vw, 70vw"
+                  priority
+                  onLoadingComplete={() => setLightboxLoading(false)}
+                />
+              </div>
             </div>
           </div>
         </div>

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { MapPin, MessageSquare } from "lucide-react";
+import { MapPin, Mail, Phone } from "lucide-react";
 import images from "@/src/images";
 import Image from "next/image";
 import ContattiMapSection from "@/src/components/ContattiMapSection";
@@ -33,131 +33,179 @@ export default function ContattiPage() {
         </div>
       </section>
 
-      {/* Contattaci + intro */}
-      <section className="relative z-10 bg-bianco py-14 md:py-20">
-        <div className="mx-auto max-w-4xl px-4 text-center sm:px-6 lg:px-8">
-          <h2 className="text-2xl font-light uppercase tracking-wide text-blu md:text-3xl">
-            Contattaci
-          </h2>
-          <p className="mt-5 max-w-2xl mx-auto text-scuro/80 leading-relaxed">
-            Gli ospiti potranno contattarci in qualsiasi momento. Possiamo
-            suggerire ogni tipo di servizio esclusivo e supportarli durante il
-            soggiorno.
-          </p>
+      {/* Contattaci: layout bianco 20% + grigio, testo + form */}
+      <section className="relative isolate w-full bg-bianco my-6 mx-auto overflow-hidden">
+        {/* Sfondo grigio 2/3: sotto al contenuto (z-index richiede position sul layer sopra) */}
+        <div
+          className="pointer-events-none absolute inset-0 z-0 grid grid-cols-2 lg:grid-cols-3"
+          aria-hidden
+        >
+          <div />
+          <div className="col-span-2 bg-grigio" />
         </div>
-        <div className="mx-auto max-w-5xl xl:max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="mt-6 grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-4 gap-x-10 gap-y-4 text-center md:gap-x-14">
-            <a
-              href="tel:+393409409123"
-              className="text-scuro hover:text-blu transition-colors"
-            >
-              <span className="block text-xs uppercase tracking-wider text-scuro/60">
-                Massimiliano
-              </span>
-              <span className="mt-0.5 block text-lg font-light tracking-wide md:text-xl">
-                +39 340 9409123
-              </span>
-            </a>
-            <a
-              href="tel:+393331745544"
-              className="text-scuro hover:text-blu transition-colors"
-            >
-              <span className="block text-xs uppercase tracking-wider text-scuro/60">
-                Marilena
-              </span>
-              <span className="mt-0.5 block text-lg font-light tracking-wide md:text-xl">
-                +39 333 1745544
-              </span>
-            </a>
-            <a
-              href="mailto:info@comolakesuites.com"
-              className="text-scuro hover:text-blu transition-colors"
-            >
-              <span className="block text-xs uppercase tracking-wider text-scuro/60">
-                Email
-              </span>
-              <span className="mt-0.5 block text-lg font-light tracking-wide md:text-xl">
-                info@comolakesuites.com
-              </span>
-            </a>
-            <div>
-              <span className="block text-xs uppercase tracking-wider text-scuro/60">
-                Indirizzo
-              </span>
-              <span className="mt-0.5 block text-lg font-light tracking-wide text-scuro/90 md:text-xl">
-                Piazza Cavour ang. Via Albertolli 22 · 22100 Como
-              </span>
+        <div className="relative z-10 flex flex-col lg:flex-row lg:min-h-0">
+          <div className="flex-1  px-6 py-14 sm:px-10 md:px-12 md:py-16 lg:px-14 lg:py-20 xl:px-20">
+            <div className="mx-auto grid max-w-6xl grid-cols-1 gap-12 lg:grid-cols-2 lg:gap-x-16 xl:gap-x-24">
+              <div className="text-left">
+                <h2 className="text-3xl font-extralight uppercase tracking-[0.12em] text-black md:text-6xl">
+                  Contattaci
+                </h2>
+                <p className="mt-6 max-w-sm text-md leading-[1.75] text-[#666666] md:text-md">
+                  Gli ospiti potranno contattarci in qualsiasi momento, possiamo
+                  suggerire ogni tipo di servizio esclusivo e supportarli durante
+                  il soggiorno.
+                </p>
+                <div className="mt-10 grid grid-cols-1 gap-12 sm:grid-cols-2 sm:gap-x-12 md:gap-x-20">
+                  <div>
+                    <p className="font-normal text-3xl text-black">
+                      Marilena
+                    </p>
+                    <ul className="mt-4 space-y-4 text-sm text-black">
+                      <li className="flex gap-1">
+                        <Phone
+                          className="mt-0.5 h-4 w-4 shrink-0 text-black"
+                          strokeWidth={1.5}
+                          aria-hidden
+                        />
+                        <a
+                          href="tel:+393331745544"
+                          className="leading-snug hover:underline"
+                        >
+                          +39 333 1745544
+                        </a>
+                      </li>
+                      <li className="flex gap-1">
+                        <Mail
+                          className="mt-0.5 h-4 w-4 shrink-0 text-black"
+                          strokeWidth={1.5}
+                          aria-hidden
+                        />
+                        <a
+                          href="mailto:info@comolakesuites.com"
+                          className="leading-snug break-all hover:underline"
+                        >
+                          info@comolakesuites.com
+                        </a>
+                      </li>
+                      <li className="flex gap-1">
+                        <MapPin
+                          className="mt-0.5 h-4 w-4 shrink-0 text-black"
+                          strokeWidth={1.5}
+                          aria-hidden
+                        />
+                        <span className="leading-snug">
+                          Piazza Cavour ang. Via Albertolli 22
+                          <br />
+                          22100 Como,
+                          <br />
+                          Italia
+                        </span>
+                      </li>
+                    </ul>
+                  </div>
+                  <div>
+                    <p className="font-normal text-3xl text-black">
+                      Massimiliano
+                    </p>
+                    <ul className="mt-4 space-y-4 text-sm text-black">
+                      <li className="flex gap-1">
+                        <Phone
+                          className="mt-0.5 h-4 w-4 shrink-0 text-black"
+                          strokeWidth={1.5}
+                          aria-hidden
+                        />
+                        <a
+                          href="tel:+393409409123"
+                          className="leading-snug hover:underline"
+                        >
+                          +39 340 9409123
+                        </a>
+                      </li>
+                      <li className="flex gap-1">
+                        <Mail
+                          className="mt-0.5 h-4 w-4 shrink-0 text-black"
+                          strokeWidth={1.5}
+                          aria-hidden
+                        />
+                        <a
+                          href="mailto:info@comolakesuites.com"
+                          className="leading-snug break-all hover:underline"
+                        >
+                          info@comolakesuites.com
+                        </a>
+                      </li>
+                      <li className="flex gap-1">
+                        <MapPin
+                          className="mt-0.5 h-4 w-4 shrink-0 text-black"
+                          strokeWidth={1.5}
+                          aria-hidden
+                        />
+                        <span className="leading-snug">
+                          Piazza Cavour ang. Via Albertolli 22
+                          <br />
+                          22100 Como,
+                          <br />
+                          Italia
+                        </span>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+
+              <div className="lg:pt-1">
+                <form className="flex flex-col gap-6 md:gap-7">
+                  <div>
+                    <label htmlFor="nome" className="sr-only">
+                      Nome (obbligatorio)
+                    </label>
+                    <input
+                      id="nome"
+                      type="text"
+                      name="nome"
+                      required
+                      autoComplete="name"
+                      placeholder="Your Name*"
+                      className="w-full rounded-none border border-[#CCCCCC] bg-[#E8E8E8] px-4 py-3.5 text-sm text-black placeholder:text-[#666666] focus:border-[#1A1B35] focus:outline-none focus:ring-1 focus:ring-[#1A1B35]"
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="email" className="sr-only">
+                      Email (obbligatorio)
+                    </label>
+                    <input
+                      id="email"
+                      type="email"
+                      name="email"
+                      required
+                      autoComplete="email"
+                      placeholder="Email address*"
+                      className="w-full rounded-none border border-[#CCCCCC] bg-[#E8E8E8] px-4 py-3.5 text-sm text-black placeholder:text-[#666666] focus:border-[#1A1B35] focus:outline-none focus:ring-1 focus:ring-[#1A1B35]"
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="messaggio" className="sr-only">
+                      Messaggio (obbligatorio)
+                    </label>
+                    <textarea
+                      id="messaggio"
+                      name="messaggio"
+                      rows={7}
+                      required
+                      placeholder="Write Message*"
+                      className="w-full resize-none rounded-none border border-[#CCCCCC] bg-[#E8E8E8] px-4 py-3.5 text-sm text-black placeholder:text-[#666666] focus:border-[#1A1B35] focus:outline-none focus:ring-1 focus:ring-[#1A1B35]"
+                    />
+                  </div>
+                  <button
+                    type="submit"
+                    className="w-full rounded-none bg-[#1A1B35] px-8 py-3.5 text-center text-sm font-medium uppercase tracking-[0.2em] text-white transition-colors hover:bg-[#14152a] sm:w-auto sm:min-w-[140px]"
+                  >
+                    SEND
+                  </button>
+                </form>
+              </div>
             </div>
           </div>
-        </div>
-      </section>
-
-      <hr />
-
-
-      {/* Scrivi un messaggio */}
-      <section className="border-t border-grigio bg-bianco py-14 md:py-20">
-        <div className="mx-auto max-w-xl px-4 sm:px-6 lg:px-8">
-          <h2 className="flex items-center justify-center gap-2 text-xl font-light uppercase tracking-wide text-blu">
-            <MessageSquare size={22} className="text-blu/80" />
-            Scrivi un messaggio
-          </h2>
-          <form className="mt-8 space-y-5">
-            <div>
-              <label
-                htmlFor="nome"
-                className="block text-xs font-medium uppercase tracking-wider text-scuro/70"
-              >
-                Nome *
-              </label>
-              <input
-                id="nome"
-                type="text"
-                name="nome"
-                required
-                className="mt-2 w-full rounded-sm border border-grigio bg-bianco px-4 py-3 text-scuro placeholder:text-scuro/40 focus:border-blu focus:outline-none focus:ring-1 focus:ring-blu"
-                placeholder="Mario Rossi"
-              />
-            </div>
-            <div>
-              <label
-                htmlFor="email"
-                className="block text-xs font-medium uppercase tracking-wider text-scuro/70"
-              >
-                Email *
-              </label>
-              <input
-                id="email"
-                type="email"
-                name="email"
-                required
-                className="mt-2 w-full rounded-sm border border-grigio bg-bianco px-4 py-3 text-scuro placeholder:text-scuro/40 focus:border-blu focus:outline-none focus:ring-1 focus:ring-blu"
-                placeholder="mariorossi@gmail.com"
-              />
-            </div>
-            <div>
-              <label
-                htmlFor="messaggio"
-                className="block text-xs font-medium uppercase tracking-wider text-scuro/70"
-              >
-                Messaggio *
-              </label>
-              <textarea
-                id="messaggio"
-                name="messaggio"
-                rows={5}
-                required
-                className="mt-2 w-full rounded-sm border border-grigio bg-bianco px-4 py-3 text-scuro placeholder:text-scuro/40 focus:border-blu focus:outline-none focus:ring-1 focus:ring-blu resize-none"
-                placeholder="Ciao, voglio sapere se avete disponibilità per il ..."
-              />
-            </div>
-            <button
-              type="submit"
-              className="mx-auto bg-blu px-6 py-3.5 text-bianco font-normal tracking-wide hover:bg-blu/90 transition-colors md:w-auto md:px-10"
-            >
-              Invia messaggio
-            </button>
-          </form>
         </div>
       </section>
 

@@ -178,6 +178,25 @@ export default function HomePage() {
       {/* Hero carosello suite */}
       <HeroCarousel slides={suiteCards} />
 
+
+
+      {/* Suite in evidenza (griglia 2x3) */}
+      <section className="bg-grigio z-9 py-16 md:py-24">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <h2 className="mt-2 text-center text-3xl md:text-5xl text-blu font-light">
+            Le Suites
+          </h2>
+          <p className="mx-auto mt-4 max-w-2xl text-center text-scuro/80">
+            Scegli e vivi la tua vacanza in un&apos;atmosfera unica.
+          </p>
+        </div>
+        {/* Card a larghezza piena per lo sfondo bianco/grigio; padding solo nel contenuto (SuiteCard) */}
+        <div className="mt-12 w-full pt-10">
+          {suiteCards.map((suite, index) => (
+            <SuiteCard key={suite.href} {...suite} indice={index} />
+          ))}
+        </div>
+      </section>
       {/* Servizi 8 icone */}
       <section className="bg-bianco py-16 md:py-24">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -206,43 +225,16 @@ export default function HomePage() {
           <div className="mt-12 text-center flex justify-center items-center">
             <Link
               href="/i-nostri-servizi"
-              className="flex justify-center gap-2 items-center mx-auto shadow-xl text-lg bg-gray-50 backdrop-blur-md lg:font-medium isolation-auto border-gray-50 before:absolute before:w-full before:transition-all before:duration-700 before:hover:w-full before:-left-full before:hover:left-0 before:rounded-full before:bg-emerald-500  before:-z-10 before:aspect-square before:hover:scale-150 before:hover:duration-700 relative z-10 px-4 py-2 overflow-hidden border-2 rounded-full group text-blu mt-3"
+              className="flex justify-center border border-blu gap-2 items-center mx-auto shadow-xl text-lg bg-blu text-bianco backdrop-blur-md lg:font-medium isolation-auto before:absolute before:w-full before:transition-all before:duration-700 before:hover:w-full before:-left-full before:hover:left-0 before:rounded-full before:bg-emerald-500  before:-z-10 before:aspect-square before:hover:scale-150 before:hover:duration-700 relative z-10 px-6 py-2 overflow-hidden  group mt-3"
             >
               Visita
-              <svg
-                className="w-8 h-8 justify-end group-hover:rotate-90 group-hover:bg-gray-50 ease-linear duration-300 rounded-full border border-blu text-blu p-2 rotate-45"
-                viewBox="0 0 16 19"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M7 18C7 18.5523 7.44772 19 8 19C8.55228 19 9 18.5523 9 18H7ZM8.70711 0.292893C8.31658 -0.0976311 7.68342 -0.0976311 7.29289 0.292893L0.928932 6.65685C0.538408 7.04738 0.538408 7.68054 0.928932 8.07107C1.31946 8.46159 1.95262 8.46159 2.34315 8.07107L8 2.41421L13.6569 8.07107C14.0474 8.46159 14.6805 8.46159 15.0711 8.07107C15.4616 7.68054 15.4616 7.04738 15.0711 6.65685L8.70711 0.292893ZM9 18L9 1H7L7 18H9Z"
-                  className="fill-gray-800 group-hover:fill-gray-800"
-                ></path>
-              </svg>
+              
             </Link>
           </div>
         </div>
       </section>
-
-      {/* Suite in evidenza (griglia 2x3) */}
-      <section className="bg-grigio z-9 py-16 md:py-24">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <h2 className="mt-2 text-center text-3xl md:text-5xl text-blu font-light">
-            Le Suites
-          </h2>
-          <p className="mx-auto mt-4 max-w-2xl text-center text-scuro/80">
-            Scegli e vivi la tua vacanza in un&apos;atmosfera unica.
-          </p>
-          <div className="grid gap-12 grid-cols-1  mt-12 justify-center items-center pt-10">
-            {suiteCards.map((suite, index) => (
-              <SuiteCard key={suite.href} {...suite} indice={index} />
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* Esperienza - 8 box */}
-      <section className="bg-bianco py-16 md:py-24">
+      <section className="bg-bianco py-16 md:py-24 ">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <p className="text-center text-sm font-medium uppercase tracking-wide text-scuro/70">
             Vivi
@@ -533,62 +525,67 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Host */}
-      <section className="bg-grigio py-16 md:py-24 min-h-screen flex flex-col justify-center">
+      {/* Host — mobile: card ~90%, foto ~68% con overlap sul grigio; sm+: riga classica */}
+      <section className="bg-bianco py-16 md:py-24">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <h2 className="mt-2 text-center text-3xl md:text-5xl text-blu font-light">
+          <h2 className="text-center text-3xl font-light text-blu md:text-5xl">
             Host
           </h2>
-          <div className="mt-12 grid gap-10 grid-cols-1 xl:grid-cols-2 ">
+          <div className="mt-12 grid grid-cols-1 gap-16 max-sm:pt-12 xl:grid-cols-2 xl:gap-10">
             {/* Card Marilena */}
-            <article className="group py-3 overflow-hidden flex flex-col md:grid grid-cols-2  w-full ">
-              <div className="relative w-full max-w-96 mx-auto aspect-3/4 md:aspect-auto md:col-span-1">
-                <Image
-                  src={images.marilena}
-                  alt="Marilena - Host Como Lake Suites"
-                  fill
-                  className="object-contain"
-                />
-              </div>
-              <div className="flex flex-1 flex-col justify-center px-6 py-8 md:px-8 ">
-                <p className="text-xs font-normal uppercase tracking-[0.2em] text-scuro/60">
-                  Host
-                </p>
-                <h3 className="mt-1 text-4xl font-normal uppercase tracking-wide text-blu">
-                  Marilena
-                </h3>
-                <p className="mt-4 text-sm leading-relaxed font-normal text-scuro/80">
-                  Per me viaggiare è una vera esperienza: credo che le persone
-                  debbano godersi la propria vacanza circondate da ogni comfort,
-                  quindi potete chiedermi qualsiasi informazione e servizio di
-                  cui abbiate bisogno durante il vostro soggiorno.
-                </p>
+            <article className="relative mx-auto w-[90%] max-w-[420px] overflow-visible sm:mx-0 sm:mb-0 sm:flex sm:w-full sm:max-w-none sm:flex-row sm:items-stretch sm:gap-7 sm:bg-[#F2F2F2] sm:p-8">
+              <div className="relative w-full bg-[#F2F2F2] sm:contents">
+                <div className="absolute left-1/2 top-0 z-10 aspect-3/4 w-[68%] -translate-x-1/2 -translate-y-[22%] overflow-hidden sm:relative sm:left-auto sm:top-auto sm:aspect-3/4 sm:w-[42%] sm:max-w-none sm:shrink-0 sm:translate-x-0 sm:translate-y-0 sm:self-stretch">
+                  <Image
+                    src={images.marilena}
+                    alt="Marilena - Host Como Lake Suites"
+                    fill
+                    sizes="(max-width: 639px) 62vw, 20vw"
+                    className="object-cover object-center"
+                  />
+                </div>
+                <div className="relative z-0 flex min-w-0 flex-col justify-center px-6 pb-8 pt-[70.7%] text-left sm:flex sm:flex-1 sm:px-0 sm:pb-0 sm:pt-0">
+                  <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-black md:text-xs">
+                    Host
+                  </p>
+                  <h3 className="mt-0.5 text-3xl font-normal tracking-tight text-black md:text-[2.125rem] md:leading-tight">
+                    Marilena
+                  </h3>
+                  <p className="mt-5 text-[15px] font-normal leading-[1.5] text-[#4a4a4a] md:text-base">
+                    Per me viaggiare è una vera esperienza: credo che le persone
+                    debbano godersi la propria vacanza circondate da ogni comfort,
+                    quindi potete chiedermi qualsiasi informazione e servizio di
+                    cui abbiate bisogno durante il vostro soggiorno.
+                  </p>
+                </div>
               </div>
             </article>
             {/* Card Massimiliano */}
-            <article className="group py-3 overflow-hidden flex flex-col md:grid grid-cols-2  w-full ">
-              <div className="flex flex-1 flex-col justify-center px-6 py-8 md:px-8">
-                <p className="text-xs font-normal uppercase tracking-[0.2em] text-scuro/60">
-                  Host
-                </p>
-                <h3 className="mt-1 text-4xl font-normal uppercase tracking-wide text-blu">
-                  Massimiliano
-                </h3>
-                <p className="mt-4 text-sm leading-relaxed font-normal text-scuro/80">
-                  Grazie alla mia esperienza pluriennale nel settore commerciale
-                  pongo la massima attenzione nella relazione con i clienti, il
-                  mio obiettivo è quello di farli sentire come se fossero a casa
-                  loro.
-                </p>
-              </div>
-              <div className="relative w-full max-w-96 mx-auto aspect-3/4 md:aspect-auto md:col-span-1">
-                <Image
-                  src={images.massimiliano}
-                  alt="Massimiliano - Host Como Lake Suites"
-                  fill
-                  className="object-contain"
-                  sizes="(max-width: 768px) 100vw, 50vw"
-                />
+            <article className="relative mx-auto w-[90%] max-w-[420px] overflow-visible sm:mx-0 sm:mb-0 sm:flex sm:w-full sm:max-w-none sm:flex-row sm:items-stretch sm:gap-7 sm:bg-[#F2F2F2] sm:p-8">
+              <div className="relative w-full bg-[#F2F2F2] sm:contents">
+                <div className="absolute left-1/2 top-0 z-10 aspect-3/4 w-[68%] -translate-x-1/2 -translate-y-[22%] overflow-hidden sm:relative sm:left-auto sm:top-auto sm:aspect-3/4 sm:w-[42%] sm:max-w-none sm:shrink-0 sm:translate-x-0 sm:translate-y-0 sm:self-stretch">
+                  <Image
+                    src={images.massimiliano}
+                    alt="Massimiliano - Host Como Lake Suites"
+                    fill
+                    sizes="(max-width: 639px) 62vw, 20vw"
+                    className="object-cover object-center"
+                  />
+                </div>
+                <div className="relative z-0 flex min-w-0 flex-col justify-center px-6 pb-8 pt-[70.7%] text-left sm:flex sm:flex-1 sm:px-0 sm:pb-0 sm:pt-0">
+                  <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-black md:text-xs">
+                    Host
+                  </p>
+                  <h3 className="mt-0.5 text-3xl font-normal tracking-tight text-black md:text-[2.125rem] md:leading-tight">
+                    Massimiliano
+                  </h3>
+                  <p className="mt-5 text-[15px] font-normal leading-[1.5] text-[#4a4a4a] md:text-base">
+                    Grazie alla mia esperienza pluriennale nel settore commerciale
+                    pongo la massima attenzione nella relazione con i clienti, il
+                    mio obiettivo è quello di farli sentire come se fossero a casa
+                    loro.
+                  </p>
+                </div>
               </div>
             </article>
           </div>

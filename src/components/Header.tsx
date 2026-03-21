@@ -65,13 +65,13 @@ export default function Header() {
                   Le Suites
                 </button>
                 {suiteAperto && (
-                  <div className="absolute left-0 top-full mt-5 w-56 bg-grigio  py-2 p-4 shadow-sm">
+                  <div className="absolute left-0 top-full mt-5 w-56 bg-gray-800 py-2 p-4 shadow-sm">
                     {suiteLinks.map((link) => (
                       <>
                         <Link
                           key={link.href}
                           href={link.href}
-                          className="block px-4 py-2 text-blu link-nav"
+                          className="block px-4 py-2 text-gray-200 link-nav"
                           onClick={() => setSuiteAperto(false)}
                         >
                           {link.label}
