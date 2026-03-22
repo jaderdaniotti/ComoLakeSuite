@@ -19,6 +19,7 @@ export default function SuiteComoSolePage() {
       heroSrc={images.suiteComoSoleHero}
       gallery={images.suiteComoSoleGallery}
       altHero="Suite Como Sole - Como Lake Suites"
+      suitePriceId="suite-como-sole"
     />
   );
 }

@@ -20,6 +20,7 @@ export default function SuiteCernobbioPage() {
       heroSrc={images.suiteCernobbioHero}
       gallery={images.suiteCernobbioGallery}
       altHero="Suite Cernobbio - Como Lake Suites"
+      suitePriceId="suite-cernobbio"
     />
   );
 }

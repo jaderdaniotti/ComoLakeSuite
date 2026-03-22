@@ -19,6 +19,7 @@ export default function SuiteVistaDuomoPage() {
       heroSrc={images.suiteVistaDuomoHero}
       gallery={images.suiteVistaDuomoGallery}
       altHero="Suite Vista Duomo - Como Lake Suites"
+      suitePriceId="suite-vista-duomo"
     />
   );
 }

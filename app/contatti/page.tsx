@@ -23,7 +23,7 @@ export default function ContattiPage() {
           priority
           sizes="100vw"
         />
-        <div className="absolute inset-0 flex flex-col justify-center bg-linear-to-t from-scuro/80 to-transparent p-6 md:p-10">
+        <div className="absolute inset-0 flex flex-col justify-center bg-linear-to-t from-black/80 to-transparent p-6 md:p-10">
           <p className="text-center text-sm font-medium uppercase tracking-[0.2em] text-bianco/70">
             Contattaci per informazioni e prenotazioni
           </p>

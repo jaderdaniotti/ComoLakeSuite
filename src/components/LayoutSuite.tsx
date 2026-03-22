@@ -2,7 +2,13 @@
 
 import Image, { type StaticImageData } from "next/image";
 import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import type { SuitePriceId } from "@/src/data/suitePrices";
+import {
+  formatEuro,
+  getStayQuote,
+  getSuiteGuestRange,
+} from "@/src/lib/pricing";
 
 type Props = {
   titolo: string;
@@ -13,6 +19,8 @@ type Props = {
   heroSrc: string | StaticImageData;
   gallery: (string | StaticImageData)[];
   altHero: string;
+  /** Slug listino: prezzo dinamico accanto al calendario */
+  suitePriceId?: SuitePriceId;
 };
 
 export default function LayoutSuite({
@@ -24,6 +32,7 @@ export default function LayoutSuite({
   heroSrc,
   gallery,
   altHero,
+  suitePriceId,
 }: Props) {
   const [activeIndex, setActiveIndex] = useState(0);
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
@@ -79,6 +88,34 @@ export default function LayoutSuite({
 
   const isInRange = (day: Date) =>
     checkIn && checkOut && day > checkIn && day < checkOut;
+
+  const guestRange = suitePriceId
+    ? getSuiteGuestRange(suitePriceId)
+    : { min: 1, max: 6 };
+  const totalGuests = adults + children;
+  const guestsInListinoRange =
+    totalGuests >= guestRange.min && totalGuests <= guestRange.max;
+
+  const stayQuote = useMemo(() => {
+    if (!suitePriceId || !checkIn || !checkOut || !guestsInListinoRange) {
+      return null;
+    }
+    return getStayQuote(suitePriceId, checkIn, checkOut, totalGuests);
+  }, [
+    suitePriceId,
+    checkIn,
+    checkOut,
+    totalGuests,
+    guestsInListinoRange,
+  ]);
+
+  const adultOptions = useMemo(() => {
+    if (!suitePriceId) return [1, 2, 3, 4];
+    const minA = Math.max(1, guestRange.min - children);
+    const maxA = Math.min(6, guestRange.max - children);
+    if (minA > maxA) return [Math.max(1, Math.min(6, guestRange.min))];
+    return Array.from({ length: maxA - minA + 1 }, (_, i) => minA + i);
+  }, [suitePriceId, guestRange.min, guestRange.max, children]);
 
   const handleDayClick = (day: Date) => {
     if (!checkIn || (checkIn && checkOut)) {
@@ -332,7 +369,7 @@ export default function LayoutSuite({
               Verifica prezzi e disponibilità
             </p>
             <h2 className="text-2xl font-light text-scuro md:text-3xl">
-              Prenota la tua permanenza in {titolo}
+              Prenota la tua permanenza in <span className="text-bluchiaro font-semibold">{titolo}</span>
             </h2>
           </div>
 
@@ -373,7 +410,7 @@ export default function LayoutSuite({
                     value={adults}
                     onChange={(e) => setAdults(Number(e.target.value))}
                   >
-                    {[1, 2, 3, 4].map((n) => (
+                    {adultOptions.map((n) => (
                       <option key={n} value={n}>
                         {n}
                       </option>
@@ -387,7 +424,14 @@ export default function LayoutSuite({
                   <select
                     className="w-full rounded-lg border border-grigio/60 bg-bianco px-3 py-2.5 text-sm text-scuro focus:outline-none focus:ring-2 focus:ring-blu/40"
                     value={children}
-                    onChange={(e) => setChildren(Number(e.target.value))}
+                    onChange={(e) => {
+                      const c = Number(e.target.value);
+                      setChildren(c);
+                      if (!suitePriceId) return;
+                      const minA = Math.max(1, guestRange.min - c);
+                      const maxA = Math.min(6, guestRange.max - c);
+                      setAdults((a) => Math.min(maxA, Math.max(minA, a)));
+                    }}
                   >
                     {[0, 1, 2, 3].map((n) => (
                       <option key={n} value={n}>
@@ -397,6 +441,62 @@ export default function LayoutSuite({
                   </select>
                 </div>
               </div>
+
+              {suitePriceId && (
+                <div className="rounded-xl border border-blu/15 bg-linear-to-br from-blu/6 to-transparent p-4">
+                  <p className="text-xs font-semibold uppercase tracking-wide text-blu">
+                    Stima dal listino
+                  </p>
+                  {!checkIn || !checkOut ? (
+                    <p className="mt-2 text-sm text-scuro/75">
+                      Seleziona arrivo e partenza nel calendario per calcolare notti
+                      e totale.
+                    </p>
+                  ) : !guestsInListinoRange ? (
+                    <p className="mt-2 text-sm text-scuro/80">
+                      Per questa suite il listino copre da{" "}
+                      <strong>{guestRange.min}</strong> a{" "}
+                      <strong>{guestRange.max}</strong> persone. Regola adulti e
+                      bambini.
+                    </p>
+                  ) : stayQuote?.ok === true ? (
+                    <dl className="mt-3 space-y-2 text-sm text-scuro">
+                      <div className="flex justify-between gap-4">
+                        <dt className="text-scuro/65">Notti</dt>
+                        <dd className="font-medium tabular-nums">
+                          {stayQuote.nights}
+                        </dd>
+                      </div>
+                      <div className="flex justify-between gap-4">
+                        <dt className="text-scuro/65">Media a notte</dt>
+                        <dd className="font-medium tabular-nums">
+                          {formatEuro(stayQuote.averagePerNightEuro)}
+                        </dd>
+                      </div>
+                      <div className="flex justify-between gap-4 border-t border-blu/10 pt-2 text-base">
+                        <dt className="font-medium text-scuro">Totale soggiorno</dt>
+                        <dd className="font-semibold text-blu tabular-nums">
+                          {formatEuro(stayQuote.totalEuro)}
+                        </dd>
+                      </div>
+                    </dl>
+                  ) : stayQuote?.ok === false ? (
+                    <p className="mt-2 text-sm text-scuro/80">
+                      {stayQuote.reason === "missing_price" &&
+                        stayQuote.firstMissingDate &&
+                        `Nessun listino per il giorno ${new Date(
+                          stayQuote.firstMissingDate + "T12:00:00",
+                        ).toLocaleDateString("it-IT")}.`}
+                      {stayQuote.reason === "invalid_dates" &&
+                        "La partenza deve essere dopo l'arrivo."}
+                      {stayQuote.reason === "no_nights" &&
+                        "Seleziona almeno una notte."}
+                      {stayQuote.reason === "guests_not_supported" &&
+                        "Combinazione ospiti non prevista nel listino."}
+                    </p>
+                  ) : null}
+                </div>
+              )}
 
               <button
                 type="button"

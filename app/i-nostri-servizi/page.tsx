@@ -373,7 +373,7 @@ export default function ServiziPage() {
           priority
           sizes=""
         />
-        <div className="absolute inset-0 flex flex-col justify-center bg-linear-to-t items-center from-scuro/80 to-transparent p-6 md:p-10">
+        <div className="absolute inset-0 flex flex-col justify-center bg-linear-to-t items-center from-black/80 to-transparent p-6 md:p-10">
           <p className="text-sm font-medium uppercase tracking-wide text-center text-bianco/70 ">
             Tutto ciò che serve per un soggiorno indimenticabile.
           </p>

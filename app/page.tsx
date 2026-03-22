@@ -212,10 +212,10 @@ export default function HomePage() {
                 key={s.titolo}
                 className="flex flex-col items-center text-center"
               >
-                <div className="flex h-12 w-12 items-center justify-center rounded-full bg-chiaro text-scuro">
+                <div className="flex h-12 w-12 items-center justify-center rounded-full bg-chiaro text-bluchiaro">
                   <s.icon size={24} />
                 </div>
-                <h3 className="mt-4 font-medium text-scuro text-sm">{s.titolo}</h3>
+                <h3 className="mt-4 font-medium text-bluchiaro text-sm">{s.titolo}</h3>
                 <p className="mt-2 text-sm font-light text-scuro/80">
                   {s.testo}
                 </p>
@@ -284,7 +284,7 @@ export default function HomePage() {
                                     />
                                   </div>
                                 </div>
-                                <h3 className="mt-4 text-2xl font-normal uppercase tracking-wide text-scuro">
+                                <h3 className="mt-4 text-2xl font-normal uppercase tracking-wide text-bluchiaro">
                                   {e.titolo}
                                 </h3>
                                 <p className="mt-2 text-sm font-light text-scuro/90">
@@ -545,13 +545,13 @@ export default function HomePage() {
                   />
                 </div>
                 <div className="relative z-0 flex min-w-0 flex-col justify-center px-6 pb-8 pt-[70.7%] text-left sm:flex sm:flex-1 sm:px-0 sm:pb-0 sm:pt-0">
-                  <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-black md:text-xs">
+                  <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-blu md:text-xs">
                     Host
                   </p>
-                  <h3 className="mt-0.5 text-3xl font-normal tracking-tight text-black md:text-[2.125rem] md:leading-tight">
+                  <h3 className="mt-0.5 text-3xl font-normal tracking-tight text-bluchiaro md:text-[2.125rem] md:leading-tight">
                     Marilena
                   </h3>
-                  <p className="mt-5 text-[15px] font-normal leading-[1.5] text-[#4a4a4a] md:text-base">
+                  <p className="mt-5 text-[15px] font-normal leading-[1.5] text-blu md:text-base">
                     Per me viaggiare è una vera esperienza: credo che le persone
                     debbano godersi la propria vacanza circondate da ogni comfort,
                     quindi potete chiedermi qualsiasi informazione e servizio di
@@ -573,13 +573,13 @@ export default function HomePage() {
                   />
                 </div>
                 <div className="relative z-0 flex min-w-0 flex-col justify-center px-6 pb-8 pt-[70.7%] text-left sm:flex sm:flex-1 sm:px-0 sm:pb-0 sm:pt-0">
-                  <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-black md:text-xs">
+                  <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-blu md:text-xs">
                     Host
                   </p>
-                  <h3 className="mt-0.5 text-3xl font-normal tracking-tight text-black md:text-[2.125rem] md:leading-tight">
+                  <h3 className="mt-0.5 text-3xl font-normal tracking-tight text-bluchiaro md:text-[2.125rem] md:leading-tight">
                     Massimiliano
                   </h3>
-                  <p className="mt-5 text-[15px] font-normal leading-[1.5] text-[#4a4a4a] md:text-base">
+                  <p className="mt-5 text-[15px] font-normal leading-[1.5] text-blu md:text-base">
                     Grazie alla mia esperienza pluriennale nel settore commerciale
                     pongo la massima attenzione nella relazione con i clienti, il
                     mio obiettivo è quello di farli sentire come se fossero a casa
@@ -595,7 +595,7 @@ export default function HomePage() {
       {/* Mappa Google – Dove siamo */}
       <section className="bg-bianco py-16 md:py-24 min-h-screen">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <h2 className="mb-2 text-center text-2xl font-semibold text-scuro md:text-3xl">
+          <h2 className="mb-2 text-center text-2xl font-semibold text-blu md:text-3xl">
             Dove siamo
           </h2>
           <p className="mx-auto mb-10 max-w-2xl text-center text-scuro/80">

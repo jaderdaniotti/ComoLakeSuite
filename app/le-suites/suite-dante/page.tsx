@@ -19,6 +19,7 @@ export default function SuiteDantePage() {
       heroSrc={images.suiteDanteHero}
       gallery={images.suiteDanteGallery}
       altHero="Suite Dante - Como Lake Suites"
+      suitePriceId="suite-dante"
     />
   );
 }

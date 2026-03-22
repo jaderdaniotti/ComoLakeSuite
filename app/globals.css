@@ -4,10 +4,11 @@
 
 :root {
   --chiaro: #eff5f6;
-  --scuro: #000000;
+  --scuro: #101443;
   --bianco: #ffffff;
   --grigio: #f1f1f1;
   --blu: #101443;
+  --bluchiaro: #0D1A63;
   --background: var(--bianco);
   --foreground: var(--scuro);
 }
@@ -38,6 +39,9 @@ body {
 }
 .text-blu{
   color: var(--blu);
+}
+.text-bluchiaro{  
+  color: var(--bluchiaro);
 }
 .glassbg {
 /* From https://css.glass */

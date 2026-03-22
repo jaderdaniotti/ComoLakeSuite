@@ -19,6 +19,7 @@ export default function SuiteCavourPage() {
       heroSrc={images.suiteCavourHero}
       gallery={images.suiteCavourGallery}
       altHero="Suite Cavour - Como Lake Suites"
+      suitePriceId="suite-cavour"
     />
   );
 }

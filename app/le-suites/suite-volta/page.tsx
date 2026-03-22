@@ -19,6 +19,7 @@ export default function SuiteVoltaPage() {
       heroSrc={images.suiteVoltaHero}
       gallery={images.suiteVoltaGallery}
       altHero="Suite Volta - Como Lake Suites"
+      suitePriceId="suite-volta"
     />
   );
 }

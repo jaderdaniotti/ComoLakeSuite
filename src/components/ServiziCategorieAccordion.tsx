@@ -89,10 +89,10 @@ export default function ServiziCategorieAccordion({ categorie }: Props) {
               className="flex w-full items-center justify-between gap-4 py-10 text-left px-3 transition-colors hover:bg-grigio/40 focus:outline-none focus-visible:ring-2 focus-visible:ring-blu focus-visible:ring-offset-2"
             >
               <div className="flex min-w-0 flex-1 flex-col items-center gap-3 sm:flex-row sm:gap-4">
-                <span className="flex size-10 shrink-0 items-center justify-center text-scuro">
-                  <IconCat className="size-full" strokeWidth={1} />
+                <span className="flex size-10 shrink-0 items-center justify-center text-bluchiaro">
+                  <IconCat className="size-full" strokeWidth={1.4} />
                 </span>
-                <span className="text-xl font-medium text-scuro">{cat.label}</span>
+                <span className="text-xl font-medium text-bluchiaro">{cat.label}</span>
               </div>
               <ChevronDown
                 className={`size-6 shrink-0 text-scuro/70 transition-transform duration-200 ${
