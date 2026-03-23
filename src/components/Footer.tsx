@@ -14,41 +14,41 @@ export default function Footer() {
   const scrollToTop = () => window.scrollTo({ top: 0, behavior: "smooth" });
 
   return (
-    <footer className="relative bg-bianco min-h-[60vh] flex flex-col justify-center text-gray-800 border-t border-blu py-12 ">
+    <footer className="relative bg-bianco min-h-[60vh] flex flex-col justify-center text-bluchiaro border-t border-blu py-12 ">
 
       <div className="absolute inset-0 z-10">
         <Image src={images.footer} alt="" fill className="object-cover" sizes="100vw" />
         <div
-          className="pointer-events-none absolute inset-0 z-10 bg-white/30"
+          className="pointer-events-none absolute inset-0 z-10 bg-black/20"
           aria-hidden
         />
       </div>
       <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8 z-20">
         <div className="grid gap-10 lg:grid-cols-4">
           <div>
-            <p className="text-blu text-md">I nostri</p>
-            <h2 className="text-4xl md:text-5xl font-light uppercase tracking-wide text-blu">
+            <p className="text-blu text-lg font-medium">I nostri</p>
+            <h2 className="text-4xl md:text-5xl font-normal uppercase tracking-wide text-bluchiaro">
               ContattI
             </h2>
           </div>
 
           <div>
-            <h3 className="text-3xl font-light uppercase tracking-wide text-blu">Massimiliano</h3>
-            <ul className="mt-4 space-y-3 text-sm">
+            <h3 className="text-3xl font-medium uppercase tracking-wide text-bluchiaro">Massimiliano</h3>
+            <ul className="mt-4 space-y-3 text-sm font-medium ">
               <li className="flex items-center gap-2">
-                <Phone size={18} className="shrink-0 text-blu" />
+                <Phone size={18} className="shrink-0 text-bluchiaro" />
                 <a href="tel:+393409409123" className="hover:underline">
                   +39 340 9409123
                 </a>
               </li>
               <li className="flex items-center gap-2">
-                <Mail size={18} className="shrink-0 text-blu" />
+                <Mail size={18} className="shrink-0 text-bluchiaro" />
                 <a href="mailto:info@comolakesuites.com" className="hover:underline">
                   info@comolakesuites.com
                 </a>
               </li>
               <li className="flex items-start gap-2">
-                <MapPin size={18} className="mt-0.5 shrink-0 text-blu" />
+                <MapPin size={18} className="mt-0.5 shrink-0 text-bluchiaro" />
                 <span>
                   Piazza Cavour ang. Via Albertolli 22
                   <br />
@@ -59,22 +59,22 @@ export default function Footer() {
           </div>
 
           <div>
-            <h3 className="text-3xl font-light uppercase tracking-wide text-blu">Marilena</h3>
-            <ul className="mt-4 space-y-3 text-sm">
+            <h3 className="text-3xl font-medium uppercase tracking-wide text-bluchiaro">Marilena</h3>
+            <ul className="mt-4 space-y-3 text-sm font-medium">
               <li className="flex items-center gap-2">
-                <Phone size={18} className="shrink-0 text-blu" />
+                <Phone size={18} className="shrink-0 text-bluchiaro" />
                 <a href="tel:+393331745544" className="hover:underline">
                   +39 333 1745544
                 </a>
               </li>
               <li className="flex items-center gap-2">
-                <Mail size={18} className="shrink-0 text-blu" />
+                <Mail size={18} className="shrink-0 text-bluchiaro" />
                 <a href="mailto:info@comolakesuites.com" className="hover:underline">
                   info@comolakesuites.com
                 </a>
               </li>
               <li className="flex items-start gap-2">
-                <MapPin size={18} className="mt-0.5 shrink-0 text-blu" />
+                <MapPin size={18} className="mt-0.5 shrink-0 text-bluchiaro" />
                 <span>
                   Piazza Cavour ang. Via Albertolli 22
                   <br />
@@ -85,14 +85,14 @@ export default function Footer() {
           </div>
 
           <div>
-            <p className="text-4xl font-light uppercase tracking-wide text-blu">Trovaci su:</p>
-            <ul className="mt-3 space-y-1">
+            <p className="text-4xl font-medium uppercase tracking-wide text-bluchiaro">Trovaci su:</p>
+            <ul className="mt-3 space-y-1 font-medium">
               <li>
                 <a
                   href="https://www.booking.com/hotel/it/como-lake-suites.it.html?label=gen173nr-1FCAsocUIQY29tby1sYWtlLXN1aXRlc0gUWARocYgBAZgBFLgBGMgBDNgBAegBAfgBA4gCAagCBLgCzqDb6QXAAgE;logged_out=1;room1=A%2CA;sb_price_type=total;sid=0cc13934770785a9f439e26bc2966da8;type=total"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-blu hover:underline"
+                  className="text-bluchiaro hover:underline"
                 >
                   Booking.com
                 </a>
@@ -102,7 +102,7 @@ export default function Footer() {
                   href="https://www.airbnb.it/manage-your-space/33795851/details"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-blu hover:underline"
+                  className="text-bluchiaro  hover:underline"
                 >
                   AirBNB
                 </a>

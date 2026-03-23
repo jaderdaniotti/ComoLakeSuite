@@ -455,7 +455,7 @@ const images = {
   ],
   thumbVistaDuomo: duomo_0,
 
-  serviziHero: volta_5,
+  serviziHero: volta_28,
 };
 
 export default images;

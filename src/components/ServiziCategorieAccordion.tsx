@@ -86,7 +86,7 @@ export default function ServiziCategorieAccordion({ categorie }: Props) {
               aria-expanded={isOpen}
               aria-controls={panelId}
               onClick={() => toggle(cat.id)}
-              className="flex w-full items-center justify-between gap-4 py-10 text-left px-3 transition-colors hover:bg-grigio/40 focus:outline-none focus-visible:ring-2 focus-visible:ring-blu focus-visible:ring-offset-2"
+              className="flex w-full items-center justify-between gap-4 py-10 text-left px-3 transition-colors hover:bg-grigio focus:outline-none focus-visible:ring-2 focus-visible:ring-blu focus-visible:ring-offset-2"
             >
               <div className="flex min-w-0 flex-1 flex-col items-center gap-3 sm:flex-row sm:gap-4">
                 <span className="flex size-10 shrink-0 items-center justify-center text-bluchiaro">

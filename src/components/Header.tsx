@@ -52,7 +52,7 @@ export default function Header() {
               <Menu className="h-6 w-6" />
             </label>
           </div>
-            <nav className="hidden mx-auto md:flex md:items-center md:gap-8 font-light tracking-wide text-md">
+            <nav className="hidden mx-auto md:flex md:items-center md:gap-8 font-light tracking-wide text-2xl">
               <Link href="/" className="link-nav text-bianco" onClick={chiudiTutto}>
                 Home
               </Link>
@@ -65,13 +65,13 @@ export default function Header() {
                   Le Suites
                 </button>
                 {suiteAperto && (
-                  <div className="absolute left-0 top-full mt-5 w-56 bg-gray-800 py-2 p-4 shadow-sm">
+                  <div className="absolute left-0 top-full mt-5 w-65 bg-gray-800 py-2 p-4 shadow-sm">
                     {suiteLinks.map((link) => (
                       <>
                         <Link
                           key={link.href}
                           href={link.href}
-                          className="block px-4 py-2 text-gray-200 link-nav"
+                          className="block px-4 py-2 text-gray-200 font-normal link-nav"
                           onClick={() => setSuiteAperto(false)}
                         >
                           {link.label}

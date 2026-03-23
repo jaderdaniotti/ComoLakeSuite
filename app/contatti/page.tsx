@@ -36,13 +36,7 @@ export default function ContattiPage() {
       {/* Contattaci: layout bianco 20% + grigio, testo + form */}
       <section className="relative isolate w-full bg-bianco my-6 mx-auto overflow-hidden">
         {/* Sfondo grigio 2/3: sotto al contenuto (z-index richiede position sul layer sopra) */}
-        <div
-          className="pointer-events-none absolute inset-0 z-0 grid grid-cols-2 lg:grid-cols-3"
-          aria-hidden
-        >
-          <div />
-          <div className="col-span-2 bg-grigio" />
-        </div>
+
         <div className="relative z-10 flex flex-col lg:flex-row lg:min-h-0">
           <div className="flex-1  px-6 py-14 sm:px-10 md:px-12 md:py-16 lg:px-14 lg:py-20 xl:px-20">
             <div className="mx-auto grid max-w-6xl grid-cols-1 gap-12 lg:grid-cols-2 lg:gap-x-16 xl:gap-x-24">
@@ -153,8 +147,9 @@ export default function ContattiPage() {
                 </div>
               </div>
 
-              <div className="lg:pt-1">
-                <form className="flex flex-col gap-6 md:gap-7">
+              <div className="lg:pt-1 relative ">
+                <div className="absolute inset-0"/>
+                <form className="flex flex-col gap-6 md:gap-7 z-20 bg-grigio p-6 rounded-lg">
                   <div>
                     <label htmlFor="nome" className="sr-only">
                       Nome (obbligatorio)

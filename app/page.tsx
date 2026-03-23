@@ -25,6 +25,33 @@ const mapThumbnailSrcs = [
 
 const suiteCards = [
   {
+    titolo: "Suite Cavour",
+    sottotitolo: "Una camera con vista",
+    descrizione:
+      "Minimal ed elegante appartamento con 4 posti letto e una vista da lasciare incantati.",
+    href: "/le-suites/suite-cavour",
+    src: images.thumbCavour,
+    alt: "Suite Cavour",
+  },
+  {
+    titolo: "Suite Volta",
+    sottotitolo: "Moderna e raffinata",
+    descrizione:
+      "Suite curata in ogni minimo dettaglio. Due camere, fino a 6 posti letto, a due passi dal centro città e con vista lago.",
+    href: "/le-suites/suite-volta",
+    src: images.thumbVolta,
+    alt: "Suite Volta",
+  },
+  {
+    titolo: "Suite Duomo",
+    sottotitolo: "Stile e modernità",
+    descrizione:
+      "Oasi di lusso e relax nel cuore della città con vista sull'iconico centro storico di Como.",
+    href: "/le-suites/suite-vista-duomo",
+    src: images.thumbVistaDuomo,
+    alt: "Suite Duomo",
+  },
+  {
     titolo: "Suite Cernobbio",
     sottotitolo: "Una camera con vista",
     descrizione:
@@ -41,33 +68,6 @@ const suiteCards = [
     href: "/le-suites/suite-dante",
     src: images.thumbDante,
     alt: "Suite Dante",
-  },
-  {
-    titolo: "Suite Volta",
-    sottotitolo: "Moderna e raffinata",
-    descrizione:
-      "Suite curata in ogni minimo dettaglio. Due camere, fino a 6 posti letto, a due passi dal centro città e con vista lago.",
-    href: "/le-suites/suite-volta",
-    src: images.thumbVolta,
-    alt: "Suite Volta",
-  },
-  {
-    titolo: "Suite Cavour",
-    sottotitolo: "Una camera con vista",
-    descrizione:
-      "Minimal ed elegante appartamento con 4 posti letto e una vista da lasciare incantati.",
-    href: "/le-suites/suite-cavour",
-    src: images.thumbCavour,
-    alt: "Suite Cavour",
-  },
-  {
-    titolo: "Suite Duomo",
-    sottotitolo: "Stile e modernità",
-    descrizione:
-      "Oasi di lusso e relax nel cuore della città con vista sull'iconico centro storico di Como.",
-    href: "/le-suites/suite-vista-duomo",
-    src: images.thumbVistaDuomo,
-    alt: "Suite Duomo",
   },
 ];
 

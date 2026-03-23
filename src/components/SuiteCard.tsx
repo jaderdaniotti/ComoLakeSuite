@@ -25,7 +25,7 @@ export default function SuiteCard({
     <article className="w-full">
       {/* Sfondo a tutta larghezza viewport; contenuto limitato a max-w-7xl */}
       <div
-        className={`w-full ${isPhotoLeft ? "bg-bianco" : "bg-grigio"}`}
+        className={`w-full ${isPhotoLeft ? "bg-bianco" : "bg-gray-500/30"}`}
       >
         <div className="mx-auto grid max-w-7xl grid-cols-1 items-center justify-center px-4 sm:px-6 lg:px-8 lg:grid-cols-3">
           <div
@@ -44,11 +44,11 @@ export default function SuiteCard({
           <div
             className={`flex h-full max-w-2xl flex-col items-center px-8 pb-4 md:mx-auto md:justify-center ${isPhotoLeft ? "lg:order-2" : "lg:order-1"}`}
           >
-            <p className="text-md font-semibold tracking-wide text-blu">{sottotitolo}</p>
-            <h2 className="mt-1.5 text-4xl font-light text-bluchiaro uppercase tracking-widest md:text-5xl">
+            <p className="text-xl font-semibold tracking-wide text-blu">{sottotitolo}</p>
+            <h2 className="mt-1.5 text-4xl font-light text-center text-bluchiaro uppercase tracking-widest md:text-5xl">
               {titolo}
             </h2>
-            <p className="mt-4 text-sm leading-relaxed text-scuro/80">
+            <p className="mt-4 text-lg text-center leading-relaxed text-scuro/80">
               {descrizione}
             </p>
             <Link
