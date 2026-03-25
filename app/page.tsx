@@ -69,6 +69,15 @@ const suiteCards = [
     src: images.thumbDante,
     alt: "Suite Dante",
   },
+  {
+    titolo: "Suite Como Sole",
+    sottotitolo: "Una camera con vista",
+    descrizione:
+      "Suite in uno dei principali quartieri di Como per offrire comfort e relax.",
+    href: "le-suites/suite-como-sole",
+    src: images.thumbComoSole,
+    alt: "Suite Como Sole",
+  },
 ];
 
 const serviziHome = [

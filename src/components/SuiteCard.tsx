@@ -31,13 +31,13 @@ export default function SuiteCard({
           <div
             className={`flex h-full items-center justify-center py-10 lg:col-span-2 ${isPhotoLeft ? "lg:order-1" : "lg:order-2"}`}
           >
-            <div className="relative mx-auto aspect-4/3 w-full max-w-2xl overflow-hidden">
+            <div className="relative mx-auto aspect-4/3 w-full max-w-2xl">
               <Image
                 src={src}
                 alt={alt}
                 fill
-                className="object-cover"
-                sizes="(max-width: 1024px) 100vw, 66vw"
+                className="object-cover "
+                sizes="(max-width: 1024px) 100vw, 66vw "
               />
             </div>
           </div>

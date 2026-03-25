@@ -44,6 +44,7 @@ import volta_32 from "./images/volta/32servizi.webp";
 import volta_33 from "./images/volta/33servizi.webp";
 import volta_34 from "./images/volta/34servizi.webp";
 import volta_35 from "./images/volta/35servizi.webp";
+
 import cavour_0 from "./images/cavour/0copertina.webp";
 import cavour_1 from "./images/cavour/1camera.webp";
 import cavour_2 from "./images/cavour/2camera.webp";
@@ -77,6 +78,7 @@ import cavour_29 from "./images/cavour/29vista.webp";
 import cavour_30 from "./images/cavour/30vista.webp";
 import cavour_31 from "./images/cavour/31vista.webp";
 import cavour_32 from "./images/cavour/32vista.webp";
+
 import cernobbio_0 from "./images/cernobbio/0copertina.webp";
 import cernobbio_1 from "./images/cernobbio/1camera.webp";
 import cernobbio_2 from "./images/cernobbio/2camera.webp";
@@ -125,6 +127,7 @@ import cernobbio_44 from "./images/cernobbio/44vista.webp";
 import cernobbio_45 from "./images/cernobbio/45vista.webp";
 import cernobbio_46 from "./images/cernobbio/46vista.webp";
 import cernobbio_47 from "./images/cernobbio/47vista.webp";
+
 import dante_0 from "./images/dante/0copertina.webp";
 import dante_1 from "./images/dante/1camera.webp";
 import dante_2 from "./images/dante/2camera.webp";
@@ -175,6 +178,7 @@ import dante_46 from "./images/dante/46vista.webp";
 import dante_47 from "./images/dante/47vista.webp";
 import dante_48 from "./images/dante/48vista.webp";
 import dante_49 from "./images/dante/49vista.webp";
+
 import duomo_0 from "./images/duomo/0copertina.webp";
 import duomo_1 from "./images/duomo/1camera.webp";
 import duomo_2 from "./images/duomo/2camera.webp";
@@ -203,6 +207,31 @@ import duomo_24 from "./images/duomo/24vista.webp";
 import duomo_25 from "./images/duomo/25vista.webp";
 import duomo_26 from "./images/duomo/26vista.webp";
 import duomo_27 from "./images/duomo/27vista.webp";
+
+import comosole_0 from "./images/comosole/0copertina.webp";
+import comosole_1 from "./images/comosole/1camera.webp";
+import comosole_2 from "./images/comosole/2camera.webp";
+import comosole_3 from "./images/comosole/3camera.webp";
+import comosole_4 from "./images/comosole/4camera.webp";
+import comosole_5 from "./images/comosole/5camera.webp";
+import comosole_6 from "./images/comosole/6soggiorno.webp";
+import comosole_7 from "./images/comosole/7soggiorno.webp";
+import comosole_8 from "./images/comosole/8soggiorno.webp";
+import comosole_9 from "./images/comosole/9soggiorno.webp";
+import comosole_10 from "./images/comosole/10soggiorno.webp";
+import comosole_11 from "./images/comosole/11soggiorno.webp";
+import comosole_12 from "./images/comosole/12cucina.webp";
+import comosole_13 from "./images/comosole/13cucina.webp";
+import comosole_14 from "./images/comosole/14cucina.webp";
+import comosole_15 from "./images/comosole/15bagno.webp";
+import comosole_16 from "./images/comosole/16bagno.webp";
+import comosole_17 from "./images/comosole/17bagno.webp";
+import comosole_18 from "./images/comosole/18bagno.webp";
+import comosole_19 from "./images/comosole/19servizi.webp";
+import comosole_20 from "./images/comosole/20servizi.webp";
+import comosole_21 from "./images/comosole/21servizi.webp";
+import comosole_22 from "./images/comosole/22servizi.webp";
+
 import marilena from "./images/marilena.webp";
 import massimiliano from "./images/max.webp";
 import fotocomo from "./images/fotocomo.webp";
@@ -363,9 +392,33 @@ const images = {
   ],
   thumbCernobbio: cernobbio_0,
 
-  suiteComoSoleHero: "https://www.comolakesuites.com/wp-content/uploads/placeholder-suite.jpg",
-  suiteComoSoleGallery: ["https://www.comolakesuites.com/wp-content/uploads/placeholder-suite.jpg"],
-  thumbComoSole: "https://www.comolakesuites.com/wp-content/uploads/placeholder-suite.jpg",
+  suiteComoSoleHero: comosole_0,
+  suiteComoSoleGallery: [
+    comosole_0,
+    comosole_1,
+    comosole_2,
+    comosole_3,
+    comosole_4,
+    comosole_5,
+    comosole_6,
+    comosole_7,
+    comosole_8,
+    comosole_9,
+    comosole_10,
+    comosole_11,
+    comosole_12,
+    comosole_13,
+    comosole_14,
+    comosole_15,
+    comosole_16,
+    comosole_17,
+    comosole_18,
+    comosole_19,
+    comosole_20,
+    comosole_21,
+    comosole_22,
+  ],
+  thumbComoSole: comosole_0,
 
   suiteDanteHero: dante_0,
   suiteDanteGallery: [
