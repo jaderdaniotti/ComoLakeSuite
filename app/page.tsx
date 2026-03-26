@@ -190,7 +190,7 @@ export default function HomePage() {
 
 
       {/* Suite in evidenza (griglia 2x3) */}
-      <section className="bg-grigio z-9 py-16 md:py-24">
+      <section className="bg-grigioscuro z-9 pt-16 md:pt-24">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <h2 className="mt-2 text-center text-3xl md:text-5xl text-blu font-light">
             Le Suites

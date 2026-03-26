@@ -199,7 +199,7 @@ export default function LayoutSuite({
       </section>
 
       {/* descrizione */}
-      <section className="mx-auto  px-4 py-16 sm:px-6 lg:px-8 bg-grigio">
+      <section className="mx-auto  px-4 py-16 sm:px-6 lg:px-8 bg-grigioscuro">
         <div className="max-w-7xl mx-auto flex flex-col items-center justify-center">
           <p className="text-sm font-medium uppercase tracking-wide text-scuro/70">
             Stile italiano
@@ -234,7 +234,7 @@ export default function LayoutSuite({
                       setLightboxLoading(true);
                       setLightboxIndex(index);
                     }}
-                    className={`relative aspect-4/3 overflow-hidden bg-grigio transition ${
+                    className={`relative aspect-4/3 overflow-hidden bg-grigioscuro transition ${
                       index === activeIndex
                         ? "border-blu/70"
                         : "border-transparent hover:border-grigio/80"

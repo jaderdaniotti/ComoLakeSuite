@@ -149,7 +149,7 @@ export default function ContattiPage() {
 
               <div className="lg:pt-1 relative ">
                 <div className="absolute inset-0"/>
-                <form className="flex flex-col gap-6 md:gap-7 z-20 bg-grigio p-6 rounded-lg">
+                <form className="flex flex-col gap-6 md:gap-7 z-20 bg-grigioscuro p-6 rounded-lg">
                   <div>
                     <label htmlFor="nome" className="sr-only">
                       Nome (obbligatorio)
@@ -205,7 +205,7 @@ export default function ContattiPage() {
       </section>
 
       {/* Mappa come in homepage – segnalibro su Piazza Cavour */}
-      <section className="border-t border-grigio bg-grigio py-14 md:py-20">
+      <section className="border-t border-grigio bg-grigioscuro py-14 md:py-20">
         <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
           <h2 className="flex items-center justify-center gap-2 text-xl font-light uppercase tracking-wide text-blu md:text-2xl">
             <MapPin size={22} className="text-blu/80" />

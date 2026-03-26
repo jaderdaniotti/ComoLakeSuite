@@ -25,7 +25,7 @@ export default function SuiteCard({
     <article className="w-full">
       {/* Sfondo a tutta larghezza viewport; contenuto limitato a max-w-7xl */}
       <div
-        className={`w-full ${isPhotoLeft ? "bg-bianco" : "bg-gray-500/30"}`}
+        className={`w-full ${isPhotoLeft ? "bg-bianco" : "bg-grigioscuro"}`}
       >
         <div className="mx-auto grid max-w-7xl grid-cols-1 items-center justify-center px-4 sm:px-6 lg:px-8 lg:grid-cols-3">
           <div

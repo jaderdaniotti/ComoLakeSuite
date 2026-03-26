@@ -37,6 +37,9 @@ body {
 .bg-chiaro {
   background: var(--chiaro);
 }
+.bg-grigioscuro{
+    background-color: color-mix(in oklab, var(--color-gray-500) /* oklch(55.1% 0.027 264.364) = #6a7282 */ 30%, transparent);
+}
 .text-blu{
   color: var(--blu);
 }

@@ -148,12 +148,12 @@ export default function ServicesOneRowCarousel({
                   return (
                     <li
                       key={`${s.titolo}-${pageIndex}-${i}`}
-                      className="flex flex-col justify-center bg-grigio px-2 py-12 items-center gap-3 text-bluchiaro/90"
+                      className="flex flex-col justify-center bg-grigioscuro px-2 py-12 items-center gap-3 text-bluchiaro/90"
                     >
                       <span className="flex size-8 shrink-0 items-center justify-center text-blu">
-                        <RenderIcon className="size-full" strokeWidth={1} />
+                        <RenderIcon className="size-full" strokeWidth={1.5} />
                       </span>
-                      <span className="font-normal text-center text-lg text-bluchiaro">
+                      <span className="font-medium text-center text-lg text-bluchiaro">
                         {s.titolo}
                       </span>
                     </li>

@@ -9,10 +9,10 @@ import images from "@/src/images";
 const suiteLinks = [
   { href: "/le-suites/suite-volta", label: "Suite Volta" },
   { href: "/le-suites/suite-cavour", label: "Suite Cavour" },
-  { href: "/le-suites/suite-cernobbio", label: "Suite Cernobbio" },
-  { href: "/le-suites/suite-como-sole", label: "Suite Como Sole" },
-  { href: "/le-suites/suite-dante", label: "Suite Dante" },
   { href: "/le-suites/suite-vista-duomo", label: "Suite Vista Duomo" },
+  { href: "/le-suites/suite-cernobbio", label: "Suite Cernobbio" },
+  { href: "/le-suites/suite-dante", label: "Suite Dante" },
+  { href: "/le-suites/suite-como-sole", label: "Suite Como Sole" },
 ];
 
 export default function Header() {
