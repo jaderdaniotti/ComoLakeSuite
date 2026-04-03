@@ -3,6 +3,7 @@
 import Image, { type StaticImageData } from "next/image";
 import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
 import type { SuitePriceId } from "@/src/data/suitePrices";
 import {
   formatEuro,
@@ -49,6 +50,8 @@ export default function LayoutSuite({
     d.setDate(1);
     return d;
   });
+
+  const router = useRouter();
 
   const addMonths = (date: Date, amount: number) =>
     new Date(date.getFullYear(), date.getMonth() + amount, 1);
@@ -175,6 +178,46 @@ export default function LayoutSuite({
     document.addEventListener("keydown", onKeyDown);
     return () => document.removeEventListener("keydown", onKeyDown);
   }, [lightboxIndex, closeLightbox, goLightboxPrev, goLightboxNext]);
+
+  const [isCheckingAvailability, setIsCheckingAvailability] = useState(false);
+  const [availabilityError, setAvailabilityError] = useState<string | null>(null);
+
+  const handleBooking = async () => {
+    if (!suitePriceId || !checkIn || !checkOut || stayQuote?.ok !== true) return;
+
+    const formatIso = (d: Date) => {
+      const y = d.getFullYear();
+      const m = String(d.getMonth() + 1).padStart(2, "0");
+      const day = String(d.getDate()).padStart(2, "0");
+      return `${y}-${m}-${day}`;
+    };
+
+    const checkInIso = formatIso(checkIn);
+    const checkOutIso = formatIso(checkOut);
+
+    setAvailabilityError(null);
+    setIsCheckingAvailability(true);
+
+    //TODO: integrare chiamata reale a servizi booking ecc... per verificare disponibilità
+
+    const q = new URLSearchParams({
+      suiteId: suitePriceId,
+      checkIn: checkInIso,
+      checkOut: checkOutIso,
+      adults: String(adults),
+      children: String(children),
+      total: stayQuote.totalEuro.toFixed(2),
+      nights: String(stayQuote.nights),
+      avgPerNight: stayQuote.averagePerNightEuro.toFixed(2),
+    });
+    router.push(`/prenota?${q.toString()}`);
+  };
+
+  const canBook =
+    !!suitePriceId &&
+    !!checkIn &&
+    !!checkOut &&
+    stayQuote?.ok === true;
 
   return (
     <div className="bg-bianco">
@@ -498,12 +541,29 @@ export default function LayoutSuite({
                 </div>
               )}
 
+              {availabilityError && (
+                <div className="rounded-lg border border-red-200 bg-red-50 px-3 py-2.5 text-xs text-red-700">
+                  {availabilityError}
+                </div>
+              )}
+
               <button
                 type="button"
-                className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-blu px-6 py-3 text-sm font-medium text-bianco shadow-sm transition hover:bg-blu/90 focus:outline-none focus:ring-2 focus:ring-blu/50"
+                onClick={handleBooking}
+                disabled={!canBook || isCheckingAvailability}
+                className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-blu px-6 py-3 text-sm font-medium text-bianco shadow-sm transition hover:bg-blu/90 focus:outline-none focus:ring-2 focus:ring-blu/50 disabled:opacity-40 disabled:cursor-not-allowed"
               >
-                Cerca disponibilità
-                <ArrowRight size={16} />
+                {isCheckingAvailability ? (
+                  <>
+                    <span className="h-4 w-4 animate-spin rounded-full border-2 border-bianco border-t-transparent" />
+                    Verifica disponibilità…
+                  </>
+                ) : (
+                  <>
+                    {canBook ? "Prenota ora" : "Seleziona date e ospiti"}
+                    <ArrowRight size={16} />
+                  </>
+                )}
               </button>
 
               <p className="text-xs text-scuro/60">
