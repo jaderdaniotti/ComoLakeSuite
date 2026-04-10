@@ -64,7 +64,9 @@ export async function POST(req: NextRequest) {
         (1000 * 60 * 60 * 24)
     );
 
-    const description = `${suiteId} · ${checkIn} → ${checkOut} · ${nights} notti · ${adults} adulti${children > 0 ? ` + ${children} bambini` : ""}`;
+    const description = `${suiteId} | ${checkIn} - ${checkOut} | ${nights} notti | ${adults} adulti${children > 0 ? ` + ${children} bambini` : ""}`;
+
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
 
     const orderPayload = {
       intent: "CAPTURE",
@@ -78,11 +80,20 @@ export async function POST(req: NextRequest) {
           custom_id: JSON.stringify({ suiteId, checkIn, checkOut, adults, children }),
         },
       ],
-      application_context: {
-        brand_name: "Como Lake Suites",
-        locale: "it-IT",
-        landing_page: "BILLING",
-        user_action: "PAY_NOW",
+      // payment_source.paypal.experience_context sostituisce il deprecato
+      // application_context nelle PayPal Orders v2 API
+      payment_source: {
+        paypal: {
+          experience_context: {
+            payment_method_preference: "IMMEDIATE_PAYMENT_REQUIRED",
+            brand_name: "Como Lake Suites",
+            landing_page: "LOGIN",
+            shipping_preference: "NO_SHIPPING",
+            user_action: "PAY_NOW",
+            return_url: `${siteUrl}/prenota/conferma`,
+            cancel_url: `${siteUrl}/prenota`,
+          },
+        },
       },
     };
 

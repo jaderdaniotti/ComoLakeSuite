@@ -50,8 +50,22 @@ export default function LayoutSuite({
     d.setDate(1);
     return d;
   });
+  const [blockedDates, setBlockedDates] = useState<Set<string>>(new Set());
 
   const router = useRouter();
+
+  // Carica i giorni bloccati da Booking.com (e in futuro altri OTA) al mount
+  useEffect(() => {
+    if (!suitePriceId) return;
+    fetch(`/api/availability/blocked?suiteId=${suitePriceId}`)
+      .then((r) => r.json())
+      .then((data: { blocked: string[] }) => {
+        setBlockedDates(new Set(data.blocked));
+      })
+      .catch(() => {
+        // Fallback silenzioso: il calendario rimane navigabile
+      });
+  }, [suitePriceId]);
 
   const addMonths = (date: Date, amount: number) =>
     new Date(date.getFullYear(), date.getMonth() + amount, 1);
@@ -92,6 +106,11 @@ export default function LayoutSuite({
   const isInRange = (day: Date) =>
     checkIn && checkOut && day > checkIn && day < checkOut;
 
+  const toIso = (d: Date) =>
+    `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+
+  const isDateBlocked = (day: Date) => blockedDates.has(toIso(day));
+
   const guestRange = suitePriceId
     ? getSuiteGuestRange(suitePriceId)
     : { min: 1, max: 6 };
@@ -121,6 +140,8 @@ export default function LayoutSuite({
   }, [suitePriceId, guestRange.min, guestRange.max, children]);
 
   const handleDayClick = (day: Date) => {
+    if (isDateBlocked(day)) return; // giorno occupato: ignora il click
+
     if (!checkIn || (checkIn && checkOut)) {
       setCheckIn(day);
       setCheckOut(null);
@@ -131,6 +152,18 @@ export default function LayoutSuite({
       setCheckIn(day);
       setCheckOut(null);
       return;
+    }
+
+    // Se c'è un giorno bloccato nel range selezionato, non permettere
+    let cursor = new Date(checkIn.getTime());
+    cursor.setDate(cursor.getDate() + 1);
+    while (cursor < day) {
+      if (isDateBlocked(cursor)) {
+        setCheckIn(day);
+        setCheckOut(null);
+        return;
+      }
+      cursor.setDate(cursor.getDate() + 1);
     }
 
     setCheckOut(day);
@@ -198,7 +231,23 @@ export default function LayoutSuite({
     setAvailabilityError(null);
     setIsCheckingAvailability(true);
 
-    //TODO: integrare chiamata reale a servizi booking ecc... per verificare disponibilità
+    try {
+      const res = await fetch("/api/availability/check", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ suiteId: suitePriceId, checkIn: checkInIso, checkOut: checkOutIso }),
+      });
+      const data = await res.json() as { available: boolean; reason?: string };
+      if (!data.available) {
+        setAvailabilityError(data.reason ?? "Le date selezionate non sono disponibili. Prova con altre date.");
+        setIsCheckingAvailability(false);
+        return;
+      }
+    } catch {
+      setAvailabilityError("Impossibile verificare la disponibilità. Riprova tra poco.");
+      setIsCheckingAvailability(false);
+      return;
+    }
 
     const q = new URLSearchParams({
       suiteId: suitePriceId,
@@ -567,8 +616,7 @@ export default function LayoutSuite({
               </button>
 
               <p className="text-xs text-scuro/60">
-                In futuro questo calendario sarà sincronizzato con Airbnb,
-                Booking.com ed Expedia.
+                Il calendario è sincronizzato con Booking.com. In arrivo la sincronizzazione con Airbnb ed Expedia.
               </p>
             </div>
 
@@ -629,6 +677,7 @@ export default function LayoutSuite({
                           const selectedStart = isSameDay(day, checkIn);
                           const selectedEnd = isSameDay(day, checkOut);
                           const inRange = isInRange(day);
+                          const blocked = isDateBlocked(day);
 
                           const isSelected = selectedStart || selectedEnd;
 
@@ -637,12 +686,16 @@ export default function LayoutSuite({
                               key={day.toISOString()}
                               type="button"
                               onClick={() => handleDayClick(day)}
+                              disabled={blocked}
+                              title={blocked ? "Non disponibile" : undefined}
                               className={`flex h-9 w-9 items-center justify-center rounded-full text-xs transition ${
-                                isSelected
-                                  ? "bg-blu text-bianco"
-                                  : inRange
-                                    ? "bg-blu/10 text-scuro"
-                                    : "text-scuro hover:bg-grigio/40"
+                                blocked
+                                  ? "cursor-not-allowed bg-grigio/30 text-scuro/25 line-through"
+                                  : isSelected
+                                    ? "bg-blu text-bianco"
+                                    : inRange
+                                      ? "bg-blu/10 text-scuro"
+                                      : "text-scuro hover:bg-grigio/40"
                               }`}
                             >
                               {day.getDate()}
@@ -655,11 +708,19 @@ export default function LayoutSuite({
                 })}
               </div>
 
-              <div className="flex items-center gap-3 text-xs text-scuro/60">
-                <span className="inline-flex h-3 w-3 rounded-full bg-blu" />
-                <span>Data selezionata</span>
-                <span className="inline-flex h-3 w-3 rounded-full bg-blu/10 border border-blu/40" />
-                <span>Intervallo soggiorno</span>
+              <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-scuro/60">
+                <span className="inline-flex items-center gap-1.5">
+                  <span className="h-3 w-3 rounded-full bg-blu" />
+                  Data selezionata
+                </span>
+                <span className="inline-flex items-center gap-1.5">
+                  <span className="h-3 w-3 rounded-full bg-blu/10 border border-blu/40" />
+                  Intervallo soggiorno
+                </span>
+                <span className="inline-flex items-center gap-1.5">
+                  <span className="h-3 w-3 rounded-full bg-grigio/30" />
+                  Non disponibile
+                </span>
               </div>
             </div>
           </div>

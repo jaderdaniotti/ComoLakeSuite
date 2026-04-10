@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { useState } from "react";
+import { Fragment, useState } from "react";
 import { Menu, X } from "lucide-react";
 import images from "@/src/images";
 
@@ -66,18 +66,17 @@ export default function Header() {
                 </button>
                 {suiteAperto && (
                   <div className="absolute left-0 top-full mt-5 w-65 bg-gray-800 py-2 p-4 shadow-sm">
-                    {suiteLinks.map((link) => (
-                      <>
+                    {suiteLinks.map((link, index) => (
+                      <Fragment key={link.href}>
                         <Link
-                          key={link.href}
                           href={link.href}
                           className="block px-4 py-2 text-gray-200 font-normal link-nav"
                           onClick={() => setSuiteAperto(false)}
                         >
                           {link.label}
                         </Link>
-                        <hr className="border-bianco/10" />
-                      </>
+                        {index < suiteLinks.length - 1 && <hr className="border-bianco/10" />}
+                      </Fragment>
                     ))}
                   </div>
                 )}

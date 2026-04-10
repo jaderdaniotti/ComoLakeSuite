@@ -1,4 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
+import { saveBooking, generateId, bookingToDates } from "@/src/lib/bookings";
+import { readBlockedDates, writeBlockedDates } from "@/src/lib/blockedDates";
 
 async function getPayPalAccessToken(): Promise<string> {
   const clientId = process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID!;
@@ -51,6 +53,7 @@ export async function POST(req: NextRequest) {
         headers: {
           Authorization: `Bearer ${accessToken}`,
           "Content-Type": "application/json",
+          "Prefer": "return=representation",
         },
       }
     );
@@ -71,6 +74,46 @@ export async function POST(req: NextRequest) {
     const amount = capture?.amount?.value ?? null;
     const payerEmail = captureData.payer?.email_address ?? null;
     const customId = captureData.purchase_units?.[0]?.custom_id ?? null;
+
+    // ── Persisti il booking e aggiorna subito i giorni bloccati ──────────────
+    if (captureStatus === "COMPLETED" && customId) {
+      try {
+        const meta = JSON.parse(customId) as {
+          suiteId: string;
+          checkIn: string;
+          checkOut: string;
+          adults: number;
+          children: number;
+        };
+
+        const booking = {
+          id: generateId(),
+          suiteId: meta.suiteId,
+          checkIn: meta.checkIn,
+          checkOut: meta.checkOut,
+          adults: Number(meta.adults),
+          children: Number(meta.children),
+          totalEuro: amount ? parseFloat(amount) : 0,
+          paypalOrderId: captureData.id,
+          payerEmail,
+          createdAt: new Date().toISOString(),
+        };
+
+        // Salva il booking su disco
+        await saveBooking(booking);
+
+        // Aggiorna immediatamente blocked-dates.json senza aspettare il cron
+        const store = await readBlockedDates();
+        const existing = new Set(store[meta.suiteId] ?? []);
+        bookingToDates(booking).forEach((d) => existing.add(d));
+        store[meta.suiteId] = Array.from(existing).sort();
+        await writeBlockedDates(store);
+      } catch (err) {
+        // Non bloccare la risposta al client per un errore di persistenza
+        console.error("capture-order: errore salvataggio booking:", err);
+      }
+    }
+    // ────────────────────────────────────────────────────────────────────────
 
     return NextResponse.json({
       status: captureStatus,

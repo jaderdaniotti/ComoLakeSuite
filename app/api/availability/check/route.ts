@@ -1,24 +1,23 @@
 import { NextRequest, NextResponse } from "next/server";
+import { readBlockedDates } from "@/src/lib/blockedDates";
 
 /**
  * POST /api/availability/check
  *
- * Verifica la disponibilità di una suite per le date richieste.
- *
- * Attualmente la risposta è mockata (sempre disponibile).
- * In futuro qui verranno integrate le chiamate alle API degli OTA:
- *  - Airbnb  → iCal / API host (https://www.airbnb.com/calendar/ical/<listing_id>.ics)
- *  - Booking.com → Connectivity API / iCal export
- *  - Expedia → EPS Rapid API (https://developers.expediagroup.com/docs/products/rapid)
- *
- * Il flusso previsto sarà:
- *  1. Recuperare i calendari iCal (o chiamare le API) per la suite indicata.
- *  2. Verificare che nessun giorno tra checkIn e checkOut (escluso) sia bloccato.
- *  3. Restituire { available: true } o { available: false, reason: string }.
+ * Verifica la disponibilità di una suite per le date richieste
+ * leggendo i giorni bloccati da public/blocked-dates.json
+ * (aggiornato ogni ora dal cron /api/availability/sync).
  *
  * Body: { suiteId: string, checkIn: string (YYYY-MM-DD), checkOut: string (YYYY-MM-DD) }
  * Response: { available: boolean, reason?: string }
  */
+
+function addOneDay(iso: string): string {
+  const [y, m, d] = iso.split("-").map(Number);
+  const date = new Date(y, m - 1, d + 1);
+  return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
+}
+
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
@@ -35,31 +34,22 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // ─── TODO: sostituire con chiamate reali agli OTA ────────────────────────
-    //
-    // Esempio Airbnb iCal:
-    //   const icalUrl = `https://www.airbnb.com/calendar/ical/${AIRBNB_IDS[suiteId]}.ics`;
-    //   const ical = await fetch(icalUrl).then(r => r.text());
-    //   const blocked = parseICalBlockedDates(ical);
-    //   const isAvailable = !blocked.some(d => d >= checkIn && d < checkOut);
-    //
-    // Esempio Booking.com Connectivity API:
-    //   const res = await fetch(`https://supply-xml.booking.com/hotels/ota/...`);
-    //   ...
-    //
-    // Esempio Expedia EPS Rapid:
-    //   const res = await fetch(`https://test.ean.com/v3/properties/availability?...`);
-    //   ...
-    //
-    // ─────────────────────────────────────────────────────────────────────────
+    const store = await readBlockedDates();
+    const blocked = new Set(store[suiteId] ?? []);
 
-    // MOCK: disponibilità sempre confermata
-    const available = true;
+    // Controlla ogni giorno [checkIn, checkOut) — il giorno di checkout non conta
+    let cursor = checkIn;
+    while (cursor < checkOut) {
+      if (blocked.has(cursor)) {
+        return NextResponse.json({
+          available: false,
+          reason: `La suite non è disponibile per alcune delle date selezionate. Prova con altre date.`,
+        });
+      }
+      cursor = addOneDay(cursor);
+    }
 
-    // Simula una piccola latenza di rete (rimuovere in produzione)
-    await new Promise((r) => setTimeout(r, 600));
-
-    return NextResponse.json({ available });
+    return NextResponse.json({ available: true });
   } catch (err) {
     console.error("availability/check error:", err);
     return NextResponse.json(

@@ -114,6 +114,7 @@ export default function PrenotaContent() {
   const onError = (err: Record<string, unknown>) => {
     console.error("PayPal error:", err);
     setPayError("Si è verificato un errore con PayPal. Riprova o contattaci.");
+    setIsProcessing(false);
   };
 
   if (!suiteId || total <= 0) return null;
@@ -215,15 +216,14 @@ export default function PrenotaContent() {
               Metodo di pagamento
             </h2>
 
-            {isProcessing ? (
-              <div className="flex flex-col items-center justify-center gap-3 py-12">
-                <div className="h-8 w-8 animate-spin rounded-full border-2 border-blu border-t-transparent" />
-                <p className="text-sm text-scuro/60">
-                  Conferma pagamento in corso…
-                </p>
-              </div>
-            ) : (
-              <PayPalScriptProvider options={paypalScriptOptions}>
+            <PayPalScriptProvider options={paypalScriptOptions}>
+              <div className="relative">
+                {isProcessing && (
+                  <div className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-3 rounded-xl bg-bianco/90">
+                    <div className="h-8 w-8 animate-spin rounded-full border-2 border-blu border-t-transparent" />
+                    <p className="text-sm text-scuro/60">Conferma pagamento in corso…</p>
+                  </div>
+                )}
                 <PayPalButtons
                   style={{
                     layout: "vertical",
@@ -235,11 +235,11 @@ export default function PrenotaContent() {
                   createOrder={createOrder}
                   onApprove={onApprove}
                   onError={onError}
-                  onCancel={() => setPayError(null)}
+                  onCancel={() => { setPayError(null); setIsProcessing(false); }}
                   disabled={isProcessing}
                 />
-              </PayPalScriptProvider>
-            )}
+              </div>
+            </PayPalScriptProvider>
 
             {payError && (
               <div className="rounded-lg bg-red-50 border border-red-200 px-4 py-3 text-sm text-red-700">
