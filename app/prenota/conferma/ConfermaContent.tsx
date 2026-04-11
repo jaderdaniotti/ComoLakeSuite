@@ -2,7 +2,7 @@
 
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
-import { CheckCircle, CalendarDays, Users, BedDouble, Phone, Mail } from "lucide-react";
+import { CheckCircle, CalendarDays, Users, BedDouble, Phone, Mail, CalendarPlus } from "lucide-react";
 import { formatEuro } from "@/src/lib/pricing";
 
 const SUITE_LABELS: Record<string, string> = {
@@ -28,6 +28,21 @@ export default function ConfermaContent() {
   const payerEmail = params.get("payerEmail") ?? "";
 
   const suiteLabel = SUITE_LABELS[suiteId] ?? suiteId;
+
+  // Link "Aggiungi al calendario" in formato Google Calendar
+  const googleCalUrl = (() => {
+    if (!checkIn || !checkOut) return null;
+    const start = checkIn.replace(/-/g, "");
+    const end = checkOut.replace(/-/g, "");
+    const params = new URLSearchParams({
+      action: "TEMPLATE",
+      text: `Soggiorno – ${suiteLabel}`,
+      dates: `${start}/${end}`,
+      details: `Prenotazione confermata presso ${suiteLabel}. ID ordine PayPal: ${orderId}`,
+      location: "Como, Italia",
+    });
+    return `https://calendar.google.com/calendar/render?${params.toString()}`;
+  })();
 
   const formatDate = (iso: string) => {
     if (!iso) return "–";
@@ -114,6 +129,19 @@ export default function ConfermaContent() {
                 {formatEuro(total)}
               </span>
             </div>
+          )}
+
+          {/* Aggiungi al calendario */}
+          {googleCalUrl && (
+            <a
+              href={googleCalUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 text-sm text-blu hover:underline"
+            >
+              <CalendarPlus size={16} />
+              Aggiungi al calendario Google
+            </a>
           )}
         </div>
 

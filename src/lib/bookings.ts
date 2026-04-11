@@ -1,7 +1,7 @@
 import path from "path";
 import fs from "fs/promises";
 
-/** Path fuori da public/ per non esporre dati personali via HTTP statico */
+/** Path del file JSON delle prenotazioni dirette (fuori da public/ per non esporlo) */
 export const BOOKINGS_PATH = path.join(process.cwd(), "data", "bookings.json");
 
 export type Booking = {
@@ -27,7 +27,7 @@ export async function readBookings(): Promise<Booking[]> {
   }
 }
 
-/** Aggiunge un booking al file (crea il file e la directory se necessario). */
+/** Aggiunge un booking al file (crea la directory se necessario). */
 export async function saveBooking(booking: Booking): Promise<void> {
   await fs.mkdir(path.dirname(BOOKINGS_PATH), { recursive: true });
   const bookings = await readBookings();

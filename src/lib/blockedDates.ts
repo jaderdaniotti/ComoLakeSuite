@@ -37,28 +37,54 @@ export const ICAL_URLS: Record<SuitePriceId, Record<string, string | undefined>>
   },
 };
 
-/** Path assoluto del file JSON con i giorni bloccati (in public/ per semplicità) */
-export const BLOCKED_DATES_PATH = path.join(
-  process.cwd(),
-  "public",
-  "blocked-dates.json"
-);
-
 export type BlockedDatesStore = Record<string, string[]>; // suiteId → YYYY-MM-DD[]
 
-/** Legge lo store da disco. Restituisce {} se il file non esiste. */
-export async function readBlockedDates(): Promise<BlockedDatesStore> {
+/**
+ * blocked-dates.json → solo prenotazioni dirette dal sito (PayPal).
+ * Scritto da capture-order dopo ogni pagamento.
+ */
+const DIRECT_DATES_PATH = path.join(process.cwd(), "public", "blocked-dates.json");
+
+/**
+ * ota-dates.json → cache delle date dai feed iCal OTA (Booking.com, Airbnb, …).
+ * Aggiornato dal cron ogni ora tramite syncAllSuites().
+ */
+const OTA_DATES_PATH = path.join(process.cwd(), "public", "ota-dates.json");
+
+/** Legge un file JSON dello store. Restituisce {} se non esiste. */
+async function readStore(filePath: string): Promise<BlockedDatesStore> {
   try {
-    const raw = await fs.readFile(BLOCKED_DATES_PATH, "utf-8");
+    const raw = await fs.readFile(filePath, "utf-8");
     return JSON.parse(raw) as BlockedDatesStore;
   } catch {
     return {};
   }
 }
 
-/** Scrive lo store su disco in modo atomico-like (sovrascrittura). */
+/**
+ * Legge e unisce le date dirette + OTA per tutte le suite.
+ * Usato da /api/availability/blocked e /api/availability/check.
+ */
+export async function readBlockedDates(): Promise<BlockedDatesStore> {
+  const [direct, ota] = await Promise.all([
+    readStore(DIRECT_DATES_PATH),
+    readStore(OTA_DATES_PATH),
+  ]);
+
+  const merged: BlockedDatesStore = { ...ota };
+  for (const [suiteId, dates] of Object.entries(direct)) {
+    const set = new Set([...(merged[suiteId] ?? []), ...dates]);
+    merged[suiteId] = Array.from(set).sort();
+  }
+  return merged;
+}
+
+/**
+ * Scrive le date dei booking diretti (PayPal) in blocked-dates.json.
+ * NON tocca ota-dates.json.
+ */
 export async function writeBlockedDates(data: BlockedDatesStore): Promise<void> {
-  await fs.writeFile(BLOCKED_DATES_PATH, JSON.stringify(data, null, 2), "utf-8");
+  await fs.writeFile(DIRECT_DATES_PATH, JSON.stringify(data, null, 2), "utf-8");
 }
 
 export type SyncResult = {
@@ -68,22 +94,23 @@ export type SyncResult = {
 };
 
 /**
- * Scarica tutti i feed iCal configurati per tutte le suite,
- * fa il merge dei giorni bloccati e salva in blocked-dates.json.
+ * Scarica tutti i feed iCal OTA configurati e salva il risultato in ota-dates.json.
+ * NON tocca blocked-dates.json (prenotazioni dirette): i due file sono indipendenti.
+ * Chiamato dal cron ogni ora.
  */
 export async function syncAllSuites(): Promise<SyncResult> {
-  const current = await readBlockedDates();
+  const current = await readStore(OTA_DATES_PATH);
   const synced: string[] = [];
   const errors: string[] = [];
 
   for (const [suiteId, feeds] of Object.entries(ICAL_URLS)) {
-    const merged = new Set<string>();
+    const otaDates = new Set<string>();
 
     for (const [source, url] of Object.entries(feeds)) {
       if (!url) continue;
       try {
         const dates = await fetchBlockedDates(url);
-        dates.forEach((d) => merged.add(d));
+        dates.forEach((d) => otaDates.add(d));
         synced.push(`${suiteId}:${source} (${dates.length} giorni)`);
       } catch (err) {
         const msg = err instanceof Error ? err.message : String(err);
@@ -92,11 +119,11 @@ export async function syncAllSuites(): Promise<SyncResult> {
       }
     }
 
-    // Aggiorna solo la suite, mantieni le altre intatte
-    current[suiteId] = Array.from(merged).sort();
+    // Aggiorna solo la suite corrente, mantieni le altre intatte
+    current[suiteId] = Array.from(otaDates).sort();
   }
 
-  await writeBlockedDates(current);
+  await fs.writeFile(OTA_DATES_PATH, JSON.stringify(current, null, 2), "utf-8");
 
   return { synced, errors, syncedAt: new Date().toISOString() };
 }

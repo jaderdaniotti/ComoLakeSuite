@@ -23,6 +23,12 @@ const paypalScriptOptions: ReactPayPalScriptOptions = {
   clientId: process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID!,
   currency: "EUR",
   intent: "capture",
+  // commit:true deve corrispondere a user_action:"PAY_NOW" nel create-order API
+  commit: true,
+  // NOTA: buyer-country:"IT" è valido SOLO in sandbox per simulare il paese
+  // del compratore. NON va passato in produzione (live). Decommentare solo
+  // se si ritorna in sandbox:
+  // "buyer-country": "IT",
 };
 
 export default function PrenotaContent() {

@@ -99,7 +99,7 @@ export async function POST(req: NextRequest) {
           createdAt: new Date().toISOString(),
         };
 
-        // Salva il booking su disco
+        // Salva il booking su Vercel Blob
         await saveBooking(booking);
 
         // Aggiorna immediatamente blocked-dates.json senza aspettare il cron

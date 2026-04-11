@@ -1,0 +1,26 @@
+[
+  {
+    "id": "2d245c65-704e-46c4-9264-f43e2dee9ed4",
+    "suiteId": "suite-volta",
+    "checkIn": "2026-04-18",
+    "checkOut": "2026-04-19",
+    "adults": 1,
+    "children": 0,
+    "totalEuro": 0.01,
+    "paypalOrderId": "6XW62783B3250982S",
+    "payerEmail": "davidemazza9814@gmail.com",
+    "createdAt": "2026-04-11T11:50:38.456Z"
+  },
+  {
+    "id": "47c8a7b0-46b5-4d71-83ec-c40a1294d89b",
+    "suiteId": "suite-cernobbio",
+    "checkIn": "2026-09-29",
+    "checkOut": "2026-09-30",
+    "adults": 2,
+    "children": 0,
+    "totalEuro": 0.01,
+    "paypalOrderId": "5WV39242H6764215K",
+    "payerEmail": "davidemazza9814@gmail.com",
+    "createdAt": "2026-04-11T12:17:12.367Z"
+  }
+]
