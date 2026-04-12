@@ -5,6 +5,7 @@ import Image from "next/image";
 import { Fragment, useState } from "react";
 import { Menu, X } from "lucide-react";
 import images from "@/src/images";
+import { useLanguage } from "@/src/components/LanguageProvider";
 
 const suiteLinks = [
   { href: "/le-suites/suite-volta", label: "Suite Volta" },
@@ -17,6 +18,17 @@ const suiteLinks = [
 
 export default function Header() {
   const [suiteAperto, setSuiteAperto] = useState(false);
+  const { locale, toggleLocale } = useLanguage();
+
+  const labels = {
+    home: "Home",
+    suites: locale === "en" ? "Suites" : "Le Suites",
+    services: locale === "en" ? "Services" : "Servizi",
+    contacts: locale === "en" ? "Contacts" : "Contatti",
+    openMenu: locale === "en" ? "Open menu" : "Apri menu",
+    closeMenu: locale === "en" ? "Close menu" : "Chiudi menu",
+    switchLanguage: locale === "en" ? "Italiano" : "English",
+  };
 
   const chiudiDrawer = () => {
     const checkbox = document.getElementById(
@@ -46,7 +58,7 @@ export default function Header() {
 
             <label
               htmlFor="drawer-nav"
-              aria-label="Apri menu"
+              aria-label={labels.openMenu}
               className="btn btn-square btn-ghost md:hidden text-bianco hover:bg-bianco/10 hover:text-bianco"
             >
               <Menu className="h-6 w-6" />
@@ -54,7 +66,7 @@ export default function Header() {
           </div>
             <nav className="hidden mx-auto md:flex md:items-center md:gap-8 font-light tracking-wide text-2xl">
               <Link href="/" className="link-nav text-bianco" onClick={chiudiTutto}>
-                Home
+                {labels.home}
               </Link>
               <div className="relative">
                 <button
@@ -62,7 +74,7 @@ export default function Header() {
                   onClick={() => setSuiteAperto(!suiteAperto)}
                   className="link-nav text-bianco"
                 >
-                  Le Suites
+                  {labels.suites}
                 </button>
                 {suiteAperto && (
                   <div className="absolute left-0 top-full mt-5 w-65 bg-gray-800 py-2 p-4 shadow-sm">
@@ -82,11 +94,14 @@ export default function Header() {
                 )}
               </div>
               <Link href="/i-nostri-servizi" className="link-nav text-bianco" onClick={chiudiTutto}>
-                Servizi
+                {labels.services}
               </Link>
               <Link href="/contatti" className="link-nav text-bianco" onClick={chiudiTutto}>
-                Contatti
+                {labels.contacts}
               </Link>
+              <button type="button" className="link-nav text-bianco" onClick={toggleLocale}>
+                {labels.switchLanguage}
+              </button>
             </nav>
         </header>
       </div>
@@ -94,12 +109,12 @@ export default function Header() {
       <div className="drawer-side w-full z-60 md:hidden">
         <label
           htmlFor="drawer-nav"
-          aria-label="Chiudi menu"
+          aria-label={labels.closeMenu}
           className="drawer-overlay"
         />
         <label
           htmlFor="drawer-nav"
-          aria-label="Chiudi menu"
+          aria-label={labels.closeMenu}
           className="absolute right-4 top-4 z-10 flex h-10 w-10 cursor-pointer items-center justify-center text-bianco hover:bg-bianco/10"
         >
           <X className="h-6 w-6" />
@@ -121,7 +136,7 @@ export default function Header() {
                 className="text-bianco rounded-none"
                 onClick={chiudiDrawer}
               >
-                Home
+                {labels.home}
               </Link>
             </li>
             <li>
@@ -130,7 +145,7 @@ export default function Header() {
                 className="text-bianco rounded-none"
                 onClick={chiudiDrawer}
               >
-                Servizi
+                {labels.services}
               </Link>
             </li>
             <li>
@@ -139,14 +154,26 @@ export default function Header() {
                 className="text-bianco rounded-none"
                 onClick={chiudiDrawer}
               >
-                Contatti
+                {labels.contacts}
               </Link>
+            </li>
+            <li>
+              <button
+                type="button"
+                className="text-bianco rounded-none"
+                onClick={() => {
+                  toggleLocale();
+                  chiudiDrawer();
+                }}
+              >
+                {labels.switchLanguage}
+              </button>
             </li>
           </div>
           <div className="flex flex-col gap-2 border-b border-bianco w-full py-3 justify-center items-center">
             <li className="menu-title">
-              <span className="text-bianco border-b border-bianco rounded-none pb-0 tracking-wide uppercase tracking-widest flex items-center gap-2 font-medium text-2xl">
-                Le Suites
+              <span className="text-bianco border-b border-bianco rounded-none pb-0 uppercase tracking-widest flex items-center gap-2 font-medium text-2xl">
+                {labels.suites}
               </span>
             </li>
             {suiteLinks.map((link) => (

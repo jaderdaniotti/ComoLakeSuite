@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import Script from "next/script";
+import { cookies } from "next/headers";
 import {
   CircleParking,
   Wifi,
@@ -15,6 +16,7 @@ import SuiteCard from "@/src/components/SuiteCard";
 import HeroCarousel from "@/src/components/HeroCarousel";
 import HomeMapSection from "@/src/components/HomeMapSection";
 import images from "@/src/images";
+import { getServerLocale, t } from "@/src/lib/i18n";
 
 const mapThumbnailSrcs = [
   (images.thumbVolta as { src: string }).src,
@@ -181,11 +183,133 @@ function chunkArray<T>(arr: T[], size: number): T[][] {
   return pages;
 }
 
-export default function HomePage() {
+export default async function HomePage() {
+  const locale = getServerLocale(await cookies());
+  const ctaVisitLabel = locale === "en" ? "Visit" : "Visita";
+  const suiteCtaLabel =
+    locale === "en" ? "Read more and book" : "Leggi tutto e prenota";
+
+  const localizedSuiteCards = suiteCards.map((card) => ({
+    ...card,
+    sottotitolo: t(
+      locale,
+      card.sottotitolo,
+      {
+        "Una camera con vista": "A room with a view",
+        "Moderna e raffinata": "Modern and refined",
+        "Stile e modernità": "Style and modernity",
+      }[card.sottotitolo] ?? card.sottotitolo,
+    ),
+    descrizione: t(
+      locale,
+      card.descrizione,
+      {
+        "Minimal ed elegante appartamento con 4 posti letto e una vista da lasciare incantati.":
+          "A minimal and elegant apartment with 4 beds and a breathtaking view.",
+        "Suite curata in ogni minimo dettaglio. Due camere, fino a 6 posti letto, a due passi dal centro città e con vista lago.":
+          "A suite designed down to every detail. Two bedrooms, up to 6 guests, just steps from the city center with a lake view.",
+        "Oasi di lusso e relax nel cuore della città con vista sull'iconico centro storico di Como.":
+          "An oasis of luxury and relaxation in the heart of the city, overlooking Como's iconic historic center.",
+        "Alloggio in una delle località più suggestive del lago di Como per un soggiorno da sogno.":
+          "Accommodation in one of Lake Como's most charming locations for a dream stay.",
+        "Suite curata in ogni minimo dettaglio per chi cerca un alloggio moderno e riservato.":
+          "A suite refined in every detail for guests looking for modern and private accommodation.",
+        "Suite in uno dei principali quartieri di Como per offrire comfort e relax.":
+          "A suite in one of Como's main neighborhoods, designed for comfort and relaxation.",
+      }[card.descrizione] ?? card.descrizione,
+    ),
+  }));
+
+  const localizedServiziHome = serviziHome.map((item) => ({
+    ...item,
+    titolo: t(
+      locale,
+      item.titolo,
+      {
+        Parcheggio: "Parking",
+        "Free Wi-fi": "Free Wi-Fi",
+        "Terrazza vista lago": "Lake-view terrace",
+        "Pulizie ogni 2 giorni": "Cleaning every 2 days",
+        Colazione: "Breakfast",
+        "Cucina attrezzata": "Equipped kitchen",
+        "Biancheria per la casa": "House linen",
+        Climatizzatore: "Air conditioning",
+      }[item.titolo] ?? item.titolo,
+    ),
+    testo: t(
+      locale,
+      item.testo,
+      {
+        "Parcheggio custodito adiacente alle suites.":
+          "Secure parking adjacent to the suites.",
+        "Connessione a internet gratuita in entrambe le suites.":
+          "Free internet connection in all suites.",
+        "Il terrazzo affaccia sullo splendido paesaggio del Lago di Como.":
+          "The terrace overlooks the stunning Lake Como scenery.",
+        "Servizio di pulizia incluso per gli ospiti.":
+          "Cleaning service included for guests.",
+        "Colazione italiana e internazionale a buffet.":
+          "Italian and international buffet breakfast.",
+        "Cucina completa di elettrodomestici e ogni comfort.":
+          "Fully equipped kitchen with appliances and every comfort.",
+        "Biancheria completa sia per le camere, sia per il bagno e kit di cortesia incluso.":
+          "Complete linen for bedrooms and bathrooms, with courtesy kit included.",
+        "Climatizzazione in tutti gli ambienti per tutte le stagioni (caldo, freddo).":
+          "Air conditioning in all rooms for every season (heating and cooling).",
+      }[item.testo] ?? item.testo,
+    ),
+  }));
+
+  const localizedEsperienze = esperienze.map((item) => ({
+    ...item,
+    titolo: t(
+      locale,
+      item.titolo,
+      {
+        "Design italiano": "Italian design",
+        "Biancheria pregiata": "Premium linen",
+        "Comfort superior": "Superior comfort",
+        "Attenzione ai dettagli": "Attention to detail",
+        "Asciugamani personalizzati": "Personalized towels",
+        "Sapone artigianale": "Artisanal soap",
+        "Cucina attrezzata": "Equipped kitchen",
+        "Caffè italiano": "Italian coffee",
+      }[item.titolo] ?? item.titolo,
+    ),
+    testo: t(
+      locale,
+      item.testo,
+      {
+        "Un ambiente di classe, dove la tradizione del design italiano rende lo spazio caldo e accogliente.":
+          "A classy environment where Italian design tradition makes the space warm and welcoming.",
+        "Biancheria di alta qualità, pensata per il benessere personale.":
+          "High-quality linen designed for personal wellbeing.",
+        "Un alloggio signorile e spazioso, arredato con cura e dotato dei più moderni comfort.":
+          "A refined and spacious accommodation, carefully furnished and equipped with modern comforts.",
+        "La cura di ogni dettaglio crea un perfetto connubio tra design e comodità.":
+          "Attention to every detail creates a perfect blend of design and comfort.",
+        "La cura e l'attenzione sono presenti in ogni ambiente e dettaglio.":
+          "Care and attention are present in every room and detail.",
+        "Saponi artigianali a base di prodotti naturali ed oli essenziali.":
+          "Artisanal soaps made with natural products and essential oils.",
+        "La cucina ha uno spazio dedicato che la rende bella, pratica e funzionale.":
+          "The kitchen has a dedicated area that makes it beautiful, practical, and functional.",
+        "Lo stile italiano è rappresentato anche dal caffè.":
+          "Italian style is also expressed through coffee.",
+      }[item.testo] ?? item.testo,
+    ),
+  }));
+
   return (
     <>
       {/* Hero carosello suite */}
-      <HeroCarousel slides={suiteCards} />
+      <HeroCarousel
+        slides={localizedSuiteCards}
+        ctaLabel={ctaVisitLabel}
+        previousLabel={t(locale, "Slide precedente", "Previous slide")}
+        nextLabel={t(locale, "Slide successiva", "Next slide")}
+        goToSlideLabelPrefix={t(locale, "Vai alla slide", "Go to slide")}
+      />
 
 
 
@@ -193,16 +317,25 @@ export default function HomePage() {
       <section className="bg-grigioscuro z-9 pt-16 md:pt-24">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <h2 className="mt-2 text-center text-3xl md:text-5xl text-blu font-light">
-            Le Suites
+            {t(locale, "Le Suites", "Suites")}
           </h2>
           <p className="mx-auto mt-4 max-w-2xl text-center text-scuro/80">
-            Scegli e vivi la tua vacanza in un&apos;atmosfera unica.
+            {t(
+              locale,
+              "Scegli e vivi la tua vacanza in un'atmosfera unica.",
+              "Choose your stay and enjoy your vacation in a unique atmosphere.",
+            )}
           </p>
         </div>
         {/* Card a larghezza piena per lo sfondo bianco/grigio; padding solo nel contenuto (SuiteCard) */}
         <div className="mt-12 w-full pt-10">
-          {suiteCards.map((suite, index) => (
-            <SuiteCard key={suite.href} {...suite} indice={index} />
+          {localizedSuiteCards.map((suite, index) => (
+            <SuiteCard
+              key={suite.href}
+              {...suite}
+              indice={index}
+              ctaLabel={suiteCtaLabel}
+            />
           ))}
         </div>
       </section>
@@ -210,13 +343,17 @@ export default function HomePage() {
       <section className="bg-bianco py-16 md:py-24">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <h2 className="mt-2 text-center text-3xl md:text-5xl text-blu font-light">
-            Servizi
+            {t(locale, "Servizi", "Services")}
           </h2>
           <p className="mx-auto mt-4 max-w-2xl text-center text-scuro/80">
-            Tutto ciò che serve per un soggiorno indimenticabile.
+            {t(
+              locale,
+              "Tutto ciò che serve per un soggiorno indimenticabile.",
+              "Everything you need for an unforgettable stay.",
+            )}
           </p>
           <div className="mt-12 grid gap-8 grid-cols-2 lg:grid-cols-4">
-            {serviziHome.map((s) => (
+            {localizedServiziHome.map((s) => (
               <div
                 key={s.titolo}
                 className="flex flex-col items-center text-center"
@@ -236,8 +373,7 @@ export default function HomePage() {
               href="/i-nostri-servizi"
               className="flex justify-center border border-blu gap-2 items-center mx-auto shadow-xl text-lg bg-blu text-bianco backdrop-blur-md lg:font-medium isolation-auto before:absolute before:w-full before:transition-all before:duration-700 before:hover:w-full before:-left-full before:hover:left-0 before:rounded-full before:bg-emerald-500  before:-z-10 before:aspect-square before:hover:scale-150 before:hover:duration-700 relative z-10 px-6 py-2 overflow-hidden  group mt-3"
             >
-              Visita
-              
+              {ctaVisitLabel}
             </Link>
           </div>
         </div>
@@ -246,20 +382,24 @@ export default function HomePage() {
       <section className="bg-bianco py-16 md:py-24 ">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <p className="text-center text-sm font-medium uppercase tracking-wide text-scuro/70">
-            Vivi
+            {t(locale, "Vivi", "Live")}
           </p>
           <h2 className="mt-2 text-center text-3xl md:text-5xl text-blu font-light">
-            L&apos;esperienza
+            {t(locale, "L'esperienza", "The experience")}
           </h2>
           <p className="mx-auto mt-4 max-w-2xl text-center text-scuro/80">
-            Immersione nell&apos;atmosfera del Lago di Como con i nostri video.
+            {t(
+              locale,
+              "Immersione nell'atmosfera del Lago di Como con i nostri video.",
+              "Immerse yourself in the Lake Como atmosphere with our videos.",
+            )}
           </p>
           <div className="mt-12">
             {/* Carosello "custom" via scroll orizzontale + snap.
                 Telefono: 2 esperienze in 1 riga.
                 sm: 4 esperienze per pagina (2 colonne -> 2 righe).
                 lg+: 8 esperienze per pagina (4 colonne -> 2 righe). */}
-            {esperienze.length > 0 && (
+            {localizedEsperienze.length > 0 && (
               <>
                 <div className="sm:hidden relative">
                   <div
@@ -268,7 +408,7 @@ export default function HomePage() {
                     className="overflow-x-auto snap-x snap-mandatory touch-pan-x"
                   >
                     <div className="flex">
-                      {chunkArray(esperienze, 1).map((pageItems, pageIndex) => (
+                      {chunkArray(localizedEsperienze, 1).map((pageItems, pageIndex) => (
                         <div
                           key={pageIndex}
                           className="exp-page min-w-full snap-start px-0"
@@ -307,14 +447,14 @@ export default function HomePage() {
                     </div>
                   </div>
 
-                  {chunkArray(esperienze, 2).length > 1 && (
+                  {chunkArray(localizedEsperienze, 2).length > 1 && (
                     <>
                       <button
                         type="button"
                         data-exp-target="exp-carousel-xs"
                         data-exp-dir="prev"
                         className="btn btn-circle btn-sm pointer-events-auto absolute left-2 top-1/2 -translate-y-1/2"
-                        aria-label="Esperienze precedenti"
+                        aria-label={t(locale, "Esperienze precedenti", "Previous experiences")}
                       >
                         ❮
                       </button>
@@ -323,7 +463,7 @@ export default function HomePage() {
                         data-exp-target="exp-carousel-xs"
                         data-exp-dir="next"
                         className="btn btn-circle btn-sm pointer-events-auto absolute right-2 top-1/2 -translate-y-1/2"
-                        aria-label="Esperienze successive"
+                        aria-label={t(locale, "Esperienze successive", "Next experiences")}
                       >
                         ❯
                       </button>
@@ -338,7 +478,7 @@ export default function HomePage() {
                     className="overflow-x-auto snap-x snap-mandatory touch-pan-x"
                   >
                     <div className="flex">
-                      {chunkArray(esperienze, 4).map((pageItems, pageIndex) => (
+                      {chunkArray(localizedEsperienze, 4).map((pageItems, pageIndex) => (
                         <div
                           key={pageIndex}
                           className="exp-page min-w-full snap-start px-0"
@@ -377,14 +517,14 @@ export default function HomePage() {
                     </div>
                   </div>
 
-                  {chunkArray(esperienze, 4).length > 1 && (
+                  {chunkArray(localizedEsperienze, 4).length > 1 && (
                     <>
                       <button
                         type="button"
                         data-exp-target="exp-carousel-sm"
                         data-exp-dir="prev"
                         className="btn btn-circle btn-sm pointer-events-auto absolute left-2 top-1/2 -translate-y-1/2"
-                        aria-label="Esperienze precedenti"
+                        aria-label={t(locale, "Esperienze precedenti", "Previous experiences")}
                       >
                         ❮
                       </button>
@@ -393,7 +533,7 @@ export default function HomePage() {
                         data-exp-target="exp-carousel-sm"
                         data-exp-dir="next"
                         className="btn btn-circle btn-sm pointer-events-auto absolute right-2 top-1/2 -translate-y-1/2"
-                        aria-label="Esperienze successive"
+                        aria-label={t(locale, "Esperienze successive", "Next experiences")}
                       >
                         ❯
                       </button>
@@ -408,7 +548,7 @@ export default function HomePage() {
                     className="overflow-x-auto snap-x snap-mandatory touch-pan-x"
                   >
                     <div className="flex">
-                      {chunkArray(esperienze, 8).map((pageItems, pageIndex) => (
+                      {chunkArray(localizedEsperienze, 8).map((pageItems, pageIndex) => (
                         <div
                           key={pageIndex}
                           className="exp-page min-w-full snap-start px-0"
@@ -447,14 +587,14 @@ export default function HomePage() {
                     </div>
                   </div>
 
-                  {chunkArray(esperienze, 8).length > 1 && (
+                  {chunkArray(localizedEsperienze, 8).length > 1 && (
                     <>
                       <button
                         type="button"
                         data-exp-target="exp-carousel-lg"
                         data-exp-dir="prev"
                         className="btn btn-circle btn-sm pointer-events-auto absolute left-2 top-1/2 -translate-y-1/2"
-                        aria-label="Esperienze precedenti"
+                        aria-label={t(locale, "Esperienze precedenti", "Previous experiences")}
                       >
                         ❮
                       </button>
@@ -463,7 +603,7 @@ export default function HomePage() {
                         data-exp-target="exp-carousel-lg"
                         data-exp-dir="next"
                         className="btn btn-circle btn-sm pointer-events-auto absolute right-2 top-1/2 -translate-y-1/2"
-                        aria-label="Esperienze successive"
+                        aria-label={t(locale, "Esperienze successive", "Next experiences")}
                       >
                         ❯
                       </button>
@@ -524,7 +664,7 @@ export default function HomePage() {
             <div className="aspect-video w-full overflow-hidden rounded-lg bg-scuro">
               <iframe
                 src="https://www.youtube.com/embed/NExwdwH2_eU?rel=0"
-                title="Video esperienza Lago di Como 1"
+                title={t(locale, "Video esperienza Lago di Como 1", "Lake Como experience video 1")}
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowFullScreen
                 className="h-full w-full"
@@ -538,7 +678,7 @@ export default function HomePage() {
       <section className="bg-bianco py-16 md:py-24">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <h2 className="text-center text-3xl font-light text-blu md:text-5xl">
-            Host
+            {t(locale, "Host", "Hosts")}
           </h2>
           <div className="mt-12 grid grid-cols-1 gap-16 max-sm:pt-12 xl:grid-cols-2 xl:gap-10">
             {/* Card Marilena */}
@@ -555,16 +695,17 @@ export default function HomePage() {
                 </div>
                 <div className="relative z-0 flex min-w-0 flex-col justify-center px-6 pb-8 pt-[70.7%] text-left sm:flex sm:flex-1 sm:px-0 sm:pb-0 sm:pt-0">
                   <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-blu md:text-xs">
-                    Host
+                    {t(locale, "Host", "Host")}
                   </p>
                   <h3 className="mt-0.5 text-3xl font-normal tracking-tight text-bluchiaro md:text-[2.125rem] md:leading-tight">
                     Marilena
                   </h3>
                   <p className="mt-5 text-[15px] font-normal leading-[1.5] text-blu md:text-base">
-                    Per me viaggiare è una vera esperienza: credo che le persone
-                    debbano godersi la propria vacanza circondate da ogni comfort,
-                    quindi potete chiedermi qualsiasi informazione e servizio di
-                    cui abbiate bisogno durante il vostro soggiorno.
+                    {t(
+                      locale,
+                      "Per me viaggiare è una vera esperienza: credo che le persone debbano godersi la propria vacanza circondate da ogni comfort, quindi potete chiedermi qualsiasi informazione e servizio di cui abbiate bisogno durante il vostro soggiorno.",
+                      "For me, traveling is a true experience: I believe people should enjoy their vacation surrounded by comfort, so feel free to ask me for any information or service you need during your stay.",
+                    )}
                   </p>
                 </div>
               </div>
@@ -583,16 +724,17 @@ export default function HomePage() {
                 </div>
                 <div className="relative z-0 flex min-w-0 flex-col justify-center px-6 pb-8 pt-[70.7%] text-left sm:flex sm:flex-1 sm:px-0 sm:pb-0 sm:pt-0">
                   <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-blu md:text-xs">
-                    Host
+                    {t(locale, "Host", "Host")}
                   </p>
                   <h3 className="mt-0.5 text-3xl font-normal tracking-tight text-bluchiaro md:text-[2.125rem] md:leading-tight">
                     Massimiliano
                   </h3>
                   <p className="mt-5 text-[15px] font-normal leading-[1.5] text-blu md:text-base">
-                    Grazie alla mia esperienza pluriennale nel settore commerciale
-                    pongo la massima attenzione nella relazione con i clienti, il
-                    mio obiettivo è quello di farli sentire come se fossero a casa
-                    loro.
+                    {t(
+                      locale,
+                      "Grazie alla mia esperienza pluriennale nel settore commerciale pongo la massima attenzione nella relazione con i clienti, il mio obiettivo è quello di farli sentire come se fossero a casa loro.",
+                      "Thanks to my many years of commercial experience, I pay the utmost attention to guest relationships; my goal is to make everyone feel at home.",
+                    )}
                   </p>
                 </div>
               </div>
@@ -605,10 +747,14 @@ export default function HomePage() {
       <section className="bg-bianco py-16 md:py-24 min-h-screen">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <h2 className="mb-2 text-center text-2xl font-semibold text-blu md:text-3xl">
-            Dove siamo
+            {t(locale, "Dove siamo", "Where we are")}
           </h2>
           <p className="mx-auto mb-10 max-w-2xl text-center text-scuro/80">
-            Le nostre suite a Como e Cernobbio: Via Albertolli 22, Via Dante 25, Via Cinque Giornate 26, Via Giuseppe Garibaldi 15.
+            {t(
+              locale,
+              "Le nostre suite a Como e Cernobbio: Via Albertolli 22, Via Dante 25, Via Cinque Giornate 26, Via Giuseppe Garibaldi 15.",
+              "Our suites in Como and Cernobbio: Via Albertolli 22, Via Dante 25, Via Cinque Giornate 26, Via Giuseppe Garibaldi 15.",
+            )}
           </p>
           <HomeMapSection thumbnailSrcs={mapThumbnailSrcs} />
         </div>

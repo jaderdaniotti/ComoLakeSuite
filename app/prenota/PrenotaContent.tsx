@@ -12,6 +12,7 @@ import { formatEuro } from "@/src/lib/pricing";
 import { ArrowLeft, CalendarDays, Users, BedDouble, User, Mail, Phone } from "lucide-react";
 import { SUITE_LABELS } from "@/src/lib/suiteLabels";
 import { suiteHeroImage } from "@/src/lib/suiteHeroImages";
+import { useLanguage } from "@/src/components/LanguageProvider";
 
 const paypalScriptOptions: ReactPayPalScriptOptions = {
   clientId: process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID!,
@@ -26,6 +27,7 @@ const paypalScriptOptions: ReactPayPalScriptOptions = {
 };
 
 export default function PrenotaContent() {
+  const { locale } = useLanguage();
   const router = useRouter();
   const params = useSearchParams();
 
@@ -64,7 +66,7 @@ export default function PrenotaContent() {
   const formatDate = (iso: string) => {
     if (!iso) return "–";
     const [y, m, d] = iso.split("-").map(Number);
-    return new Date(y, m - 1, d).toLocaleDateString("it-IT", {
+    return new Date(y, m - 1, d).toLocaleDateString(locale === "en" ? "en-US" : "it-IT", {
       day: "2-digit",
       month: "long",
       year: "numeric",
@@ -91,7 +93,12 @@ export default function PrenotaContent() {
     });
     if (!res.ok) {
       const err = await res.json();
-      throw new Error(err.error ?? "Errore nella creazione dell'ordine");
+      throw new Error(
+        err.error ??
+          (locale === "en"
+            ? "Error creating order"
+            : "Errore nella creazione dell'ordine"),
+      );
     }
     const data = await res.json();
     return data.orderId as string;
@@ -109,7 +116,10 @@ export default function PrenotaContent() {
       });
       const capture = await res.json();
       if (!res.ok || capture.status !== "COMPLETED") {
-        throw new Error(capture.error ?? "Pagamento non completato");
+        throw new Error(
+          capture.error ??
+            (locale === "en" ? "Payment not completed" : "Pagamento non completato"),
+        );
       }
       // Redirect to confirmation page passing relevant info
       const q = new URLSearchParams({
@@ -129,7 +139,11 @@ export default function PrenotaContent() {
       router.push(`/prenota/conferma?${q.toString()}`);
     } catch (err) {
       setPayError(
-        err instanceof Error ? err.message : "Errore durante il pagamento"
+        err instanceof Error
+          ? err.message
+          : locale === "en"
+            ? "Error during payment"
+            : "Errore durante il pagamento"
       );
       setIsProcessing(false);
     }
@@ -137,7 +151,11 @@ export default function PrenotaContent() {
 
   const onError = (err: Record<string, unknown>) => {
     console.error("PayPal error:", err);
-    setPayError("Si è verificato un errore con PayPal. Riprova o contattaci.");
+    setPayError(
+      locale === "en"
+        ? "A PayPal error occurred. Please try again or contact us."
+        : "Si è verificato un errore con PayPal. Riprova o contattaci.",
+    );
     setIsProcessing(false);
   };
 
@@ -166,16 +184,16 @@ export default function PrenotaContent() {
             className="inline-flex items-center gap-2 text-sm text-bianco/75 hover:text-bianco transition"
           >
             <ArrowLeft size={16} />
-            Torna alla suite
+            {locale === "en" ? "Back to suite" : "Torna alla suite"}
           </button>
         </div>
 
         <div className="mb-8 space-y-1">
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-bianco/60">
-            Pagamento sicuro
+            {locale === "en" ? "Secure payment" : "Pagamento sicuro"}
           </p>
           <h1 className="text-2xl font-light text-bianco md:text-3xl">
-            Conferma prenotazione
+            {locale === "en" ? "Confirm booking" : "Conferma prenotazione"}
           </h1>
         </div>
 
@@ -183,14 +201,16 @@ export default function PrenotaContent() {
           {/* Left: booking summary */}
           <div className="rounded-2xl bg-bianco p-6 shadow-sm space-y-6">
             <h2 className="text-base font-semibold text-scuro uppercase tracking-wide">
-              Riepilogo soggiorno
+              {locale === "en" ? "Stay summary" : "Riepilogo soggiorno"}
             </h2>
 
             <div className="space-y-4 text-sm">
               <div className="flex items-start gap-3">
                 <BedDouble size={18} className="mt-0.5 shrink-0 text-blu" />
                 <div>
-                  <p className="text-xs text-scuro/55 uppercase tracking-wide">Suite</p>
+                  <p className="text-xs text-scuro/55 uppercase tracking-wide">
+                    {locale === "en" ? "Suite" : "Suite"}
+                  </p>
                   <p className="font-medium text-scuro">{suiteLabel}</p>
                 </div>
               </div>
@@ -212,11 +232,18 @@ export default function PrenotaContent() {
               <div className="flex items-start gap-3">
                 <Users size={18} className="mt-0.5 shrink-0 text-blu" />
                 <div>
-                  <p className="text-xs text-scuro/55 uppercase tracking-wide">Ospiti</p>
+                  <p className="text-xs text-scuro/55 uppercase tracking-wide">
+                    {locale === "en" ? "Guests" : "Ospiti"}
+                  </p>
                   <p className="font-medium text-scuro">
-                    {adults} adult{adults === 1 ? "o" : "i"}
+                    {adults}{" "}
+                    {locale === "en"
+                      ? `adult${adults === 1 ? "" : "s"}`
+                      : `adult${adults === 1 ? "o" : "i"}`}
                     {children > 0
-                      ? ` + ${children} bambin${children === 1 ? "o" : "i"} (≤1 anno, gratuiti)`
+                      ? locale === "en"
+                        ? ` + ${children} child${children === 1 ? "" : "ren"} (≤1 year old, free)`
+                        : ` + ${children} bambin${children === 1 ? "o" : "i"} (≤1 anno, gratuiti)`
                       : ""}
                   </p>
                 </div>
@@ -225,35 +252,42 @@ export default function PrenotaContent() {
 
             <div className="rounded-xl border border-blu/15 bg-blu/5 p-4 space-y-2 text-sm">
               <div className="flex justify-between text-scuro/70">
-                <span>{nights} nott{nights === 1 ? "e" : "i"}</span>
+                <span>
+                  {nights}{" "}
+                  {locale === "en"
+                    ? `night${nights === 1 ? "" : "s"}`
+                    : `nott${nights === 1 ? "e" : "i"}`}
+                </span>
                 <span className="tabular-nums">{formatEuro(total)}</span>
               </div>
               {avgPerNight > 0 && (
                 <div className="flex justify-between text-scuro/60 text-xs">
-                  <span>Media a notte</span>
+                  <span>{locale === "en" ? "Average per night" : "Media a notte"}</span>
                   <span className="tabular-nums">{formatEuro(avgPerNight)}</span>
                 </div>
               )}
               <div className="flex justify-between border-t border-blu/15 pt-2 font-semibold text-base text-scuro">
-                <span>Totale da pagare</span>
+                <span>{locale === "en" ? "Total to pay" : "Totale da pagare"}</span>
                 <span className="text-blu tabular-nums">{formatEuro(total)}</span>
               </div>
             </div>
 
             <p className="text-xs text-scuro/50">
-              Il pagamento è gestito in modo sicuro tramite PayPal. Accettati
-              anche carta di credito/debito senza conto PayPal.
+              {locale === "en"
+                ? "Payment is securely processed through PayPal. Credit/debit card is also accepted without a PayPal account."
+                : "Il pagamento è gestito in modo sicuro tramite PayPal. Accettati anche carta di credito/debito senza conto PayPal."}
             </p>
           </div>
 
           {/* Right: dati prenotante + PayPal */}
           <div className="rounded-2xl bg-bianco p-6 shadow-sm space-y-5">
             <h2 className="text-base font-semibold text-scuro uppercase tracking-wide">
-              Dati del prenotante
+              {locale === "en" ? "Booker details" : "Dati del prenotante"}
             </h2>
             <p className="text-xs text-scuro/55 leading-relaxed">
-              Compila nome, email e telefono prima di pagare: servono per la conferma e per
-              contattarti in caso di necessità.
+              {locale === "en"
+                ? "Fill in name, email, and phone before paying: we need them for confirmation and to contact you if needed."
+                : "Compila nome, email e telefono prima di pagare: servono per la conferma e per contattarti in caso di necessità."}
             </p>
             <div className="space-y-4">
               <div>
@@ -272,7 +306,7 @@ export default function PrenotaContent() {
                     value={bookerName}
                     onChange={(e) => setBookerName(e.target.value)}
                     maxLength={80}
-                    placeholder="Nome e cognome"
+                    placeholder={locale === "en" ? "Full name" : "Nome e cognome"}
                     className="w-full rounded-lg border border-blu/15 bg-bianco py-3 pl-10 pr-3 text-sm text-scuro placeholder:text-scuro/40 focus:border-blu focus:outline-none focus:ring-1 focus:ring-blu"
                   />
                 </div>
@@ -293,7 +327,7 @@ export default function PrenotaContent() {
                     value={bookerEmail}
                     onChange={(e) => setBookerEmail(e.target.value)}
                     maxLength={120}
-                    placeholder="Email"
+                    placeholder={locale === "en" ? "Email" : "Email"}
                     className="w-full rounded-lg border border-blu/15 bg-bianco py-3 pl-10 pr-3 text-sm text-scuro placeholder:text-scuro/40 focus:border-blu focus:outline-none focus:ring-1 focus:ring-blu"
                   />
                 </div>
@@ -314,7 +348,11 @@ export default function PrenotaContent() {
                     value={bookerPhone}
                     onChange={(e) => setBookerPhone(e.target.value)}
                     maxLength={40}
-                    placeholder="Telefono (consigliato)"
+                    placeholder={
+                      locale === "en"
+                        ? "Phone number (recommended)"
+                        : "Telefono (consigliato)"
+                    }
                     className="w-full rounded-lg border border-blu/15 bg-bianco py-3 pl-10 pr-3 text-sm text-scuro placeholder:text-scuro/40 focus:border-blu focus:outline-none focus:ring-1 focus:ring-blu"
                   />
                 </div>
@@ -322,7 +360,7 @@ export default function PrenotaContent() {
             </div>
 
             <h2 className="text-base font-semibold text-scuro uppercase tracking-wide pt-2 border-t border-blu/10">
-              Metodo di pagamento
+              {locale === "en" ? "Payment method" : "Metodo di pagamento"}
             </h2>
 
             <PayPalScriptProvider options={paypalScriptOptions}>
@@ -330,7 +368,11 @@ export default function PrenotaContent() {
                 {isProcessing && (
                   <div className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-3 rounded-xl bg-bianco/90">
                     <div className="h-8 w-8 animate-spin rounded-full border-2 border-blu border-t-transparent" />
-                    <p className="text-sm text-scuro/60">Conferma pagamento in corso…</p>
+                    <p className="text-sm text-scuro/60">
+                      {locale === "en"
+                        ? "Confirming payment…"
+                        : "Conferma pagamento in corso…"}
+                    </p>
                   </div>
                 )}
                 <PayPalButtons
@@ -351,7 +393,9 @@ export default function PrenotaContent() {
             </PayPalScriptProvider>
             {!canPay && (
               <p className="text-xs text-scuro/50 text-center">
-                Compila nome (2–80 caratteri) e un’email valida per abilitare il pagamento.
+                {locale === "en"
+                  ? "Fill in name (2-80 characters) and a valid email to enable payment."
+                  : "Compila nome (2–80 caratteri) e un’email valida per abilitare il pagamento."}
               </p>
             )}
 
@@ -362,8 +406,9 @@ export default function PrenotaContent() {
             )}
 
             <p className="text-xs text-scuro/45 text-center">
-              Cliccando su PayPal verrai reindirizzato alla pagina di pagamento
-              sicura. Puoi pagare anche con carta senza conto PayPal.
+              {locale === "en"
+                ? "By clicking PayPal you will be redirected to the secure payment page. You can also pay by card without a PayPal account."
+                : "Cliccando su PayPal verrai reindirizzato alla pagina di pagamento sicura. Puoi pagare anche con carta senza conto PayPal."}
             </p>
           </div>
         </div>

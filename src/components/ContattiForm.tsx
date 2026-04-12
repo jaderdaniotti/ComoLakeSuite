@@ -1,8 +1,10 @@
 "use client";
 
 import { useState } from "react";
+import { useLanguage } from "@/src/components/LanguageProvider";
 
 export default function ContattiForm() {
+  const { locale } = useLanguage();
   const [pending, setPending] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [done, setDone] = useState(false);
@@ -32,17 +34,30 @@ export default function ContattiForm() {
       if (!res.ok) {
         const extra =
           data.reason === "not_configured"
-            ? " (sviluppo: not_configured)"
+            ? locale === "en"
+              ? " (development: not_configured)"
+              : " (sviluppo: not_configured)"
             : data.reason === "provider_error"
-              ? " (sviluppo: provider_error — vedi log del server)"
+              ? locale === "en"
+                ? " (development: provider_error — check server logs)"
+                : " (sviluppo: provider_error — vedi log del server)"
               : "";
-        setError((data.error ?? "Invio non riuscito. Riprova tra poco.") + extra);
+        setError(
+          (data.error ??
+            (locale === "en"
+              ? "Sending failed. Please try again shortly."
+              : "Invio non riuscito. Riprova tra poco.")) + extra,
+        );
         return;
       }
       setDone(true);
       form.reset();
     } catch {
-      setError("Connessione non disponibile. Riprova tra poco.");
+      setError(
+        locale === "en"
+          ? "Connection unavailable. Please try again shortly."
+          : "Connessione non disponibile. Riprova tra poco.",
+      );
     } finally {
       setPending(false);
     }
@@ -58,8 +73,9 @@ export default function ContattiForm() {
           className="border border-[#101443]/20 bg-[#E8E8E8] px-4 py-3 text-sm text-[#101443]"
           role="status"
         >
-          Messaggio inviato. Riceverai a breve un messaggio di conferma al tuo
-          indirizzo email; ti risponderemo al più presto.
+          {locale === "en"
+            ? "Message sent. You will soon receive a confirmation email; we will reply as soon as possible."
+            : "Messaggio inviato. Riceverai a breve un messaggio di conferma al tuo indirizzo email; ti risponderemo al più presto."}
         </p>
       )}
       {error && (
@@ -73,7 +89,7 @@ export default function ContattiForm() {
 
       <div>
         <label htmlFor="nome" className="sr-only">
-          Nome (obbligatorio)
+          {locale === "en" ? "Name (required)" : "Nome (obbligatorio)"}
         </label>
         <input
           id="nome"
@@ -84,13 +100,13 @@ export default function ContattiForm() {
           maxLength={200}
           autoComplete="name"
           disabled={pending}
-          placeholder="Nome e cognome"
+          placeholder={locale === "en" ? "Full name" : "Nome e cognome"}
           className="w-full rounded-none border border-[#CCCCCC] bg-[#E8E8E8] px-4 py-3.5 text-sm text-black placeholder:text-[#666666] focus:border-[#1A1B35] focus:outline-none focus:ring-1 focus:ring-[#1A1B35] disabled:opacity-60"
         />
       </div>
       <div>
         <label htmlFor="email" className="sr-only">
-          Email (obbligatorio)
+          {locale === "en" ? "Email (required)" : "Email (obbligatorio)"}
         </label>
         <input
           id="email"
@@ -100,13 +116,13 @@ export default function ContattiForm() {
           maxLength={320}
           autoComplete="email"
           disabled={pending}
-          placeholder="Indirizzo email"
+          placeholder={locale === "en" ? "Email address" : "Indirizzo email"}
           className="w-full rounded-none border border-[#CCCCCC] bg-[#E8E8E8] px-4 py-3.5 text-sm text-black placeholder:text-[#666666] focus:border-[#1A1B35] focus:outline-none focus:ring-1 focus:ring-[#1A1B35] disabled:opacity-60"
         />
       </div>
       <div>
         <label htmlFor="messaggio" className="sr-only">
-          Messaggio (obbligatorio)
+          {locale === "en" ? "Message (required)" : "Messaggio (obbligatorio)"}
         </label>
         <textarea
           id="messaggio"
@@ -116,7 +132,7 @@ export default function ContattiForm() {
           minLength={10}
           maxLength={10000}
           disabled={pending}
-          placeholder="Messaggio"
+          placeholder={locale === "en" ? "Message" : "Messaggio"}
           className="w-full resize-none rounded-none border border-[#CCCCCC] bg-[#E8E8E8] px-4 py-3.5 text-sm text-black placeholder:text-[#666666] focus:border-[#1A1B35] focus:outline-none focus:ring-1 focus:ring-[#1A1B35] disabled:opacity-60"
         />
       </div>
@@ -125,7 +141,13 @@ export default function ContattiForm() {
         disabled={pending}
         className="w-full rounded-none bg-[#1A1B35] px-8 py-3.5 text-center text-sm font-medium uppercase tracking-[0.2em] text-white transition-colors hover:bg-[#14152a] disabled:opacity-60 sm:w-auto sm:min-w-[140px]"
       >
-        {pending ? "Invio…" : "Invia"}
+        {pending
+          ? locale === "en"
+            ? "Sending…"
+            : "Invio…"
+          : locale === "en"
+            ? "Send"
+            : "Invia"}
       </button>
     </form>
   );

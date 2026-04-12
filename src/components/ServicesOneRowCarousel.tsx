@@ -2,6 +2,7 @@
 
 import { useMemo, useRef, useState } from "react";
 import type { LucideIcon } from "lucide-react";
+import { useLanguage } from "@/src/components/LanguageProvider";
 import {
   Sparkles,
   Car,
@@ -90,6 +91,7 @@ export default function ServicesOneRowCarousel({
   chunkSize: number;
   visibilityClass: string;
 }) {
+  const { locale } = useLanguage();
   const pages = useMemo(() => chunkArray(items, chunkSize), [items, chunkSize]);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const [activePage, setActivePage] = useState(0);
@@ -136,7 +138,11 @@ export default function ServicesOneRowCarousel({
             <div
               key={pageIndex}
               className="min-w-full snap-start px-0"
-              aria-label={`Servizi pagina ${pageIndex + 1}`}
+              aria-label={
+                locale === "en"
+                  ? `Services page ${pageIndex + 1}`
+                  : `Servizi pagina ${pageIndex + 1}`
+              }
             >
               <ul
                 className={`grid ${gridColsClassByCols[cols]} gap-x-6 gap-y-3 w-full`}
@@ -172,7 +178,7 @@ export default function ServicesOneRowCarousel({
             disabled={prevDisabled}
             onClick={() => scrollToPage(prevPageIndex)}
             className="btn btn-circle btn-sm pointer-events-auto"
-            aria-label="Servizi precedenti"
+            aria-label={locale === "en" ? "Previous services" : "Servizi precedenti"}
           >
             ❮
           </button>
@@ -181,7 +187,7 @@ export default function ServicesOneRowCarousel({
             disabled={prevDisabled}
             onClick={() => scrollToPage(nextPageIndex)}
             className="btn btn-circle btn-sm pointer-events-auto"
-            aria-label="Servizi successivi"
+            aria-label={locale === "en" ? "Next services" : "Servizi successivi"}
           >
             ❯
           </button>

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { X } from "lucide-react";
+import { useLanguage } from "@/src/components/LanguageProvider";
 
 /** Stessi numeri della sezione contatti / footer */
 const CONTATTI_WHATSAPP = [
@@ -24,11 +25,16 @@ function IconaWhatsApp({ className }: { className?: string }) {
 
 export default function WhatsAppFab() {
   const [aperto, setAperto] = useState(false);
+  const { locale } = useLanguage();
 
   return (
     <div className="fixed bottom-12 right-5 z-100 flex flex-col items-end gap-2 sm:bottom-12 sm:right-6">
       {aperto && (
-        <div className="flex flex-col items-end gap-2" role="group" aria-label="Contatti WhatsApp">
+        <div
+          className="flex flex-col items-end gap-2"
+          role="group"
+          aria-label={locale === "en" ? "WhatsApp contacts" : "Contatti WhatsApp"}
+        >
           {CONTATTI_WHATSAPP.map(({ nome, tel }) => (
             <a
               key={tel}
@@ -49,7 +55,13 @@ export default function WhatsAppFab() {
         onClick={() => setAperto((v) => !v)}
         aria-expanded={aperto}
         aria-label={
-          aperto ? "Chiudi menu WhatsApp" : "Apri contatti WhatsApp"
+          aperto
+            ? locale === "en"
+              ? "Close WhatsApp menu"
+              : "Chiudi menu WhatsApp"
+            : locale === "en"
+              ? "Open WhatsApp contacts"
+              : "Apri contatti WhatsApp"
         }
         className="flex h-14 w-14 items-center justify-center rounded-full bg-[#25D366] text-white shadow-lg transition-transform hover:bg-[#20bd5a] hover:scale-105 focus:outline-none focus-visible:ring-2 focus-visible:ring-blu focus-visible:ring-offset-2"
       >

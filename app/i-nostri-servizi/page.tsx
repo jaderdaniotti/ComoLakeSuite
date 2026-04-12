@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { cookies } from "next/headers";
 import {
   CircleParking,
   Wifi,
@@ -40,6 +41,7 @@ import Image from "next/image";
 import images from "@/src/images";
 import ServiziCategorieAccordion from "@/src/components/ServiziCategorieAccordion";
 import { buildPageMetadata } from "@/src/lib/seo";
+import { getServerLocale, t } from "@/src/lib/i18n";
 
 export const metadata: Metadata = {
   ...buildPageMetadata({
@@ -47,6 +49,13 @@ export const metadata: Metadata = {
     description:
       "Parcheggio privato, Wi-fi, terrazza vista lago, pulizie, colazione, cucina attrezzata, biancheria, climatizzatore e molti altri servizi.",
     pathname: "/i-nostri-servizi",
+    keywords: [
+      "servizi suite Como",
+      "parcheggio privato Como",
+      "suite con wifi Como",
+      "suite con terrazza Lago di Como",
+      "alloggi con colazione Como",
+    ],
   }),
 };
 
@@ -342,23 +351,171 @@ function groupServiziByCategoria(
   return byCat;
 }
 
-export default function ServiziPage() {
+export default async function ServiziPage() {
+  const locale = getServerLocale(await cookies());
   const getIconKey = (icon: LucideIcon) =>
     (icon as unknown as { displayName?: string; name?: string }).displayName ??
     (icon as unknown as { displayName?: string; name?: string }).name ??
     "";
 
   const byCat = groupServiziByCategoria(serviziBooking, categorieServizi);
+  const categoryLabelMapEn: Record<string, string> = {
+    cucina: "Kitchen",
+    camera: "Bedroom",
+    bagno: "Bathroom",
+    soggiorno: "Living area",
+    esterni: "Outdoor areas",
+    comuni: "Common areas",
+    benessere: "Wellness services",
+    ristorazione: "Food and drink",
+    attivita: "Activities",
+    intrattenimento: "Entertainment & family services",
+    pulizie: "Cleaning services",
+    negozi: "Shops",
+    parcheggio: "Parking",
+    internet: "Internet",
+    media: "Media & technology",
+    accessibilita: "Accessibility",
+    trasporti: "Transport",
+    accoglienza: "Reception services",
+    vista: "Outdoor & view",
+    edificio: "Building features",
+    sicurezza: "Safety & security",
+    lingue: "Languages spoken",
+    varie: "Miscellaneous",
+  };
+  const serviceTitleMapEn: Record<string, string> = {
+    "Spa & centro benessere": "Spa & wellness center",
+    "Navetta aeroportuale": "Airport shuttle",
+    "Camere non fumatori": "Non-smoking rooms",
+    "Parcheggio privato": "Private parking",
+    "Connessione WiFi gratuita": "Free WiFi",
+    Terrazza: "Terrace",
+    Bar: "Bar",
+    "Colazione ottima": "Excellent breakfast",
+    "Bagno privato": "Private bathroom",
+    Parcheggio: "Parking",
+    "Aria condizionata": "Air conditioning",
+    "TV a schermo piatto": "Flat-screen TV",
+    "Area picnic": "Picnic area",
+    Ascensore: "Elevator",
+    "Accesso con chiavi": "Key access",
+    "Allarme antifumo": "Smoke alarm",
+    "Appartamento privato in edificio": "Private apartment in building",
+    "Area giochi": "Play area",
+    "Area giochi all'aperto": "Outdoor play area",
+    Armadietti: "Lockers",
+    "Armadio o guardaroba": "Wardrobe or closet",
+    "Arredamento da esterni": "Outdoor furniture",
+    Asciugacapelli: "Hairdryer",
+    Asciugamani: "Towels",
+    Asciugatrice: "Dryer",
+    Autorimessa: "Parking garage",
+    Bidet: "Bidet",
+    "Bollitore elettrico": "Electric kettle",
+    "Bollitore tè/macchina caffè": "Tea/Coffee maker",
+    "Cabina armadio": "Walk-in closet",
+    "Campo da golf (nel raggio di 3 km)": "Golf course (within 3 km)",
+    "Canali pay per view": "Pay-per-view channels",
+    "Canali satellitari": "Satellite channels",
+    "Canali via cavo": "Cable channels",
+    Canoa: "Canoeing",
+    "Cappella o luogo di culto": "Chapel/shrine",
+    "Carta igienica": "Toilet paper",
+    Cassaforte: "Safe",
+    "Check-in e check-out privati": "Private check-in/check-out",
+    Cucina: "Kitchen",
+    "Deposito bagagli": "Luggage storage",
+    Divano: "Sofa",
+    Doccia: "Shower",
+    "Escursioni in bicicletta": "Cycling",
+    Escursionismo: "Hiking",
+    Estintori: "Fire extinguishers",
+    "Fattura disponibile su richiesta": "Invoice available on request",
+    "Ferro da stiro": "Iron",
+    "Ferro e asse da stiro": "Ironing facilities",
+    Forno: "Oven",
+    "Forno a microonde": "Microwave",
+    Frigorifero: "Refrigerator",
+    "Giochi da tavolo/puzzle": "Board games/puzzles",
+    Inglese: "English",
+    Italiano: "Italian",
+    Francese: "French",
+    "Ingresso indipendente": "Private entrance",
+    Insonorizzazione: "Soundproofing",
+    "Intrattenimento serale": "Evening entertainment",
+    Lavastoviglie: "Dishwasher",
+    Lavatrice: "Washing machine",
+    "Macchina da caffè": "Coffee machine",
+    Massaggi: "Massage",
+    "Menù per diete particolari (su richiesta)":
+      "Special diet menus (on request)",
+    Minibar: "Minibar",
+    "Mini club": "Kids' club",
+    "Minimarket sul posto": "On-site minimarket",
+    "Noleggio biciclette": "Bicycle rental",
+    Pantofole: "Slippers",
+    Accappatoio: "Bathrobe",
+    "Parquet o pavimento in legno": "Hardwood or parquet floors",
+    "Parrucchiere/salone di bellezza": "Hair/beauty salon",
+    Pesca: "Fishing",
+    "Piani superiori accessibili tramite ascensore":
+      "Upper floors accessible by elevator",
+    "Piano cottura": "Stovetop",
+    "Presa elettrica vicino al letto": "Socket near the bed",
+    "Prodotti da bagno in omaggio": "Free toiletries",
+    "Prodotti per le pulizie": "Cleaning products",
+    "Rilevatore di monossido di carbonio": "Carbon monoxide detector",
+    Riscaldamento: "Heating",
+    "Sala giochi": "Games room",
+    "Sala comune/zona TV": "Shared lounge/TV area",
+    Seggiolone: "High chair",
+    "Servizio baby-sitter": "Babysitting service",
+    "Servizio di parcheggio e riconsegna auto": "Valet parking",
+    "Servizio lavanderia": "Laundry service",
+    "Servizio navetta": "Shuttle service",
+    "Servizio pulizie": "Housekeeping",
+    "Servizio streaming (per es. Netflix)": "Streaming service (e.g. Netflix)",
+    "Servizi spa": "Spa services",
+    "Sicurezza 24 ore su 24": "24-hour security",
+    "Soluzioni anallergiche": "Hypoallergenic room",
+    "Sportello bancomat": "ATM/cash machine on site",
+    "Stand appendiabiti": "Clothes rack",
+    Stendibiancheria: "Drying rack for clothing",
+    "Struttura interamente non fumatori": "Non-smoking throughout",
+    "Tavolo da pranzo": "Dining table",
+    Tostapane: "Toaster",
+    "Tour a piedi": "Walking tours",
+    "Tour in bicicletta": "Bike tours",
+    "Tour o lezioni sulla cultura locale":
+      "Tour or class about local culture",
+    TV: "TV",
+    "Utensili da cucina": "Kitchenware",
+    "Vasca o doccia": "Bathtub or shower",
+    "Vino/champagne": "Wine/champagne",
+    "Vista Lago": "Lake view",
+    "Vista città": "City view",
+    "Vista luogo di interesse": "Landmark view",
+    "Vista montagna": "Mountain view",
+    WC: "Toilet",
+    "Zona pranzo": "Dining area",
+    "Zona soggiorno": "Sitting area",
+    "Pagamenti accettati": "Accepted payments",
+    "Banco escursioni": "Tour desk",
+    Aerobica: "Aerobics",
+    Sci: "Skiing",
+    Equitazione: "Horse riding",
+  };
   const categoriePerAccordion = categorieServizi
     .map((cat) => {
       const list = byCat.get(cat.id);
       if (!list || list.length === 0) return null;
       return {
         id: cat.id,
-        label: cat.label,
+        label: locale === "en" ? (categoryLabelMapEn[cat.id] ?? cat.label) : cat.label,
         items: list.map((s) => ({
           iconKey: getIconKey(s.icon),
-          titolo: s.titolo,
+          titolo: locale === "en" ? (serviceTitleMapEn[s.titolo] ?? s.titolo) : s.titolo,
         })),
       };
     })
@@ -371,7 +528,7 @@ export default function ServiziPage() {
       <section className=" min-h-[600px] md:min-h-screen">
         <Image
           src={images.serviziHero}
-          alt="Servizi"
+          alt={t(locale, "Servizi", "Services")}
           fill
           className="object-cover h-full"
           priority
@@ -379,10 +536,14 @@ export default function ServiziPage() {
         />
         <div className="absolute inset-0 flex flex-col justify-center bg-linear-to-t items-center from-black/80 to-transparent p-6 md:p-10">
           <p className="text-lg font-medium uppercase tracking-wide text-center text-bianco/70 ">
-            Tutto ciò che serve per un soggiorno indimenticabile.
+            {t(
+              locale,
+              "Tutto ciò che serve per un soggiorno indimenticabile.",
+              "Everything you need for an unforgettable stay.",
+            )}
           </p>
           <h1 className="text-3xl font-extralight tracking-tighter text-bianco md:text-9xl">
-            Servizi
+            {t(locale, "Servizi", "Services")}
           </h1>
         </div>
       </section>
@@ -391,7 +552,7 @@ export default function ServiziPage() {
       <section className="relative z-10 py-16 md:py-24 bg-bianco">
         <div className="mx-auto max-w-4xl xl:max-w-7xl px-4 sm:px-6 lg:px-8">
           <h2 className="text-2xl font-light uppercase tracking-wide text-scuro text-center mb-14">
-            Servizi in struttura
+            {t(locale, "Servizi in struttura", "On-site services")}
           </h2>
           <ServiziCategorieAccordion categorie={categoriePerAccordion} />
         </div>

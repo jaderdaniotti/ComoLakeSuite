@@ -3,11 +3,20 @@ import type { Metadata } from "next";
 export const SITE_URL = "https://www.comolakesuites.com";
 export const SITE_NAME = "Como Lake Suites";
 export const DEFAULT_OG_IMAGE = "/opengraph-image.png";
+export const DEFAULT_SEO_KEYWORDS = [
+  "Como Lake Suites",
+  "suite Lago di Como",
+  "suite Como",
+  "appartamenti Como",
+  "alloggi Lago di Como",
+  "vacanze Como",
+];
 
 type BuildPageMetadataParams = {
   title: string;
   description: string;
   pathname: string;
+  keywords?: string[];
   noIndex?: boolean;
 };
 
@@ -15,8 +24,13 @@ export function buildPageMetadata({
   title,
   description,
   pathname,
+  keywords = [],
   noIndex = false,
 }: BuildPageMetadataParams): Metadata {
+  const mergedKeywords = Array.from(
+    new Set([...DEFAULT_SEO_KEYWORDS, ...keywords]),
+  );
+
   const robots = noIndex
     ? {
         index: false,
@@ -45,6 +59,14 @@ export function buildPageMetadata({
   return {
     title,
     description,
+    keywords: mergedKeywords,
+    creator: SITE_NAME,
+    publisher: SITE_NAME,
+    formatDetection: {
+      address: true,
+      email: true,
+      telephone: true,
+    },
     alternates: {
       canonical: pathname,
     },
@@ -54,6 +76,7 @@ export function buildPageMetadata({
       url: pathname,
       siteName: SITE_NAME,
       locale: "it_IT",
+      localeAlternate: ["en_US"],
       type: "website",
       images: [
         {
@@ -80,6 +103,11 @@ export const websiteJsonLd = {
   name: SITE_NAME,
   url: SITE_URL,
   inLanguage: "it-IT",
+  potentialAction: {
+    "@type": "SearchAction",
+    target: `${SITE_URL}/le-suites`,
+    "query-input": "required name=search_term_string",
+  },
 };
 
 export const lodgingBusinessJsonLd = {
@@ -89,6 +117,7 @@ export const lodgingBusinessJsonLd = {
   url: SITE_URL,
   email: "info@comolakesuites.com",
   telephone: "+39 340 9409123",
+  priceRange: "EUR",
   address: {
     "@type": "PostalAddress",
     streetAddress: "Piazza Cavour ang. Via Albertolli 22",
@@ -96,6 +125,11 @@ export const lodgingBusinessJsonLd = {
     addressLocality: "Como",
     addressCountry: "IT",
   },
+  sameAs: [
+    "https://www.booking.com/hotel/it/como-lake-suites.it.html",
+    "https://www.airbnb.it/manage-your-space/33795851/details",
+    "https://www.expedia.it/Como-Hotel-Como-Lake-Suites.h38392015.Informazioni-Hotel",
+  ],
   contactPoint: [
     {
       "@type": "ContactPoint",

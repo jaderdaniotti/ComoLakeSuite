@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
+import { cookies } from "next/headers";
 import { MapPin, Mail, Phone } from "lucide-react";
 import images from "@/src/images";
 import Image from "next/image";
 import ContattiMapSection from "@/src/components/ContattiMapSection";
 import ContattiForm from "@/src/components/ContattiForm";
 import { buildPageMetadata } from "@/src/lib/seo";
+import { getServerLocale, t } from "@/src/lib/i18n";
 
 export const metadata: Metadata = {
   ...buildPageMetadata({
@@ -12,17 +14,25 @@ export const metadata: Metadata = {
     description:
       "Contattaci per informazioni e prenotazioni. Massimiliano e Marilena sono a disposizione per suggerire servizi esclusivi e supportarti durante il soggiorno.",
     pathname: "/contatti",
+    keywords: [
+      "contatti Como Lake Suites",
+      "prenotazioni suite Como",
+      "telefono Como Lake Suites",
+      "email Como Lake Suites",
+      "assistenza soggiorno Como",
+    ],
   }),
 };
 
-export default function ContattiPage() {
+export default async function ContattiPage() {
+  const locale = getServerLocale(await cookies());
   return (
     <div className="">
       {/* Hero */}
       <section className="relative min-h-[600px] md:min-h-screen overflow-hidden">
         <Image
           src={images.fotocomo}
-          alt="Como Lake Suites - Contatti"
+          alt={t(locale, "Como Lake Suites - Contatti", "Como Lake Suites - Contacts")}
           fill
           className="object-cover"
           priority
@@ -30,10 +40,14 @@ export default function ContattiPage() {
         />
         <div className="absolute inset-0 flex flex-col justify-center bg-linear-to-t from-black/80 to-transparent p-6 md:p-10">
           <p className="text-center text-sm font-medium uppercase tracking-[0.2em] text-bianco/70">
-            Contattaci per informazioni e prenotazioni
+            {t(
+              locale,
+              "Contattaci per informazioni e prenotazioni",
+              "Contact us for information and bookings",
+            )}
           </p>
           <h1 className="text-center text-4xl font-extralight tracking-tight text-bianco md:text-7xl lg:text-8xl">
-            Contatti
+            {t(locale, "Contatti", "Contacts")}
           </h1>
         </div>
       </section>
@@ -47,12 +61,14 @@ export default function ContattiPage() {
             <div className="mx-auto grid max-w-6xl grid-cols-1 gap-12 lg:grid-cols-2 lg:gap-x-16 xl:gap-x-24">
               <div className="text-left">
                 <h2 className="text-3xl font-extralight uppercase tracking-[0.12em] text-black md:text-6xl">
-                  Contattaci
+                  {t(locale, "Contattaci", "Contact us")}
                 </h2>
                 <p className="mt-6 max-w-sm text-md leading-[1.75] text-[#666666] md:text-md">
-                  Gli ospiti potranno contattarci in qualsiasi momento, possiamo
-                  suggerire ogni tipo di servizio esclusivo e supportarli durante
-                  il soggiorno.
+                  {t(
+                    locale,
+                    "Gli ospiti potranno contattarci in qualsiasi momento, possiamo suggerire ogni tipo di servizio esclusivo e supportarli durante il soggiorno.",
+                    "Guests can contact us at any time. We can suggest exclusive services and support them throughout their stay.",
+                  )}
                 </p>
                 <div className="mt-10 grid grid-cols-1 gap-12 sm:grid-cols-2 sm:gap-x-12 md:gap-x-20">
                   <div>
@@ -97,7 +113,7 @@ export default function ContattiPage() {
                           <br />
                           22100 Como,
                           <br />
-                          Italia
+                          {t(locale, "Italia", "Italy")}
                         </span>
                       </li>
                     </ul>
@@ -144,7 +160,7 @@ export default function ContattiPage() {
                           <br />
                           22100 Como,
                           <br />
-                          Italia
+                          {t(locale, "Italia", "Italy")}
                         </span>
                       </li>
                     </ul>
@@ -166,10 +182,11 @@ export default function ContattiPage() {
         <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
           <h2 className="flex items-center justify-center gap-2 text-xl font-light uppercase tracking-wide text-blu md:text-2xl">
             <MapPin size={22} className="text-blu/80" />
-            Dove trovarci
+            {t(locale, "Dove trovarci", "Where to find us")}
           </h2>
           <p className="mt-2 text-center text-sm text-scuro/70">
-            Piazza Cavour ang. Via Albertolli 22 · 22100 Como, Italia
+            Piazza Cavour ang. Via Albertolli 22 · 22100 Como,{" "}
+            {t(locale, "Italia", "Italy")}
           </p>
           <div className="mt-6">
             <ContattiMapSection

@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import type { StaticImageData } from "next/image";
 
 export type HeroSlide = {
@@ -19,15 +19,25 @@ const AUTOPLAY_MS = 7600;
 
 type Props = {
   slides: HeroSlide[];
+  ctaLabel?: string;
+  previousLabel?: string;
+  nextLabel?: string;
+  goToSlideLabelPrefix?: string;
 };
 
-export default function HeroCarousel({ slides }: Props) {
+export default function HeroCarousel({
+  slides,
+  ctaLabel = "Visita",
+  previousLabel = "Slide precedente",
+  nextLabel = "Slide successiva",
+  goToSlideLabelPrefix = "Vai alla slide",
+}: Props) {
   const [index, setIndex] = useState(0);
   const total = slides.length;
 
   const goTo = useCallback(
     (i: number) => {
-      setIndex((prev) => {
+      setIndex(() => {
         let next = i;
         if (next >= total) next = 0;
         if (next < 0) next = total - 1;
@@ -91,7 +101,7 @@ export default function HeroCarousel({ slides }: Props) {
               href={s.href}
               className="flex justify-center gap-2 items-center mx-auto shadow-xl text-lg bg-gray-50 backdrop-blur-md lg:font-medium isolation-auto border-gray-50 before:absolute before:w-full before:transition-all before:duration-700 before:hover:w-full before:-left-full before:hover:left-0 before:rounded-full before:bg-emerald-500  before:-z-10 before:aspect-square before:hover:scale-150 before:hover:duration-700 relative z-10 px-6 py-2 overflow-hidden  group text-blu mt-3"
             >
-              Visita
+              {ctaLabel}
             </Link>
           </div>
         ) : null,
@@ -102,7 +112,7 @@ export default function HeroCarousel({ slides }: Props) {
         type="button"
         onClick={prev}
         className="absolute left-2 top-1/2 z-4 -translate-y-1/2 rounded-full bg-bianco/20 p-2 text-bianco hover:bg-bianco/40 transition-colors md:left-4 "
-        aria-label="Slide precedente"
+        aria-label={previousLabel}
       >
         <ChevronLeft size={28} />
       </button>
@@ -110,7 +120,7 @@ export default function HeroCarousel({ slides }: Props) {
         type="button"
         onClick={next}
         className="absolute right-2 top-1/2 z-4 -translate-y-1/2 rounded-full bg-bianco/20 p-2 text-bianco hover:bg-bianco/40 transition-colors md:right-4"
-        aria-label="Slide successiva"
+        aria-label={nextLabel}
       >
         <ChevronRight size={28} />
       </button>
@@ -128,7 +138,7 @@ export default function HeroCarousel({ slides }: Props) {
               backgroundColor:
                 i === index ? "#FFFFFF" : "rgba(255,255,255,0.4)",
             }}
-            aria-label={`Vai alla slide ${i + 1}`}
+            aria-label={`${goToSlideLabelPrefix} ${i + 1}`}
           />
         ))}
       </div>

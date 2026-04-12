@@ -10,6 +10,7 @@ import {
   getStayQuote,
   getSuiteGuestRange,
 } from "@/src/lib/pricing";
+import { useLanguage } from "@/src/components/LanguageProvider";
 
 type Props = {
   titolo: string;
@@ -51,6 +52,7 @@ export default function LayoutSuite({
     return d;
   });
   const [blockedDates, setBlockedDates] = useState<Set<string>>(new Set());
+  const { locale } = useLanguage();
 
   const router = useRouter();
 
@@ -81,12 +83,14 @@ export default function LayoutSuite({
 
   const formatDisplayDate = (date: Date | null) =>
     date
-      ? date.toLocaleDateString("it-IT", {
+      ? date.toLocaleDateString(locale === "en" ? "en-US" : "it-IT", {
           day: "2-digit",
           month: "short",
           year: "numeric",
         })
-      : "Seleziona data";
+      : locale === "en"
+        ? "Select date"
+        : "Seleziona data";
 
   const getMonthMatrix = (date: Date) => {
     const year = date.getFullYear();
@@ -162,7 +166,7 @@ export default function LayoutSuite({
     }
 
     // Se c'è un giorno bloccato nel range selezionato, non permettere
-    let cursor = new Date(checkIn.getTime());
+    const cursor = new Date(checkIn.getTime());
     cursor.setDate(cursor.getDate() + 1);
     while (cursor < day) {
       if (isDateBlocked(cursor)) {
@@ -246,12 +250,21 @@ export default function LayoutSuite({
       });
       const data = await res.json() as { available: boolean; reason?: string };
       if (!data.available) {
-        setAvailabilityError(data.reason ?? "Le date selezionate non sono disponibili. Prova con altre date.");
+        setAvailabilityError(
+          data.reason ??
+            (locale === "en"
+              ? "Selected dates are not available. Please try different dates."
+              : "Le date selezionate non sono disponibili. Prova con altre date."),
+        );
         setIsCheckingAvailability(false);
         return;
       }
     } catch {
-      setAvailabilityError("Impossibile verificare la disponibilità. Riprova tra poco.");
+      setAvailabilityError(
+        locale === "en"
+          ? "Unable to verify availability. Please try again shortly."
+          : "Impossibile verificare la disponibilità. Riprova tra poco.",
+      );
       setIsCheckingAvailability(false);
       return;
     }
@@ -301,7 +314,7 @@ export default function LayoutSuite({
       <section className="mx-auto  px-4 py-16 sm:px-6 lg:px-8 bg-grigioscuro">
         <div className="max-w-7xl mx-auto flex flex-col items-center justify-center">
           <p className="text-sm font-medium uppercase tracking-wide text-scuro/70">
-            Stile italiano
+            {locale === "en" ? "Italian style" : "Stile italiano"}
           </p>
           <h2 className="mt-2 text-5xl font-normal text-blu text-center">
             {dettagliTitolo}
@@ -315,7 +328,7 @@ export default function LayoutSuite({
       {/* immagini */}
       <section className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8 border-t border-blu mt-6">
         <p className="text-4xl font-light uppercase tracking-wide text-center text-scuro/70">
-          Immagini della suite
+          {locale === "en" ? "Suite images" : "Immagini della suite"}
         </p>
         {gallery.length > 0 && (
           <section className="py-6 space-y-4">
@@ -338,7 +351,11 @@ export default function LayoutSuite({
                         ? "border-blu/70"
                         : "border-transparent hover:border-grigio/80"
                     }`}
-                    aria-label={`Apri immagine ${index + 1}`}
+                    aria-label={
+                      locale === "en"
+                        ? `Open image ${index + 1}`
+                        : `Apri immagine ${index + 1}`
+                    }
                   >
                     <Image
                       src={src}
@@ -363,7 +380,11 @@ export default function LayoutSuite({
           className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4"
           role="dialog"
           aria-modal="true"
-          aria-label={`Anteprima immagine ${lightboxIndex + 1} di ${gallery.length}`}
+          aria-label={
+            locale === "en"
+              ? `Image preview ${lightboxIndex + 1} of ${gallery.length}`
+              : `Anteprima immagine ${lightboxIndex + 1} di ${gallery.length}`
+          }
           onClick={closeLightbox}
         >
           <div
@@ -373,8 +394,8 @@ export default function LayoutSuite({
             <button
               type="button"
               onClick={closeLightbox}
-              className="absolute right-2 top-2 z-20 btn btn-circle btn-sm bg-bianco/90 hover:bg-bianco"
-              aria-label="Chiudi"
+              className="absolute right-2 top-2 text-scuro font-light z-20 btn btn-circle btn-sm bg-bianco/90 hover:bg-bianco"
+              aria-label={locale === "en" ? "Close" : "Chiudi"}
             >
               ✕
             </button>
@@ -388,7 +409,7 @@ export default function LayoutSuite({
                     goLightboxPrev();
                   }}
                   className="absolute left-1 top-1/2 z-20 -translate-y-1/2 btn btn-circle btn-md border-0 bg-bianco/90 text-scuro shadow-md hover:bg-bianco md:left-2"
-                  aria-label="Immagine precedente"
+                  aria-label={locale === "en" ? "Previous image" : "Immagine precedente"}
                 >
                   <ChevronLeft className="h-6 w-6" strokeWidth={1.75} />
                 </button>
@@ -399,7 +420,7 @@ export default function LayoutSuite({
                     goLightboxNext();
                   }}
                   className="absolute right-1 top-1/2 z-20 -translate-y-1/2 btn btn-circle btn-md border-0 bg-bianco/90 text-scuro shadow-md hover:bg-bianco md:right-2"
-                  aria-label="Immagine successiva"
+                  aria-label={locale === "en" ? "Next image" : "Immagine successiva"}
                 >
                   <ChevronRight className="h-6 w-6" strokeWidth={1.75} />
                 </button>
@@ -465,10 +486,13 @@ export default function LayoutSuite({
         <div className="mx-auto flex max-w-7xl flex-col gap-8 px-4 py-10 sm:px-6 lg:px-8">
           <div className="space-y-2">
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-scuro/60">
-              Verifica prezzi e disponibilità
+              {locale === "en"
+                ? "Check prices and availability"
+                : "Verifica prezzi e disponibilità"}
             </p>
             <h2 className="text-2xl font-light text-scuro md:text-3xl">
-              Prenota la tua permanenza in <span className="text-bluchiaro font-semibold">{titolo}</span>
+              {locale === "en" ? "Book your stay in " : "Prenota la tua permanenza in "}
+              <span className="text-bluchiaro font-semibold">{titolo}</span>
             </h2>
           </div>
 
@@ -480,7 +504,7 @@ export default function LayoutSuite({
               <div className="grid gap-3 md:grid-cols-2">
                 <div className="space-y-1.5">
                   <label className="text-xs font-medium uppercase tracking-wide text-scuro/60">
-                    Arrivo
+                    {locale === "en" ? "Check-in" : "Arrivo"}
                   </label>
                   <button
                     type="button"
@@ -491,7 +515,7 @@ export default function LayoutSuite({
                 </div>
                 <div className="space-y-1.5">
                   <label className="text-xs font-medium uppercase tracking-wide text-scuro/60">
-                    Partenza
+                    {locale === "en" ? "Check-out" : "Partenza"}
                   </label>
                   <button
                     type="button"
@@ -502,7 +526,7 @@ export default function LayoutSuite({
                 </div>
                 <div className="space-y-1.5">
                   <label className="text-xs font-medium uppercase tracking-wide text-scuro/60">
-                    Adulti
+                    {locale === "en" ? "Adults" : "Adulti"}
                   </label>
                   <select
                     className="w-full rounded-lg border border-grigio/60 bg-bianco px-3 py-2.5 text-sm text-scuro focus:outline-none focus:ring-2 focus:ring-blu/40"
@@ -518,7 +542,9 @@ export default function LayoutSuite({
                 </div>
                 <div className="space-y-1.5">
                   <label className="text-xs font-medium uppercase tracking-wide text-scuro/60">
-                    Bambini (max 1 anno)
+                    {locale === "en"
+                      ? "Children (max 1 year)"
+                      : "Bambini (max 1 anno)"}
                   </label>
                   <select
                     className="w-full rounded-lg border border-grigio/60 bg-bianco px-3 py-2.5 text-sm text-scuro focus:outline-none focus:ring-2 focus:ring-blu/40"
@@ -544,36 +570,45 @@ export default function LayoutSuite({
               {suitePriceId && (
                 <div className="rounded-xl border border-blu/15 bg-linear-to-br from-blu/6 to-transparent p-4">
                   <p className="text-xs font-semibold uppercase tracking-wide text-blu">
-                    Stima dal listino
+                    {locale === "en" ? "Rate estimate" : "Stima dal listino"}
                   </p>
                   {!checkIn || !checkOut ? (
                     <p className="mt-2 text-sm text-scuro/75">
-                      Seleziona arrivo e partenza nel calendario per calcolare notti
-                      e totale.
+                      {locale === "en"
+                        ? "Select check-in and check-out in the calendar to calculate nights and total."
+                        : "Seleziona arrivo e partenza nel calendario per calcolare notti e totale."}
                     </p>
                   ) : !guestsInListinoRange ? (
                     <p className="mt-2 text-sm text-scuro/80">
-                      Per questa suite il listino copre da{" "}
+                      {locale === "en"
+                        ? "For this suite, the rate covers from "
+                        : "Per questa suite il listino copre da "}
                       <strong>{guestRange.min}</strong> a{" "}
-                      <strong>{guestRange.max}</strong> persone. Regola adulti e
-                      bambini.
+                      <strong>{guestRange.max}</strong>{" "}
+                      {locale === "en"
+                        ? "guests. Adjust adults and children."
+                        : "persone. Regola adulti e bambini."}
                     </p>
                   ) : stayQuote?.ok === true ? (
                     <dl className="mt-3 space-y-2 text-sm text-scuro">
                       <div className="flex justify-between gap-4">
-                        <dt className="text-scuro/65">Notti</dt>
+                        <dt className="text-scuro/65">{locale === "en" ? "Nights" : "Notti"}</dt>
                         <dd className="font-medium tabular-nums">
                           {stayQuote.nights}
                         </dd>
                       </div>
                       <div className="flex justify-between gap-4">
-                        <dt className="text-scuro/65">Media a notte</dt>
+                        <dt className="text-scuro/65">
+                          {locale === "en" ? "Average per night" : "Media a notte"}
+                        </dt>
                         <dd className="font-medium tabular-nums">
                           {formatEuro(stayQuote.averagePerNightEuro)}
                         </dd>
                       </div>
                       <div className="flex justify-between gap-4 border-t border-blu/10 pt-2 text-base">
-                        <dt className="font-medium text-scuro">Totale soggiorno</dt>
+                        <dt className="font-medium text-scuro">
+                          {locale === "en" ? "Stay total" : "Totale soggiorno"}
+                        </dt>
                         <dd className="font-semibold text-blu tabular-nums">
                           {formatEuro(stayQuote.totalEuro)}
                         </dd>
@@ -583,15 +618,25 @@ export default function LayoutSuite({
                     <p className="mt-2 text-sm text-scuro/80">
                       {stayQuote.reason === "missing_price" &&
                         stayQuote.firstMissingDate &&
-                        `Nessun listino per il giorno ${new Date(
+                        `${
+                          locale === "en"
+                            ? "No rate available for "
+                            : "Nessun listino per il giorno "
+                        }${new Date(
                           stayQuote.firstMissingDate + "T12:00:00",
-                        ).toLocaleDateString("it-IT")}.`}
+                        ).toLocaleDateString(locale === "en" ? "en-US" : "it-IT")}.`}
                       {stayQuote.reason === "invalid_dates" &&
-                        "La partenza deve essere dopo l'arrivo."}
+                        (locale === "en"
+                          ? "Check-out must be after check-in."
+                          : "La partenza deve essere dopo l'arrivo.")}
                       {stayQuote.reason === "no_nights" &&
-                        "Seleziona almeno una notte."}
+                        (locale === "en"
+                          ? "Select at least one night."
+                          : "Seleziona almeno una notte.")}
                       {stayQuote.reason === "guests_not_supported" &&
-                        "Combinazione ospiti non prevista nel listino."}
+                        (locale === "en"
+                          ? "Guest combination not covered by the rate."
+                          : "Combinazione ospiti non prevista nel listino.")}
                     </p>
                   ) : null}
                 </div>
@@ -612,18 +657,26 @@ export default function LayoutSuite({
                 {isCheckingAvailability ? (
                   <>
                     <span className="h-4 w-4 animate-spin rounded-full border-2 border-bianco border-t-transparent" />
-                    Verifica disponibilità…
+                    {locale === "en" ? "Checking availability…" : "Verifica disponibilità…"}
                   </>
                 ) : (
                   <>
-                    {canBook ? "Prenota ora" : "Seleziona date e ospiti"}
+                    {canBook
+                      ? locale === "en"
+                        ? "Book now"
+                        : "Prenota ora"
+                      : locale === "en"
+                        ? "Select dates and guests"
+                        : "Seleziona date e ospiti"}
                     <ArrowRight size={16} />
                   </>
                 )}
               </button>
 
               <p className="text-xs text-scuro/60">
-                Il calendario è sincronizzato con Booking.com. In arrivo la sincronizzazione con Airbnb ed Expedia.
+                {locale === "en"
+                  ? "The calendar is synced with Booking.com. Airbnb and Expedia sync is coming soon."
+                  : "Il calendario è sincronizzato con Booking.com. In arrivo la sincronizzazione con Airbnb ed Expedia."}
               </p>
             </div>
 
@@ -638,12 +691,12 @@ export default function LayoutSuite({
                   <ChevronLeft size={16} />
                 </button>
                 <p className="text-sm font-medium text-scuro">
-                  {currentMonth.toLocaleDateString("it-IT", {
+                  {currentMonth.toLocaleDateString(locale === "en" ? "en-US" : "it-IT", {
                     month: "long",
                     year: "numeric",
                   })}{" "}
                   -{" "}
-                  {nextMonth.toLocaleDateString("it-IT", {
+                  {nextMonth.toLocaleDateString(locale === "en" ? "en-US" : "it-IT", {
                     month: "long",
                     year: "numeric",
                   })}
@@ -660,10 +713,13 @@ export default function LayoutSuite({
               <div className="grid gap-4 md:grid-cols-2">
                 {[currentMonth, nextMonth].map((monthDate) => {
                   const cells = getMonthMatrix(monthDate);
-                  const monthLabel = monthDate.toLocaleDateString("it-IT", {
+                  const monthLabel = monthDate.toLocaleDateString(
+                    locale === "en" ? "en-US" : "it-IT",
+                    {
                     month: "long",
                     year: "numeric",
-                  });
+                    },
+                  );
 
                   return (
                     <div key={monthLabel} className="space-y-2">
@@ -671,7 +727,10 @@ export default function LayoutSuite({
                         {monthLabel}
                       </p>
                       <div className="grid grid-cols-7 gap-1 text-center text-[11px] uppercase tracking-wide text-scuro/60">
-                        {["Lu", "Ma", "Me", "Gi", "Ve", "Sa", "Do"].map((d) => (
+                        {(locale === "en"
+                          ? ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"]
+                          : ["Lu", "Ma", "Me", "Gi", "Ve", "Sa", "Do"]
+                        ).map((d) => (
                           <span key={d}>{d}</span>
                         ))}
                       </div>
@@ -694,7 +753,13 @@ export default function LayoutSuite({
                               type="button"
                               onClick={() => handleDayClick(day)}
                               disabled={blocked}
-                              title={blocked ? "Non disponibile" : undefined}
+                              title={
+                                blocked
+                                  ? locale === "en"
+                                    ? "Not available"
+                                    : "Non disponibile"
+                                  : undefined
+                              }
                               className={`flex h-9 w-9 items-center justify-center rounded-full text-xs transition ${
                                 blocked
                                   ? "cursor-not-allowed bg-grigio/30 text-scuro/25 line-through"
@@ -718,15 +783,15 @@ export default function LayoutSuite({
               <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-scuro/60">
                 <span className="inline-flex items-center gap-1.5">
                   <span className="h-3 w-3 rounded-full bg-blu" />
-                  Data selezionata
+                  {locale === "en" ? "Selected date" : "Data selezionata"}
                 </span>
                 <span className="inline-flex items-center gap-1.5">
                   <span className="h-3 w-3 rounded-full bg-blu/10 border border-blu/40" />
-                  Intervallo soggiorno
+                  {locale === "en" ? "Stay range" : "Intervallo soggiorno"}
                 </span>
                 <span className="inline-flex items-center gap-1.5">
                   <span className="h-3 w-3 rounded-full bg-grigio/30" />
-                  Non disponibile
+                  {locale === "en" ? "Not available" : "Non disponibile"}
                 </span>
               </div>
             </div>

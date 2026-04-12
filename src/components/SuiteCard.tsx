@@ -9,6 +9,7 @@ type SuiteCardProps = {
   src: string | StaticImageData;
   alt: string;
   indice: number;
+  ctaLabel?: string;
 };
 
 export default function SuiteCard({
@@ -18,7 +19,8 @@ export default function SuiteCard({
   href,
   src,
   alt,
-  indice
+  indice,
+  ctaLabel = "Leggi tutto e prenota",
 }: SuiteCardProps) {
   const isPhotoLeft = indice % 2 === 0;
   return (
@@ -55,7 +57,7 @@ export default function SuiteCard({
               href={href}
               className="mt-8 inline-block rounded-sm bg-blu px-6 py-3.5 text-center text-sm font-medium uppercase tracking-wide text-bianco hover:bg-blu/90 transition-colors"
             >
-              Leggi tutto e prenota
+              {ctaLabel}
             </Link>
           </div>
         </div>

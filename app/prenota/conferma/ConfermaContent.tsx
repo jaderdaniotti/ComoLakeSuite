@@ -7,8 +7,10 @@ import { CheckCircle, CalendarDays, Users, BedDouble, Phone, Mail, CalendarPlus,
 import { formatEuro } from "@/src/lib/pricing";
 import { SUITE_LABELS } from "@/src/lib/suiteLabels";
 import { suiteHeroImage } from "@/src/lib/suiteHeroImages";
+import { useLanguage } from "@/src/components/LanguageProvider";
 
 export default function ConfermaContent() {
+  const { locale } = useLanguage();
   const params = useSearchParams();
 
   const suiteId = params.get("suiteId") ?? "";
@@ -35,10 +37,13 @@ export default function ConfermaContent() {
     const end = checkOut.replace(/-/g, "");
     const params = new URLSearchParams({
       action: "TEMPLATE",
-      text: `Soggiorno – ${suiteLabel}`,
+      text: locale === "en" ? `Stay – ${suiteLabel}` : `Soggiorno – ${suiteLabel}`,
       dates: `${start}/${end}`,
-      details: `Prenotazione confermata presso ${suiteLabel}. ID ordine PayPal: ${orderId}`,
-      location: "Como, Italia",
+      details:
+        locale === "en"
+          ? `Booking confirmed at ${suiteLabel}. PayPal order ID: ${orderId}`
+          : `Prenotazione confermata presso ${suiteLabel}. ID ordine PayPal: ${orderId}`,
+      location: locale === "en" ? "Como, Italy" : "Como, Italia",
     });
     return `https://calendar.google.com/calendar/render?${params.toString()}`;
   })();
@@ -46,7 +51,7 @@ export default function ConfermaContent() {
   const formatDate = (iso: string) => {
     if (!iso) return "–";
     const [y, m, d] = iso.split("-").map(Number);
-    return new Date(y, m - 1, d).toLocaleDateString("it-IT", {
+    return new Date(y, m - 1, d).toLocaleDateString(locale === "en" ? "en-US" : "it-IT", {
       weekday: "long",
       day: "2-digit",
       month: "long",
@@ -75,17 +80,23 @@ export default function ConfermaContent() {
             <CheckCircle size={36} strokeWidth={1.5} />
           </div>
           <h1 className="text-2xl font-light text-bianco md:text-3xl">
-            Prenotazione confermata!
+            {locale === "en" ? "Booking confirmed!" : "Prenotazione confermata!"}
           </h1>
           <p className="max-w-md text-sm text-bianco/85 leading-relaxed">
-            Il pagamento è stato ricevuto con successo.
+            {locale === "en"
+              ? "Your payment has been received successfully."
+              : "Il pagamento è stato ricevuto con successo."}
             {confirmEmail
-              ? ` Abbiamo inviato la conferma all’indirizzo ${confirmEmail}.`
-              : " Riceverai a breve una conferma via email se disponibile."}
+              ? locale === "en"
+                ? ` We sent confirmation to ${confirmEmail}.`
+                : ` Abbiamo inviato la conferma all’indirizzo ${confirmEmail}.`
+              : locale === "en"
+                ? " You will receive an email confirmation shortly when available."
+                : " Riceverai a breve una conferma via email se disponibile."}
           </p>
           {orderId && (
             <p className="text-xs text-bianco/55 font-mono">
-              ID ordine: {orderId}
+              {locale === "en" ? "Order ID" : "ID ordine"}: {orderId}
             </p>
           )}
         </div>
@@ -93,14 +104,16 @@ export default function ConfermaContent() {
         {/* Booking summary card */}
         <div className="rounded-2xl bg-bianco p-6 shadow-sm space-y-6 mb-6">
           <h2 className="text-sm font-semibold uppercase tracking-[0.15em] text-scuro/60">
-            Dettagli soggiorno
+            {locale === "en" ? "Stay details" : "Dettagli soggiorno"}
           </h2>
 
           <div className="space-y-5 text-sm">
             <div className="flex items-start gap-3">
               <BedDouble size={18} className="mt-0.5 shrink-0 text-blu" />
               <div>
-                <p className="text-xs text-scuro/50 uppercase tracking-wide">Suite</p>
+                <p className="text-xs text-scuro/50 uppercase tracking-wide">
+                  {locale === "en" ? "Suite" : "Suite"}
+                </p>
                 <p className="font-semibold text-scuro text-base">{suiteLabel}</p>
               </div>
             </div>
@@ -122,11 +135,18 @@ export default function ConfermaContent() {
             <div className="flex items-start gap-3">
               <Users size={18} className="mt-0.5 shrink-0 text-blu" />
               <div>
-                <p className="text-xs text-scuro/50 uppercase tracking-wide">Ospiti</p>
+                  <p className="text-xs text-scuro/50 uppercase tracking-wide">
+                    {locale === "en" ? "Guests" : "Ospiti"}
+                  </p>
                 <p className="font-medium text-scuro">
-                  {adults} adult{adults === 1 ? "o" : "i"}
+                  {adults}{" "}
+                  {locale === "en"
+                    ? `adult${adults === 1 ? "" : "s"}`
+                    : `adult${adults === 1 ? "o" : "i"}`}
                   {children > 0
-                    ? ` + ${children} bambin${children === 1 ? "o" : "i"} (≤1 anno, gratuiti)`
+                    ? locale === "en"
+                      ? ` + ${children} child${children === 1 ? "" : "ren"} (≤1 year old, free)`
+                      : ` + ${children} bambin${children === 1 ? "o" : "i"} (≤1 anno, gratuiti)`
                     : ""}
                 </p>
               </div>
@@ -136,7 +156,7 @@ export default function ConfermaContent() {
               <div className="rounded-xl border border-blu/10 bg-scuro/2 p-4 space-y-3 text-sm">
                 <p className="text-xs font-semibold uppercase tracking-wide text-scuro/55 flex items-center gap-2">
                   <User size={14} className="text-blu" aria-hidden />
-                  Prenotante
+                  {locale === "en" ? "Booker" : "Prenotante"}
                 </p>
                 {bookerName && (
                   <p className="font-medium text-scuro">{bookerName}</p>
@@ -160,7 +180,11 @@ export default function ConfermaContent() {
           {total > 0 && (
             <div className="rounded-xl border border-blu/15 bg-blu/5 px-4 py-3 flex justify-between items-center">
               <span className="text-sm text-scuro/70">
-                {nights} nott{nights === 1 ? "e" : "i"} · totale pagato
+                {nights}{" "}
+                {locale === "en"
+                  ? `night${nights === 1 ? "" : "s"}`
+                  : `nott${nights === 1 ? "e" : "i"}`}{" "}
+                · {locale === "en" ? "total paid" : "totale pagato"}
               </span>
               <span className="font-bold text-lg text-blu tabular-nums">
                 {formatEuro(total)}
@@ -177,7 +201,9 @@ export default function ConfermaContent() {
               className="flex items-center gap-2 text-sm text-blu hover:underline"
             >
               <CalendarPlus size={16} />
-              Aggiungi al calendario Google
+              {locale === "en"
+                ? "Add to Google Calendar"
+                : "Aggiungi al calendario Google"}
             </a>
           )}
         </div>
@@ -185,11 +211,12 @@ export default function ConfermaContent() {
         {/* Contacts card */}
         <div className="rounded-2xl bg-bianco p-6 shadow-sm space-y-4 mb-8">
           <h2 className="text-sm font-semibold uppercase tracking-[0.15em] text-scuro/60">
-            Hai bisogno di aiuto?
+            {locale === "en" ? "Need help?" : "Hai bisogno di aiuto?"}
           </h2>
           <p className="text-sm text-scuro/70">
-            Per informazioni sull'arrivo, modifiche o qualsiasi necessità,
-            contattaci direttamente:
+            {locale === "en"
+              ? "For arrival details, changes, or any need, contact us directly:"
+              : "Per informazioni sull'arrivo, modifiche o qualsiasi necessità, contattaci direttamente:"}
           </p>
           <div className="grid gap-4 sm:grid-cols-2 text-sm">
             <div className="space-y-1">
@@ -228,7 +255,7 @@ export default function ConfermaContent() {
             href="/"
             className="inline-flex items-center justify-center rounded-full bg-blu px-8 py-3 text-sm font-medium text-bianco shadow-sm hover:bg-blu/90 transition"
           >
-            Torna alla home
+            {locale === "en" ? "Back to home" : "Torna alla home"}
           </Link>
         </div>
       </div>

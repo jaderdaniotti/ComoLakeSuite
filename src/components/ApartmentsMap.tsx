@@ -8,6 +8,7 @@ import "leaflet/dist/leaflet.css";
 
 import type { ApartmentMarker } from "@/src/data/apartmentsMapData";
 import { APARTMENTS } from "@/src/data/apartmentsMapData";
+import { useLanguage } from "@/src/components/LanguageProvider";
 
 function createThumbnailIcon(thumbnailSrc: string) {
   return L.divIcon({
@@ -49,6 +50,7 @@ function isValidMarker(a: ApartmentMarker): a is ApartmentMarker & { lat: number
 }
 
 export default function ApartmentsMap({ apartments }: Props) {
+  const { locale } = useLanguage();
   const list = useMemo(() => {
     const withThumbs = apartments ?? APARTMENTS;
     return withThumbs.filter(isValidMarker);
@@ -83,7 +85,7 @@ export default function ApartmentsMap({ apartments }: Props) {
                   {apt.href && (
                     <a
                       href={apt.href}
-                      title="Visita la suite"
+                      title={locale === "en" ? "Visit suite" : "Visita la suite"}
                       className="flex shrink-0 rounded-full p-1.5 text-blu transition hover:bg-blu/10 hover:text-blu/90"
                     >
                       <Eye size={18} strokeWidth={1.5} />

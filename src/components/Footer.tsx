@@ -8,9 +8,19 @@ import {
   ChevronUp,
 } from "lucide-react";
 import images from "@/src/images";
+import { useLanguage } from "@/src/components/LanguageProvider";
 
 
 export default function Footer() {
+  const { locale } = useLanguage();
+  const labels = {
+    contactsIntro: locale === "en" ? "Our" : "I nostri",
+    contacts: locale === "en" ? "Contacts" : "Contatti",
+    findUsOn: locale === "en" ? "Find us on:" : "Trovaci su:",
+    backToTop: locale === "en" ? "Back to top" : "Torna su",
+    country: locale === "en" ? "Italy" : "Italia",
+  };
+
   const scrollToTop = () => window.scrollTo({ top: 0, behavior: "smooth" });
 
   return (
@@ -26,9 +36,9 @@ export default function Footer() {
       <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8 z-20">
         <div className="grid gap-10 lg:grid-cols-4">
           <div>
-            <p className="text-blu text-lg font-medium">I nostri</p>
+            <p className="text-blu text-lg font-medium">{labels.contactsIntro}</p>
             <h2 className="text-4xl md:text-5xl font-normal uppercase tracking-wide text-bluchiaro">
-              ContattI
+              {labels.contacts}
             </h2>
           </div>
 
@@ -52,7 +62,7 @@ export default function Footer() {
                 <span>
                   Piazza Cavour ang. Via Albertolli 22
                   <br />
-                  22100 Como, Italia
+                  22100 Como, {labels.country}
                 </span>
               </li>
             </ul>
@@ -78,14 +88,14 @@ export default function Footer() {
                 <span>
                   Piazza Cavour ang. Via Albertolli 22
                   <br />
-                  22100 Como, Italia
+                  22100 Como, {labels.country}
                 </span>
               </li>
             </ul>
           </div>
 
           <div>
-            <p className="text-4xl font-medium uppercase tracking-wide text-bluchiaro">Trovaci su:</p>
+            <p className="text-4xl font-medium uppercase tracking-wide text-bluchiaro">{labels.findUsOn}</p>
             <ul className="mt-3 space-y-1 font-medium">
               <li>
                 <a
@@ -128,7 +138,7 @@ export default function Footer() {
         type="button"
         onClick={scrollToTop}
         className="absolute bottom-6 right-6 flex h-12 w-12 items-center justify-center rounded-full bg-[#1e3a5f] text-blu hover:bg-[#2a4a6f] transition-colors"
-        aria-label="Torna su"
+        aria-label={labels.backToTop}
       >
         <ChevronUp size={24} className="text-bianco" />
       </button>
