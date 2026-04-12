@@ -4,6 +4,7 @@ import "./globals.css";
 import Header from "@/src/components/Header";
 import Footer from "@/src/components/Footer";
 import WhatsAppFab from "@/src/components/WhatsAppFab";
+import logoVerticale from "@/src/images/logo-verticale.webp";
 import {
   SITE_NAME,
   SITE_URL,
@@ -23,6 +24,11 @@ export const metadata: Metadata = {
   }),
   verification: {
     google: "gBkj67c3ywB85rS99KPChZFk_5TtWJmv2pYvqLnYQpE",
+  },
+  icons: {
+    icon: logoVerticale.src,
+    shortcut: logoVerticale.src,
+    apple: logoVerticale.src,
   },
 };
 
