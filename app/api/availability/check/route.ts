@@ -6,7 +6,7 @@ import { readBlockedDates } from "@/src/lib/blockedDates";
  *
  * Verifica la disponibilità di una suite per le date richieste
  * leggendo i giorni bloccati da public/blocked-dates.json
- * (aggiornato ogni ora dal cron /api/availability/sync).
+ * (date OTA aggiornate al massimo una volta al giorno dal cron Vercel su /api/availability/sync).
  *
  * Body: { suiteId: string, checkIn: string (YYYY-MM-DD), checkOut: string (YYYY-MM-DD) }
  * Response: { available: boolean, reason?: string }

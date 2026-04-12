@@ -47,7 +47,7 @@ const DIRECT_DATES_PATH = path.join(process.cwd(), "public", "blocked-dates.json
 
 /**
  * ota-dates.json → cache delle date dai feed iCal OTA (Booking.com, Airbnb, …).
- * Aggiornato dal cron ogni ora tramite syncAllSuites().
+ * Aggiornato dal cron Vercel (max 1/giorno su Hobby) tramite syncAllSuites().
  */
 const OTA_DATES_PATH = path.join(process.cwd(), "public", "ota-dates.json");
 
@@ -96,7 +96,7 @@ export type SyncResult = {
 /**
  * Scarica tutti i feed iCal OTA configurati e salva il risultato in ota-dates.json.
  * NON tocca blocked-dates.json (prenotazioni dirette): i due file sono indipendenti.
- * Chiamato dal cron ogni ora.
+ * Chiamato dal cron Vercel (schedulazione in vercel.json).
  */
 export async function syncAllSuites(): Promise<SyncResult> {
   const current = await readStore(OTA_DATES_PATH);

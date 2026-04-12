@@ -5,9 +5,9 @@ import { syncAllSuites } from "@/src/lib/blockedDates";
  * GET /api/availability/sync
  *
  * Scarica tutti i feed iCal configurati (Booking.com, Airbnb, Expedia)
- * per ogni suite e salva i giorni bloccati in public/blocked-dates.json.
+ * per ogni suite e salva i giorni bloccati in public/ota-dates.json.
  *
- * Chiamato dal cron job di Vercel ogni ora (vedi vercel.json).
+ * Chiamato dal cron job di Vercel una volta al giorno (vedi vercel.json; UTC).
  * Protetto dal parametro ?key=CRON_SECRET o header x-cron-secret.
  */
 
