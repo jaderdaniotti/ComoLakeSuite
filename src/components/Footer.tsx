@@ -13,12 +13,18 @@ import { useLanguage } from "@/src/components/LanguageProvider";
 
 export default function Footer() {
   const { locale } = useLanguage();
+  const currentYear = new Date().getFullYear();
   const labels = {
     contactsIntro: locale === "en" ? "Our" : "I nostri",
     contacts: locale === "en" ? "Contacts" : "Contatti",
     findUsOn: locale === "en" ? "Find us on:" : "Trovaci su:",
     backToTop: locale === "en" ? "Back to top" : "Torna su",
     country: locale === "en" ? "Italy" : "Italia",
+    rights:
+      locale === "en"
+        ? `© ${currentYear} Como Lake Suites. All rights reserved.`
+        : `© ${currentYear} Como Lake Suites. Tutti i diritti riservati.`,
+    madeBy: locale === "en" ? "Made by" : "Made by",
   };
 
   const scrollToTop = () => window.scrollTo({ top: 0, behavior: "smooth" });
@@ -131,9 +137,23 @@ export default function Footer() {
           </div>
         </div>
       </div>
-<div className="w-full text-center text-sm bottom-0 absolute pb-3">
-  <p>Made with ❤️ by <a href="https://jaderdaniotti.netlify.app/" target="_blank" rel="noopener noreferrer" className="text-blu hover:underline">Jader</a></p>
-</div>
+      <div className="absolute bottom-0 left-0 right-0 z-20 border-t border-white/20 bg-black/40 px-4 py-3 text-xs text-bianco/90 backdrop-blur-xs">
+        <div className="mx-auto flex w-full max-w-7xl flex-col items-center justify-between gap-2 sm:flex-row">
+          <p>{labels.rights}</p>
+          <p>
+            {labels.madeBy}{" "}
+            <a
+              href="https://jaderdaniotti.netlify.app/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-bianco hover:text-blu hover:underline"
+            >
+              Jader
+            </a>{" "}
+            ❤️
+          </p>
+        </div>
+      </div>
       <button
         type="button"
         onClick={scrollToTop}
