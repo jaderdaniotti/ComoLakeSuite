@@ -1,11 +1,15 @@
 import type { Metadata } from "next";
 import LayoutSuite from "@/src/components/LayoutSuite";
 import images from "@/src/images";
+import { buildPageMetadata } from "@/src/lib/seo";
 
 export const metadata: Metadata = {
-  title: "Suite Dante - Como Lake Suites",
-  description:
-    "Suite Dante nel cuore di Como. Due camere, fino a 6 posti letto, a pochi passi dal centro storico. Moderna, riservata e completa di ogni comfort.",
+  ...buildPageMetadata({
+    title: "Suite Dante - Como Lake Suites",
+    description:
+      "Suite Dante nel cuore di Como. Due camere, fino a 6 posti letto, a pochi passi dal centro storico. Moderna, riservata e completa di ogni comfort.",
+    pathname: "/le-suites/suite-dante",
+  }),
 };
 
 export default function SuiteDantePage() {

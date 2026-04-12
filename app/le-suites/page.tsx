@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import SuiteCard from "@/src/components/SuiteCard";
 import images from "@/src/images";
+import { buildPageMetadata } from "@/src/lib/seo";
 
 const suites = [
   {
@@ -61,9 +62,12 @@ const suites = [
 ];
 
 export const metadata: Metadata = {
-  title: "Le Suites - Como Lake Suites",
-  description:
-    "Scopri le nostre suite: Volta, Cavour, Cernobbio, Como Sole, Dante, Vista Duomo. Alloggi di charme sul Lago di Como.",
+  ...buildPageMetadata({
+    title: "Le Suites - Como Lake Suites",
+    description:
+      "Scopri le nostre suite: Volta, Cavour, Cernobbio, Como Sole, Dante, Vista Duomo. Alloggi di charme sul Lago di Como.",
+    pathname: "/le-suites",
+  }),
 };
 
 export default function LeSuitesPage() {

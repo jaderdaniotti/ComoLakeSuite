@@ -1,11 +1,15 @@
 import type { Metadata } from "next";
 import LayoutSuite from "@/src/components/LayoutSuite";
 import images from "@/src/images";
+import { buildPageMetadata } from "@/src/lib/seo";
 
 export const metadata: Metadata = {
-  title: "Suite Como Sole - Como Lake Suites",
-  description:
-    "Suite Como Sole in uno dei principali quartieri di Como. Circa 80 mq, fino a 4 posti letto, ampio parcheggio. Comfort e relax per famiglie e gruppi.",
+  ...buildPageMetadata({
+    title: "Suite Como Sole - Como Lake Suites",
+    description:
+      "Suite Como Sole in uno dei principali quartieri di Como. Circa 80 mq, fino a 4 posti letto, ampio parcheggio. Comfort e relax per famiglie e gruppi.",
+    pathname: "/le-suites/suite-como-sole",
+  }),
 };
 
 export default function SuiteComoSolePage() {

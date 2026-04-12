@@ -1,11 +1,15 @@
 import type { Metadata } from "next";
 import LayoutSuite from "@/src/components/LayoutSuite";
 import images from "@/src/images";
+import { buildPageMetadata } from "@/src/lib/seo";
 
 export const metadata: Metadata = {
-  title: "Suite Volta - Como Lake Suites",
-  description:
-    "Suite Volta nel cuore del centro storico di Como. Appartamento di circa 130 mq, curato in ogni dettaglio, eleganza e calore. Fino a 6 posti letto, vista lago.",
+  ...buildPageMetadata({
+    title: "Suite Volta - Como Lake Suites",
+    description:
+      "Suite Volta nel cuore del centro storico di Como. Appartamento di circa 130 mq, curato in ogni dettaglio, eleganza e calore. Fino a 6 posti letto, vista lago.",
+    pathname: "/le-suites/suite-volta",
+  }),
 };
 
 export default function SuiteVoltaPage() {

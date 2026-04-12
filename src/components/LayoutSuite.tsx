@@ -54,9 +54,16 @@ export default function LayoutSuite({
 
   const router = useRouter();
 
-  // Carica i giorni bloccati da Booking.com (e in futuro altri OTA) al mount
+  // Trigger sync OTA on-demand (con throttling lato server: max 1 ogni 5 min)
   useEffect(() => {
     if (!suitePriceId) return;
+    
+    // 1. Trigger sync in background (non blocca il caricamento)
+    fetch("/api/availability/sync", { method: "GET" }).catch(() => {
+      // Ignora errori: la sync è best-effort
+    });
+
+    // 2. Carica le date bloccate (include sia OTA che dirette)
     fetch(`/api/availability/blocked?suiteId=${suitePriceId}`)
       .then((r) => r.json())
       .then((data: { blocked: string[] }) => {

@@ -1,11 +1,15 @@
 import type { Metadata } from "next";
 import LayoutSuite from "@/src/components/LayoutSuite";
 import images from "@/src/images";
+import { buildPageMetadata } from "@/src/lib/seo";
 
 export const metadata: Metadata = {
-  title: "Suite Vista Duomo - Como Lake Suites",
-  description:
-    "Suite Vista Duomo: oasi di lusso e relax nel cuore di Como. Appartamento 65mq con vista sull'iconico centro storico.",
+  ...buildPageMetadata({
+    title: "Suite Vista Duomo - Como Lake Suites",
+    description:
+      "Suite Vista Duomo: oasi di lusso e relax nel cuore di Como. Appartamento 65mq con vista sull'iconico centro storico.",
+    pathname: "/le-suites/suite-vista-duomo",
+  }),
 };
 
 export default function SuiteVistaDuomoPage() {

@@ -1,8 +1,3 @@
 {
-  "crons": [
-    {
-      "path": "/api/availability/sync",
-      "schedule": "0 3 * * *"
-    }
-  ]
+  "crons": []
 }

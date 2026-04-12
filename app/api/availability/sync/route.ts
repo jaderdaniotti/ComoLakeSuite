@@ -5,18 +5,19 @@ import { syncAllSuites } from "@/src/lib/blockedDates";
  * GET /api/availability/sync
  *
  * Scarica tutti i feed iCal configurati (Booking.com, Airbnb, Expedia)
- * per ogni suite e salva i giorni bloccati in public/ota-dates.json.
+ * per ogni suite e salva i giorni bloccati su Blob (ota-dates.json).
  *
- * Chiamato dal cron job di Vercel una volta al giorno (vedi vercel.json; UTC) e,
- * opzionalmente, da GitHub Actions ogni 5 min (workflow sync-availability).
- * Protetto da CRON_SECRET: query ?key=, header x-cron-secret, oppure
- * Authorization: Bearer … (così invoca anche il cron nativo Vercel).
+ * Chiamato da:
+ * - GitHub Actions ogni 5 min (workflow sync-availability) con header x-cron-secret
+ * - Client-side on-demand (quando l'utente apre una pagina suite) senza auth
+ * - Manualmente con ?key= o header per forzare sync
+ *
+ * Throttling: max 1 sync effettiva ogni 5 min; richieste intermedie ricevono cache.
  */
 
-function isAuthorized(req: NextRequest): boolean {
+function hasAuthToken(req: NextRequest): boolean {
   const secret = process.env.CRON_SECRET;
-  // In sviluppo senza secret configurato: accesso libero
-  if (!secret) return true;
+  if (!secret) return false;
   const qp = req.nextUrl.searchParams.get("key");
   if (qp === secret) return true;
   if (req.headers.get("x-cron-secret") === secret) return true;
@@ -26,12 +27,10 @@ function isAuthorized(req: NextRequest): boolean {
 }
 
 export async function GET(req: NextRequest) {
-  if (!isAuthorized(req)) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
-
   try {
-    const result = await syncAllSuites();
+    // Se ha token valido, forza sync (bypassa throttling)
+    const force = hasAuthToken(req);
+    const result = await syncAllSuites(force);
     return NextResponse.json({ ok: true, ...result });
   } catch (err) {
     console.error("[availability/sync] fatal error:", err);

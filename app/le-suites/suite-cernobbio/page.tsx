@@ -1,11 +1,15 @@
 import type { Metadata } from "next";
 import LayoutSuite from "@/src/components/LayoutSuite";
 import images from "@/src/images";
+import { buildPageMetadata } from "@/src/lib/seo";
 
 export const metadata: Metadata = {
-  title: "Suite Cernobbio - Como Lake Suites",
-  description:
-    "Suite Cernobbio sulle rive del Lago di Como. Circa 60 mq, 4 posti letto. Comodità ed eleganza, passeggiate sul lungolago e gite in barca.",
+  ...buildPageMetadata({
+    title: "Suite Cernobbio - Como Lake Suites",
+    description:
+      "Suite Cernobbio sulle rive del Lago di Como. Circa 60 mq, 4 posti letto. Comodità ed eleganza, passeggiate sul lungolago e gite in barca.",
+    pathname: "/le-suites/suite-cernobbio",
+  }),
 };
 
 export default function SuiteCernobbioPage() {

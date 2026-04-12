@@ -4,11 +4,15 @@ import images from "@/src/images";
 import Image from "next/image";
 import ContattiMapSection from "@/src/components/ContattiMapSection";
 import ContattiForm from "@/src/components/ContattiForm";
+import { buildPageMetadata } from "@/src/lib/seo";
 
 export const metadata: Metadata = {
-  title: "Contatti - Como Lake Suites",
-  description:
-    "Contattaci per informazioni e prenotazioni. Massimiliano e Marilena sono a disposizione per suggerire servizi esclusivi e supportarti durante il soggiorno.",
+  ...buildPageMetadata({
+    title: "Contatti - Como Lake Suites",
+    description:
+      "Contattaci per informazioni e prenotazioni. Massimiliano e Marilena sono a disposizione per suggerire servizi esclusivi e supportarti durante il soggiorno.",
+    pathname: "/contatti",
+  }),
 };
 
 export default function ContattiPage() {

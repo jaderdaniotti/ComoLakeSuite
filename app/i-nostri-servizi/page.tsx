@@ -39,11 +39,15 @@ import {
 import Image from "next/image";
 import images from "@/src/images";
 import ServiziCategorieAccordion from "@/src/components/ServiziCategorieAccordion";
+import { buildPageMetadata } from "@/src/lib/seo";
 
 export const metadata: Metadata = {
-  title: "Servizi - Como Lake Suites",
-  description:
-    "Parcheggio privato, Wi-fi, terrazza vista lago, pulizie, colazione, cucina attrezzata, biancheria, climatizzatore e molti altri servizi.",
+  ...buildPageMetadata({
+    title: "Servizi - Como Lake Suites",
+    description:
+      "Parcheggio privato, Wi-fi, terrazza vista lago, pulizie, colazione, cucina attrezzata, biancheria, climatizzatore e molti altri servizi.",
+    pathname: "/i-nostri-servizi",
+  }),
 };
 
 /** Servizi da Booking.com – elenco completo con grafica esistente */

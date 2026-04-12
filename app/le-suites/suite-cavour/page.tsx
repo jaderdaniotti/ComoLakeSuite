@@ -1,11 +1,15 @@
 import type { Metadata } from "next";
 import LayoutSuite from "@/src/components/LayoutSuite";
 import images from "@/src/images";
+import { buildPageMetadata } from "@/src/lib/seo";
 
 export const metadata: Metadata = {
-  title: "Suite Cavour - Como Lake Suites",
-  description:
-    "Suite Cavour nel centro storico di Como. Appartamento 65mq con grande balcone e vista sul Lago. Perfetta per 2 o 4 persone. Parcheggio, pulizie e colazione inclusi.",
+  ...buildPageMetadata({
+    title: "Suite Cavour - Como Lake Suites",
+    description:
+      "Suite Cavour nel centro storico di Como. Appartamento 65mq con grande balcone e vista sul Lago. Perfetta per 2 o 4 persone. Parcheggio, pulizie e colazione inclusi.",
+    pathname: "/le-suites/suite-cavour",
+  }),
 };
 
 export default function SuiteCavourPage() {

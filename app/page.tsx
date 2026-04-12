@@ -74,7 +74,7 @@ const suiteCards = [
     sottotitolo: "Una camera con vista",
     descrizione:
       "Suite in uno dei principali quartieri di Como per offrire comfort e relax.",
-    href: "le-suites/suite-como-sole",
+    href: "/le-suites/suite-como-sole",
     src: images.thumbComoSole,
     alt: "Suite Como Sole",
   },
