@@ -3,6 +3,7 @@ import { MapPin, Mail, Phone } from "lucide-react";
 import images from "@/src/images";
 import Image from "next/image";
 import ContattiMapSection from "@/src/components/ContattiMapSection";
+import ContattiForm from "@/src/components/ContattiForm";
 
 export const metadata: Metadata = {
   title: "Contatti - Como Lake Suites",
@@ -147,57 +148,9 @@ export default function ContattiPage() {
                 </div>
               </div>
 
-              <div className="lg:pt-1 relative ">
-                <div className="absolute inset-0"/>
-                <form className="flex flex-col gap-6 md:gap-7 z-20 bg-grigioscuro p-6 rounded-lg">
-                  <div>
-                    <label htmlFor="nome" className="sr-only">
-                      Nome (obbligatorio)
-                    </label>
-                    <input
-                      id="nome"
-                      type="text"
-                      name="nome"
-                      required
-                      autoComplete="name"
-                      placeholder="Your Name*"
-                      className="w-full rounded-none border border-[#CCCCCC] bg-[#E8E8E8] px-4 py-3.5 text-sm text-black placeholder:text-[#666666] focus:border-[#1A1B35] focus:outline-none focus:ring-1 focus:ring-[#1A1B35]"
-                    />
-                  </div>
-                  <div>
-                    <label htmlFor="email" className="sr-only">
-                      Email (obbligatorio)
-                    </label>
-                    <input
-                      id="email"
-                      type="email"
-                      name="email"
-                      required
-                      autoComplete="email"
-                      placeholder="Email address*"
-                      className="w-full rounded-none border border-[#CCCCCC] bg-[#E8E8E8] px-4 py-3.5 text-sm text-black placeholder:text-[#666666] focus:border-[#1A1B35] focus:outline-none focus:ring-1 focus:ring-[#1A1B35]"
-                    />
-                  </div>
-                  <div>
-                    <label htmlFor="messaggio" className="sr-only">
-                      Messaggio (obbligatorio)
-                    </label>
-                    <textarea
-                      id="messaggio"
-                      name="messaggio"
-                      rows={7}
-                      required
-                      placeholder="Write Message*"
-                      className="w-full resize-none rounded-none border border-[#CCCCCC] bg-[#E8E8E8] px-4 py-3.5 text-sm text-black placeholder:text-[#666666] focus:border-[#1A1B35] focus:outline-none focus:ring-1 focus:ring-[#1A1B35]"
-                    />
-                  </div>
-                  <button
-                    type="submit"
-                    className="w-full rounded-none bg-[#1A1B35] px-8 py-3.5 text-center text-sm font-medium uppercase tracking-[0.2em] text-white transition-colors hover:bg-[#14152a] sm:w-auto sm:min-w-[140px]"
-                  >
-                    SEND
-                  </button>
-                </form>
+              <div className="relative lg:pt-1">
+                <div className="absolute inset-0" aria-hidden />
+                <ContattiForm />
               </div>
             </div>
           </div>

@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import {
@@ -9,14 +10,16 @@ import {
 } from "@paypal/react-paypal-js";
 import { formatEuro } from "@/src/lib/pricing";
 import { ArrowLeft, CalendarDays, Users, BedDouble } from "lucide-react";
+import images from "@/src/images";
+import { SUITE_LABELS } from "@/src/lib/suiteLabels";
 
-const SUITE_LABELS: Record<string, string> = {
-  "suite-cavour": "Suite Cavour",
-  "suite-volta": "Suite Volta",
-  "suite-vista-duomo": "Suite Vista Duomo",
-  "suite-dante": "Suite Dante",
-  "suite-cernobbio": "Suite Cernobbio",
-  "suite-como-sole": "Suite Como Sole",
+const SUITE_HERO: Record<string, (typeof images)["suiteVoltaHero"]> = {
+  "suite-cavour": images.suiteCavourHero,
+  "suite-volta": images.suiteVoltaHero,
+  "suite-vista-duomo": images.suiteVistaDuomoHero,
+  "suite-dante": images.suiteDanteHero,
+  "suite-cernobbio": images.suiteCernobbioHero,
+  "suite-como-sole": images.suiteComoSoleHero,
 };
 
 const paypalScriptOptions: ReactPayPalScriptOptions = {
@@ -45,6 +48,7 @@ export default function PrenotaContent() {
   const avgPerNight = Number(params.get("avgPerNight") ?? 0);
 
   const suiteLabel = SUITE_LABELS[suiteId] ?? suiteId;
+  const heroSrc = SUITE_HERO[suiteId] ?? images.fotocomo;
 
   const [payError, setPayError] = useState<string | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
@@ -126,14 +130,26 @@ export default function PrenotaContent() {
   if (!suiteId || total <= 0) return null;
 
   return (
-    <div className="min-h-screen bg-grigioscuro pt-50">
-      <div className="mx-auto max-w-4xl px-4 pb-10 sm:px-6 lg:px-8">
+    <div className="relative min-h-screen pt-50">
+      <div className="absolute inset-0 z-0 overflow-hidden" aria-hidden>
+        <Image
+          src={heroSrc}
+          alt=""
+          fill
+          className="object-cover object-center"
+          sizes="100vw"
+          priority
+        />
+        <div className="absolute inset-0 bg-linear-to-b from-scuro/70 via-scuro/45 to-scuro/55" />
+      </div>
+
+      <div className="relative z-10 mx-auto max-w-4xl px-4 pb-10 sm:px-6 lg:px-8">
         {/* Back button */}
         <div className="mb-6">
           <button
             type="button"
             onClick={() => router.back()}
-            className="inline-flex items-center gap-2 text-sm text-scuro/60 hover:text-scuro transition"
+            className="inline-flex items-center gap-2 text-sm text-bianco/75 hover:text-bianco transition"
           >
             <ArrowLeft size={16} />
             Torna alla suite
@@ -141,10 +157,10 @@ export default function PrenotaContent() {
         </div>
 
         <div className="mb-8 space-y-1">
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-scuro/50">
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-bianco/60">
             Pagamento sicuro
           </p>
-          <h1 className="text-2xl font-light text-scuro md:text-3xl">
+          <h1 className="text-2xl font-light text-bianco md:text-3xl">
             Conferma prenotazione
           </h1>
         </div>

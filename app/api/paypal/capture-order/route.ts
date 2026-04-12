@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { saveBooking, generateId, bookingToDates } from "@/src/lib/bookings";
 import { readBlockedDates, writeBlockedDates } from "@/src/lib/blockedDates";
+import { sendBookingEmails } from "@/src/lib/mail";
 
 async function getPayPalAccessToken(): Promise<string> {
   const clientId = process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID!;
@@ -108,6 +109,17 @@ export async function POST(req: NextRequest) {
         bookingToDates(booking).forEach((d) => existing.add(d));
         store[meta.suiteId] = Array.from(existing).sort();
         await writeBlockedDates(store);
+
+        void sendBookingEmails({
+          suiteId: meta.suiteId,
+          checkIn: meta.checkIn,
+          checkOut: meta.checkOut,
+          adults: Number(meta.adults),
+          children: Number(meta.children),
+          totalEuro: amount ? parseFloat(amount) : 0,
+          paypalOrderId: captureData.id,
+          payerEmail,
+        }).catch((e) => console.error("capture-order: invio email:", e));
       } catch (err) {
         // Non bloccare la risposta al client per un errore di persistenza
         console.error("capture-order: errore salvataggio booking:", err);
