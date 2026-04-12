@@ -4,6 +4,7 @@ const nextConfig: NextConfig = {
   images: {
     remotePatterns: [
       { protocol: "https", hostname: "www.comolakesuites.com", pathname: "/**" },
+      { protocol: "https", hostname: "www.comolakesuites.eu", pathname: "/**" },
     ],
   },
   async redirects() {

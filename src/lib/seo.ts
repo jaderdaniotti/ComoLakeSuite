@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 
-export const SITE_URL = "https://www.comolakesuites.com";
+export const SITE_URL = "https://www.comolakesuites.eu";
 export const SITE_NAME = "Como Lake Suites";
 export const DEFAULT_OG_IMAGE = "/opengraph-image.png";
 export const DEFAULT_SEO_KEYWORDS = [
