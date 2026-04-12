@@ -1,0 +1,42 @@
+# Sincronizza le date OTA (feed iCal Booking/Airbnb → ota-dates.json) chiamando
+# l'endpoint già usato dal cron Vercel.
+#
+# Piano GitHub gratuito + repo pubblico: minuti Actions inclusi senza costo (fair use).
+# Frequenza schedule: GitHub impone almeno 5 minuti tra esecuzioni → max ~288 run/giorno.
+#
+# Setup (Settings → Secrets and variables → Actions → New repository secret):
+#   AVAILABILITY_SYNC_URL  es. https://www.comolakesuites.eu/api/availability/sync
+#   CRON_SECRET            stesso valore della variabile CRON_SECRET su Vercel
+#
+# Il cron giornaliero in vercel.json resta come backup se GitHub non gira.
+
+name: Sync OTA availability (iCal)
+
+on:
+  schedule:
+    # Ogni 5 minuti (UTC) — frequenza massima consentita per schedule su GitHub Actions.
+    - cron: "*/5 * * * *"
+  workflow_dispatch:
+
+concurrency:
+  group: availability-sync
+  cancel-in-progress: false
+
+jobs:
+  ping-sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - name: Trigger /api/availability/sync
+        env:
+          SYNC_URL: ${{ secrets.AVAILABILITY_SYNC_URL }}
+          CRON_SECRET: ${{ secrets.CRON_SECRET }}
+        run: |
+          set -euo pipefail
+          if [ -z "${SYNC_URL:-}" ] || [ -z "${CRON_SECRET:-}" ]; then
+            echo "::error::Imposta i secret AVAILABILITY_SYNC_URL e CRON_SECRET nelle Actions del repository."
+            exit 1
+          fi
+          curl -fsS --max-time 120 \
+            -H "x-cron-secret: ${CRON_SECRET}" \
+            "${SYNC_URL}"

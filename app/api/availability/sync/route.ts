@@ -7,18 +7,22 @@ import { syncAllSuites } from "@/src/lib/blockedDates";
  * Scarica tutti i feed iCal configurati (Booking.com, Airbnb, Expedia)
  * per ogni suite e salva i giorni bloccati in public/ota-dates.json.
  *
- * Chiamato dal cron job di Vercel una volta al giorno (vedi vercel.json; UTC).
- * Protetto dal parametro ?key=CRON_SECRET o header x-cron-secret.
+ * Chiamato dal cron job di Vercel una volta al giorno (vedi vercel.json; UTC) e,
+ * opzionalmente, da GitHub Actions ogni 5 min (workflow sync-availability).
+ * Protetto da CRON_SECRET: query ?key=, header x-cron-secret, oppure
+ * Authorization: Bearer … (così invoca anche il cron nativo Vercel).
  */
 
 function isAuthorized(req: NextRequest): boolean {
   const secret = process.env.CRON_SECRET;
   // In sviluppo senza secret configurato: accesso libero
   if (!secret) return true;
-  const key =
-    req.nextUrl.searchParams.get("key") ??
-    req.headers.get("x-cron-secret");
-  return key === secret;
+  const qp = req.nextUrl.searchParams.get("key");
+  if (qp === secret) return true;
+  if (req.headers.get("x-cron-secret") === secret) return true;
+  const auth = req.headers.get("authorization");
+  if (auth === `Bearer ${secret}`) return true;
+  return false;
 }
 
 export async function GET(req: NextRequest) {
