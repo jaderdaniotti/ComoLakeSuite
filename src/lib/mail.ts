@@ -159,9 +159,12 @@ export type BookingMailPayload = {
   totalEuro: number;
   paypalOrderId: string;
   payerEmail: string | null;
+  bookerName: string;
+  bookerEmail: string;
+  bookerPhone: string;
 };
 
-/** Notifica allo staff + conferma all'ospite (se email PayPal disponibile). */
+/** Notifica allo staff + conferma al prenotante (email modulo o, in fallback, email PayPal). */
 export async function sendBookingEmails(payload: BookingMailPayload): Promise<void> {
   const suite = suiteDisplayName(payload.suiteId);
   const checkIn = formatDateIt(payload.checkIn);
@@ -173,6 +176,20 @@ export async function sendBookingEmails(payload: BookingMailPayload): Promise<vo
       : "");
   const total = formatEuro(payload.totalEuro);
   const payer = payload.payerEmail?.trim() || null;
+  const bookerName = (payload.bookerName ?? "").trim();
+  const bookerEmail = (payload.bookerEmail ?? "").trim() || null;
+  const bookerPhone = (payload.bookerPhone ?? "").trim();
+  const replyToAdmin = bookerEmail || payer || undefined;
+
+  const adminBookerRows =
+    (bookerName ? row("Prenotante", escapeHtml(bookerName)) : "") +
+    (bookerEmail ? row("Email prenotante", escapeHtml(bookerEmail)) : "") +
+    (bookerPhone ? row("Telefono", escapeHtml(bookerPhone)) : "") +
+    (payer && payer.toLowerCase() !== (bookerEmail ?? "").toLowerCase()
+      ? row("Email account pagamento", escapeHtml(payer))
+      : payer && !bookerEmail
+        ? row("Email pagatore", escapeHtml(payer))
+        : "");
 
   const adminRows =
     row("Suite", escapeHtml(suite)) +
@@ -181,7 +198,7 @@ export async function sendBookingEmails(payload: BookingMailPayload): Promise<vo
     row("Ospiti", escapeHtml(guests)) +
     row("Totale pagato", escapeHtml(total)) +
     row("Ordine PayPal", escapeHtml(payload.paypalOrderId)) +
-    (payer ? row("Email pagatore", escapeHtml(payer)) : "");
+    adminBookerRows;
 
   const adminHtml = layout(
     heading(BRAND, "Nuova prenotazione confermata") + detailsTable(adminRows)
@@ -190,17 +207,22 @@ export async function sendBookingEmails(payload: BookingMailPayload): Promise<vo
   const adminText = [
     `${BRAND} — Nuova prenotazione confermata`,
     "",
+    bookerName ? `Prenotante: ${bookerName}` : "",
+    bookerEmail ? `Email prenotante: ${bookerEmail}` : "",
+    bookerPhone ? `Telefono: ${bookerPhone}` : "",
     `Suite: ${suite}`,
     `Check-in: ${checkIn}`,
     `Check-out: ${checkOut}`,
     `Ospiti: ${guests}`,
     `Totale pagato: ${total}`,
     `Ordine PayPal: ${payload.paypalOrderId}`,
-    payer ? `Email pagatore: ${payer}` : "",
+    payer && payer.toLowerCase() !== (bookerEmail ?? "").toLowerCase()
+      ? `Email account pagamento: ${payer}`
+      : "",
     "",
     FOOTER_ADDRESS,
   ]
-    .filter(Boolean)
+    .filter((line) => line !== "")
     .join("\n");
 
   await sendMail({
@@ -208,21 +230,30 @@ export async function sendBookingEmails(payload: BookingMailPayload): Promise<vo
     subject: `Prenotazione: ${suite} · ${checkIn}`,
     html: adminHtml,
     text: adminText,
-    replyTo: payer || undefined,
+    replyTo: replyToAdmin,
   });
 
-  if (!payer) return;
+  const guestTo = bookerEmail || payer;
+  if (!guestTo) return;
+
+  const firstName = bookerName.length > 0 ? bookerName.split(/\s+/)[0] ?? bookerName : "";
+  const salutoHtml =
+    firstName.length > 0
+      ? `Ciao ${escapeHtml(firstName)},`
+      : "Ciao,";
+  const guestIntroHtml = `${salutoHtml} grazie per aver scelto ${escapeHtml(BRAND)}. Abbiamo registrato il pagamento e la prenotazione. Riceverai ulteriori dettagli o comunicazioni da parte nostra se necessario.`;
+  const guestIntroText = `${firstName.length > 0 ? `Ciao ${firstName},` : "Ciao,"} grazie per aver scelto ${BRAND}. Abbiamo registrato il pagamento e la prenotazione. Riceverai ulteriori dettagli o comunicazioni da parte nostra se necessario.`;
 
   const guestRows =
+    (bookerName ? row("Prenotante", escapeHtml(bookerName)) : "") +
+    (bookerEmail ? row("Email", escapeHtml(bookerEmail)) : "") +
+    (bookerPhone ? row("Telefono", escapeHtml(bookerPhone)) : "") +
     row("Suite", escapeHtml(suite)) +
     row("Check-in", escapeHtml(checkIn)) +
     row("Check-out", escapeHtml(checkOut)) +
     row("Ospiti", escapeHtml(guests)) +
     row("Totale", escapeHtml(total)) +
     row("Riferimento ordine", escapeHtml(payload.paypalOrderId));
-
-  const guestIntroHtml = `Grazie per aver scelto ${escapeHtml(BRAND)}. Abbiamo registrato il pagamento e la prenotazione. Riceverai ulteriori dettagli o comunicazioni da parte nostra se necessario.`;
-  const guestIntroText = `Grazie per aver scelto ${BRAND}. Abbiamo registrato il pagamento e la prenotazione. Riceverai ulteriori dettagli o comunicazioni da parte nostra se necessario.`;
 
   const guestHtml = layout(
     heading(BRAND, "Prenotazione ricevuta", guestIntroHtml) +
@@ -236,6 +267,9 @@ export async function sendBookingEmails(payload: BookingMailPayload): Promise<vo
     "",
     guestIntroText,
     "",
+    bookerName ? `Prenotante: ${bookerName}` : "",
+    bookerEmail ? `Email: ${bookerEmail}` : "",
+    bookerPhone ? `Telefono: ${bookerPhone}` : "",
     `Suite: ${suite}`,
     `Check-in: ${checkIn}`,
     `Check-out: ${checkOut}`,
@@ -244,10 +278,12 @@ export async function sendBookingEmails(payload: BookingMailPayload): Promise<vo
     `Riferimento ordine: ${payload.paypalOrderId}`,
     "",
     FOOTER_ADDRESS,
-  ].join("\n");
+  ]
+    .filter((line) => line !== "")
+    .join("\n");
 
   await sendMail({
-    to: payer,
+    to: guestTo,
     subject: `Conferma prenotazione · ${suite}`,
     html: guestHtml,
     text: guestText,

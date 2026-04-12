@@ -14,6 +14,10 @@ export type Booking = {
   totalEuro: number;
   paypalOrderId: string;
   payerEmail: string | null;
+  /** Dati compilati sul sito prima del pagamento (assenti nelle prenotazioni salvate prima di questa funzione) */
+  bookerName?: string;
+  bookerEmail?: string;
+  bookerPhone?: string;
   createdAt: string;    // ISO timestamp
 };
 

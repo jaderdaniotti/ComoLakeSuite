@@ -55,7 +55,7 @@ export async function GET(
         `DTSTART;VALUE=DATE:${toICalDate(b.checkIn)}`,
         `DTEND;VALUE=DATE:${toICalDate(b.checkOut)}`,
         `SUMMARY:Prenotazione ${suiteLabel}`,
-        `DESCRIPTION:Ospiti: ${b.adults} adulti${b.children > 0 ? ` + ${b.children} bambini` : ""} | PayPal: ${b.paypalOrderId}`,
+        `DESCRIPTION:Ospiti: ${b.adults} adulti${b.children > 0 ? ` + ${b.children} bambini` : ""} | PayPal: ${b.paypalOrderId}${b.bookerName ? ` | Prenotante: ${b.bookerName}` : ""}`,
         "END:VEVENT",
       ].join("\r\n");
     })

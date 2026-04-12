@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { saveBooking, generateId, bookingToDates } from "@/src/lib/bookings";
 import { readBlockedDates, writeBlockedDates } from "@/src/lib/blockedDates";
 import { sendBookingEmails } from "@/src/lib/mail";
+import { parseBookingPayPalMeta } from "@/src/lib/bookingPaypalMeta";
 
 async function getPayPalAccessToken(): Promise<string> {
   const clientId = process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID!;
@@ -79,13 +80,7 @@ export async function POST(req: NextRequest) {
     // ── Persisti il booking e aggiorna subito i giorni bloccati ──────────────
     if (captureStatus === "COMPLETED" && customId) {
       try {
-        const meta = JSON.parse(customId) as {
-          suiteId: string;
-          checkIn: string;
-          checkOut: string;
-          adults: number;
-          children: number;
-        };
+        const meta = parseBookingPayPalMeta(customId);
 
         const booking = {
           id: generateId(),
@@ -97,6 +92,9 @@ export async function POST(req: NextRequest) {
           totalEuro: amount ? parseFloat(amount) : 0,
           paypalOrderId: captureData.id,
           payerEmail,
+          bookerName: meta.bookerName,
+          bookerEmail: meta.bookerEmail,
+          bookerPhone: meta.bookerPhone,
           createdAt: new Date().toISOString(),
         };
 
@@ -119,6 +117,9 @@ export async function POST(req: NextRequest) {
           totalEuro: amount ? parseFloat(amount) : 0,
           paypalOrderId: captureData.id,
           payerEmail,
+          bookerName: meta.bookerName,
+          bookerEmail: meta.bookerEmail,
+          bookerPhone: meta.bookerPhone,
         }).catch((e) => console.error("capture-order: invio email:", e));
       } catch (err) {
         // Non bloccare la risposta al client per un errore di persistenza

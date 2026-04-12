@@ -1,18 +1,12 @@
 "use client";
 
+import Image from "next/image";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
-import { CheckCircle, CalendarDays, Users, BedDouble, Phone, Mail, CalendarPlus } from "lucide-react";
+import { CheckCircle, CalendarDays, Users, BedDouble, Phone, Mail, CalendarPlus, User } from "lucide-react";
 import { formatEuro } from "@/src/lib/pricing";
-
-const SUITE_LABELS: Record<string, string> = {
-  "suite-cavour": "Suite Cavour",
-  "suite-volta": "Suite Volta",
-  "suite-vista-duomo": "Suite Vista Duomo",
-  "suite-dante": "Suite Dante",
-  "suite-cernobbio": "Suite Cernobbio",
-  "suite-como-sole": "Suite Como Sole",
-};
+import { SUITE_LABELS } from "@/src/lib/suiteLabels";
+import { suiteHeroImage } from "@/src/lib/suiteHeroImages";
 
 export default function ConfermaContent() {
   const params = useSearchParams();
@@ -26,8 +20,13 @@ export default function ConfermaContent() {
   const nights = Number(params.get("nights") ?? 0);
   const orderId = params.get("orderId") ?? "";
   const payerEmail = params.get("payerEmail") ?? "";
+  const bookerName = params.get("bookerName") ?? "";
+  const bookerEmail = params.get("bookerEmail") ?? "";
+  const bookerPhone = params.get("bookerPhone") ?? "";
 
   const suiteLabel = SUITE_LABELS[suiteId] ?? suiteId;
+  const confirmEmail = bookerEmail.trim() || payerEmail.trim();
+  const heroSrc = suiteHeroImage(suiteId);
 
   // Link "Aggiungi al calendario" in formato Google Calendar
   const googleCalUrl = (() => {
@@ -56,22 +55,36 @@ export default function ConfermaContent() {
   };
 
   return (
-    <div className="min-h-screen bg-grigioscuro pt-40">
-      <div className="mx-auto max-w-3xl px-4 pb-14 sm:px-6 lg:px-8">
-        {/* Success header */}
+    <div className="relative min-h-screen">
+      <div className="absolute inset-0 z-0 overflow-hidden" aria-hidden>
+        <Image
+          src={heroSrc}
+          alt=""
+          fill
+          className="object-cover object-center"
+          sizes="100vw"
+          priority
+        />
+        <div className="absolute inset-0 bg-linear-to-b from-scuro/80 via-scuro/55 to-scuro/75" />
+      </div>
+
+      <div className="relative z-10 mx-auto max-w-3xl px-4 pb-14 pt-40 sm:px-6 lg:px-8">
+        {/* Success header (testo chiaro sul layer scuro) */}
         <div className="mb-10 flex flex-col items-center text-center space-y-3">
-          <div className="flex h-16 w-16 items-center justify-center rounded-full bg-green-100 text-green-600">
+          <div className="flex h-16 w-16 items-center justify-center rounded-full bg-bianco/95 text-green-600 shadow-sm">
             <CheckCircle size={36} strokeWidth={1.5} />
           </div>
-          <h1 className="text-2xl font-light text-scuro md:text-3xl">
+          <h1 className="text-2xl font-light text-bianco md:text-3xl">
             Prenotazione confermata!
           </h1>
-          <p className="max-w-md text-sm text-scuro/65">
-            Il pagamento è stato ricevuto con successo. Riceverai a breve una
-            conferma{payerEmail ? ` all'indirizzo ${payerEmail}` : " via email"}.
+          <p className="max-w-md text-sm text-bianco/85 leading-relaxed">
+            Il pagamento è stato ricevuto con successo.
+            {confirmEmail
+              ? ` Abbiamo inviato la conferma all’indirizzo ${confirmEmail}.`
+              : " Riceverai a breve una conferma via email se disponibile."}
           </p>
           {orderId && (
-            <p className="text-xs text-scuro/45 font-mono">
+            <p className="text-xs text-bianco/55 font-mono">
               ID ordine: {orderId}
             </p>
           )}
@@ -118,6 +131,30 @@ export default function ConfermaContent() {
                 </p>
               </div>
             </div>
+
+            {(bookerName || bookerEmail || bookerPhone) && (
+              <div className="rounded-xl border border-blu/10 bg-scuro/2 p-4 space-y-3 text-sm">
+                <p className="text-xs font-semibold uppercase tracking-wide text-scuro/55 flex items-center gap-2">
+                  <User size={14} className="text-blu" aria-hidden />
+                  Prenotante
+                </p>
+                {bookerName && (
+                  <p className="font-medium text-scuro">{bookerName}</p>
+                )}
+                {bookerEmail && (
+                  <a href={`mailto:${bookerEmail}`} className="flex items-center gap-2 text-blu hover:underline">
+                    <Mail size={14} />
+                    {bookerEmail}
+                  </a>
+                )}
+                {bookerPhone && (
+                  <a href={`tel:${bookerPhone.replace(/\s/g, "")}`} className="flex items-center gap-2 text-blu hover:underline">
+                    <Phone size={14} />
+                    {bookerPhone}
+                  </a>
+                )}
+              </div>
+            )}
           </div>
 
           {total > 0 && (
@@ -165,11 +202,11 @@ export default function ConfermaContent() {
                 +39 340 940 9123
               </a>
               <a
-                href="mailto:info@comolakedsuites.it"
+                href="mailto:info@comolakesuites.com"
                 className="flex items-center gap-2 text-blu hover:underline"
               >
                 <Mail size={14} />
-                info@comolakedsuites.it
+                info@comolakesuites.com
               </a>
             </div>
             <div className="space-y-1">

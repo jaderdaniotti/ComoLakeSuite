@@ -9,18 +9,9 @@ import {
   type ReactPayPalScriptOptions,
 } from "@paypal/react-paypal-js";
 import { formatEuro } from "@/src/lib/pricing";
-import { ArrowLeft, CalendarDays, Users, BedDouble } from "lucide-react";
-import images from "@/src/images";
+import { ArrowLeft, CalendarDays, Users, BedDouble, User, Mail, Phone } from "lucide-react";
 import { SUITE_LABELS } from "@/src/lib/suiteLabels";
-
-const SUITE_HERO: Record<string, (typeof images)["suiteVoltaHero"]> = {
-  "suite-cavour": images.suiteCavourHero,
-  "suite-volta": images.suiteVoltaHero,
-  "suite-vista-duomo": images.suiteVistaDuomoHero,
-  "suite-dante": images.suiteDanteHero,
-  "suite-cernobbio": images.suiteCernobbioHero,
-  "suite-como-sole": images.suiteComoSoleHero,
-};
+import { suiteHeroImage } from "@/src/lib/suiteHeroImages";
 
 const paypalScriptOptions: ReactPayPalScriptOptions = {
   clientId: process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID!,
@@ -48,10 +39,20 @@ export default function PrenotaContent() {
   const avgPerNight = Number(params.get("avgPerNight") ?? 0);
 
   const suiteLabel = SUITE_LABELS[suiteId] ?? suiteId;
-  const heroSrc = SUITE_HERO[suiteId] ?? images.fotocomo;
+  const heroSrc = suiteHeroImage(suiteId);
 
   const [payError, setPayError] = useState<string | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [bookerName, setBookerName] = useState("");
+  const [bookerEmail, setBookerEmail] = useState("");
+  const [bookerPhone, setBookerPhone] = useState("");
+
+  const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(bookerEmail.trim());
+  const canPay =
+    bookerName.trim().length >= 2 &&
+    bookerName.trim().length <= 80 &&
+    emailOk &&
+    bookerPhone.trim().length <= 40;
 
   // Redirect back if params are missing / invalid
   useEffect(() => {
@@ -76,7 +77,17 @@ export default function PrenotaContent() {
     const res = await fetch("/api/paypal/create-order", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ amount: total, suiteId, checkIn, checkOut, adults, children }),
+      body: JSON.stringify({
+        amount: total,
+        suiteId,
+        checkIn,
+        checkOut,
+        adults,
+        children,
+        bookerName: bookerName.trim(),
+        bookerEmail: bookerEmail.trim(),
+        bookerPhone: bookerPhone.trim(),
+      }),
     });
     if (!res.ok) {
       const err = await res.json();
@@ -111,6 +122,9 @@ export default function PrenotaContent() {
         nights: String(nights),
         orderId: capture.orderId,
         payerEmail: capture.payerEmail ?? "",
+        bookerName: bookerName.trim(),
+        bookerEmail: bookerEmail.trim(),
+        bookerPhone: bookerPhone.trim(),
       });
       router.push(`/prenota/conferma?${q.toString()}`);
     } catch (err) {
@@ -232,9 +246,82 @@ export default function PrenotaContent() {
             </p>
           </div>
 
-          {/* Right: PayPal buttons */}
+          {/* Right: dati prenotante + PayPal */}
           <div className="rounded-2xl bg-bianco p-6 shadow-sm space-y-5">
             <h2 className="text-base font-semibold text-scuro uppercase tracking-wide">
+              Dati del prenotante
+            </h2>
+            <p className="text-xs text-scuro/55 leading-relaxed">
+              Compila nome, email e telefono prima di pagare: servono per la conferma e per
+              contattarti in caso di necessità.
+            </p>
+            <div className="space-y-4">
+              <div>
+                <label htmlFor="booker-name" className="sr-only">
+                  Nome e cognome
+                </label>
+                <div className="relative">
+                  <User
+                    className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-scuro/40"
+                    aria-hidden
+                  />
+                  <input
+                    id="booker-name"
+                    type="text"
+                    autoComplete="name"
+                    value={bookerName}
+                    onChange={(e) => setBookerName(e.target.value)}
+                    maxLength={80}
+                    placeholder="Nome e cognome"
+                    className="w-full rounded-lg border border-blu/15 bg-bianco py-3 pl-10 pr-3 text-sm text-scuro placeholder:text-scuro/40 focus:border-blu focus:outline-none focus:ring-1 focus:ring-blu"
+                  />
+                </div>
+              </div>
+              <div>
+                <label htmlFor="booker-email" className="sr-only">
+                  Email
+                </label>
+                <div className="relative">
+                  <Mail
+                    className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-scuro/40"
+                    aria-hidden
+                  />
+                  <input
+                    id="booker-email"
+                    type="email"
+                    autoComplete="email"
+                    value={bookerEmail}
+                    onChange={(e) => setBookerEmail(e.target.value)}
+                    maxLength={120}
+                    placeholder="Email"
+                    className="w-full rounded-lg border border-blu/15 bg-bianco py-3 pl-10 pr-3 text-sm text-scuro placeholder:text-scuro/40 focus:border-blu focus:outline-none focus:ring-1 focus:ring-blu"
+                  />
+                </div>
+              </div>
+              <div>
+                <label htmlFor="booker-phone" className="sr-only">
+                  Telefono (opzionale)
+                </label>
+                <div className="relative">
+                  <Phone
+                    className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-scuro/40"
+                    aria-hidden
+                  />
+                  <input
+                    id="booker-phone"
+                    type="tel"
+                    autoComplete="tel"
+                    value={bookerPhone}
+                    onChange={(e) => setBookerPhone(e.target.value)}
+                    maxLength={40}
+                    placeholder="Telefono (consigliato)"
+                    className="w-full rounded-lg border border-blu/15 bg-bianco py-3 pl-10 pr-3 text-sm text-scuro placeholder:text-scuro/40 focus:border-blu focus:outline-none focus:ring-1 focus:ring-blu"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <h2 className="text-base font-semibold text-scuro uppercase tracking-wide pt-2 border-t border-blu/10">
               Metodo di pagamento
             </h2>
 
@@ -258,10 +345,15 @@ export default function PrenotaContent() {
                   onApprove={onApprove}
                   onError={onError}
                   onCancel={() => { setPayError(null); setIsProcessing(false); }}
-                  disabled={isProcessing}
+                  disabled={isProcessing || !canPay}
                 />
               </div>
             </PayPalScriptProvider>
+            {!canPay && (
+              <p className="text-xs text-scuro/50 text-center">
+                Compila nome (2–80 caratteri) e un’email valida per abilitare il pagamento.
+              </p>
+            )}
 
             {payError && (
               <div className="rounded-lg bg-red-50 border border-red-200 px-4 py-3 text-sm text-red-700">

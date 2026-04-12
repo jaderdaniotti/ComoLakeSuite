@@ -1,4 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
+import {
+  stringifyBookingPayPalMeta,
+  type BookingPayPalMeta,
+} from "@/src/lib/bookingPaypalMeta";
 
 /**
  * Ottieni un access token OAuth 2.0 da PayPal.
@@ -34,20 +38,60 @@ async function getPayPalAccessToken(): Promise<string> {
 /**
  * POST /api/paypal/create-order
  *
- * Body: { amount: number, suiteId: string, checkIn: string, checkOut: string, adults: number, children: number }
+ * Body: { amount, suiteId, checkIn, checkOut, adults, children, bookerName, bookerEmail, bookerPhone? }
  * Response: { orderId: string }
  */
+function isValidEmail(s: string): boolean {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s);
+}
+
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { amount, suiteId, checkIn, checkOut, adults, children } = body as {
+    const {
+      amount,
+      suiteId,
+      checkIn,
+      checkOut,
+      adults,
+      children,
+      bookerName,
+      bookerEmail,
+      bookerPhone,
+    } = body as {
       amount: number;
       suiteId: string;
       checkIn: string;
       checkOut: string;
       adults: number;
       children: number;
+      bookerName?: string;
+      bookerEmail?: string;
+      bookerPhone?: string;
     };
+
+    const bn = (bookerName ?? "").trim();
+    const be = (bookerEmail ?? "").trim().toLowerCase();
+    const bp = (bookerPhone ?? "").trim();
+
+    if (bn.length < 2 || bn.length > 80) {
+      return NextResponse.json(
+        { error: "Indica nome e cognome del prenotante (2–80 caratteri)." },
+        { status: 400 }
+      );
+    }
+    if (!be || !isValidEmail(be) || be.length > 120) {
+      return NextResponse.json(
+        { error: "Indica un’email di contatto valida per il prenotante." },
+        { status: 400 }
+      );
+    }
+    if (bp.length > 40) {
+      return NextResponse.json(
+        { error: "Il numero di telefono è troppo lungo." },
+        { status: 400 }
+      );
+    }
 
     if (!amount || amount <= 0) {
       return NextResponse.json(
@@ -66,6 +110,17 @@ export async function POST(req: NextRequest) {
 
     const description = `${suiteId} | ${checkIn} - ${checkOut} | ${nights} notti | ${adults} adulti${children > 0 ? ` + ${children} bambini` : ""}`;
 
+    const meta: BookingPayPalMeta = {
+      suiteId,
+      checkIn,
+      checkOut,
+      adults: Number(adults),
+      children: Number(children),
+      bookerName: bn,
+      bookerEmail: be,
+      bookerPhone: bp,
+    };
+
     const orderPayload = {
       intent: "CAPTURE",
       purchase_units: [
@@ -76,7 +131,7 @@ export async function POST(req: NextRequest) {
             value: 0.01.toFixed(2), // Per test, usare un importo fisso di 0.10 EUR. In produzione, sostituire con amount.toFixed(2)     
           },
           description,
-          custom_id: JSON.stringify({ suiteId, checkIn, checkOut, adults, children }),
+          custom_id: stringifyBookingPayPalMeta(meta),
         },
       ],
       application_context: {
