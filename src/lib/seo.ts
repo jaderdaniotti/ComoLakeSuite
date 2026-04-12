@@ -76,7 +76,6 @@ export function buildPageMetadata({
       url: pathname,
       siteName: SITE_NAME,
       locale: "it_IT",
-      localeAlternate: ["en_US"],
       type: "website",
       images: [
         {

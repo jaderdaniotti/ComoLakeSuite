@@ -1,9 +1,6 @@
 import type { MetadataRoute } from "next";
 import { SITE_URL } from "@/src/lib/seo";
 
-export const dynamic = "force-static";
-export const revalidate = 60 * 60 * 24; // Rebuild sitemap daily.
-
 type SitemapEntry = {
   pathname: string;
   changeFrequency: MetadataRoute.Sitemap[number]["changeFrequency"];
