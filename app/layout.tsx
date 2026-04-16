@@ -7,6 +7,7 @@ import Footer from "@/src/components/Footer";
 import WhatsAppFab from "@/src/components/WhatsAppFab";
 import LanguageProvider from "@/src/components/LanguageProvider";
 import logoVerticale from "@/src/images/logo-verticale.webp";
+import { Analytics } from "@vercel/analytics/next"
 import {
   SITE_NAME,
   SITE_URL,
@@ -69,6 +70,7 @@ export default async function RootLayout({
           <main className="flex-1">{children}</main>
           <Footer />
           <WhatsAppFab />
+          <Analytics />
         </LanguageProvider>
       </body>
     </html>
