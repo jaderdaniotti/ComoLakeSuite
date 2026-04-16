@@ -127,8 +127,7 @@ export async function POST(req: NextRequest) {
         {
           amount: {
             currency_code: "EUR",
-            // value: amount.toFixed(2), // In produzione, usare l'importo reale calcolatok
-            value: 0.01.toFixed(2), // Per test, usare un importo fisso di 0.10 EUR. In produzione, sostituire con amount.toFixed(2)     
+            value: amount.toFixed(2),
           },
           description,
           custom_id: stringifyBookingPayPalMeta(meta),

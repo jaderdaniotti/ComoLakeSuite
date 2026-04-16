@@ -96,10 +96,10 @@ export default async function ContattiPage() {
                           aria-hidden
                         />
                         <a
-                          href="mailto:info@comolakesuites.com"
+                          href="mailto:comolakesuitesvistalago@gmail.com"
                           className="leading-snug break-all hover:underline"
                         >
-                          info@comolakesuites.com
+                          comolakesuitesvistalago@gmail.com
                         </a>
                       </li>
                       <li className="flex gap-1">
@@ -143,10 +143,10 @@ export default async function ContattiPage() {
                           aria-hidden
                         />
                         <a
-                          href="mailto:info@comolakesuites.com"
+                          href="mailto:comolakesuitesvistalago@gmail.com"
                           className="leading-snug break-all hover:underline"
                         >
-                          info@comolakesuites.com
+                          comolakesuitesvistalago@gmail.com
                         </a>
                       </li>
                       <li className="flex gap-1">

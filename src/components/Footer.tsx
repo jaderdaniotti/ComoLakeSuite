@@ -59,8 +59,8 @@ export default function Footer() {
               </li>
               <li className="flex items-center gap-2">
                 <Mail size={18} className="shrink-0 text-bluchiaro" />
-                <a href="mailto:info@comolakesuites.com" className="hover:underline">
-                  info@comolakesuites.com
+                <a href="mailto:comolakesuitesvistalago@gmail.com" className="hover:underline">
+                  comolakesuitesvistalago@gmail.com
                 </a>
               </li>
               <li className="flex items-start gap-2">
@@ -85,8 +85,8 @@ export default function Footer() {
               </li>
               <li className="flex items-center gap-2">
                 <Mail size={18} className="shrink-0 text-bluchiaro" />
-                <a href="mailto:info@comolakesuites.com" className="hover:underline">
-                  info@comolakesuites.com
+                <a href="mailto:comolakesuitesvistalago@gmail.com" className="hover:underline">
+                  comolakesuitesvistalago@gmail.com
                 </a>
               </li>
               <li className="flex items-start gap-2">

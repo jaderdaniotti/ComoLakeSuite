@@ -114,7 +114,7 @@ export const lodgingBusinessJsonLd = {
   "@type": "LodgingBusiness",
   name: SITE_NAME,
   url: SITE_URL,
-  email: "info@comolakesuites.com",
+  email: "comolakesuitesvistalago@gmail.com",
   telephone: "+39 340 9409123",
   priceRange: "EUR",
   address: {

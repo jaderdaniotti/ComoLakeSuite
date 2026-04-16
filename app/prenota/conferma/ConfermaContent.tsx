@@ -229,11 +229,11 @@ export default function ConfermaContent() {
                 +39 340 940 9123
               </a>
               <a
-                href="mailto:info@comolakesuites.com"
+                href="mailto:comolakesuitesvistalago@gmail.com"
                 className="flex items-center gap-2 text-blu hover:underline"
               >
                 <Mail size={14} />
-                info@comolakesuites.com
+                comolakesuitesvistalago@gmail.com
               </a>
             </div>
             <div className="space-y-1">
