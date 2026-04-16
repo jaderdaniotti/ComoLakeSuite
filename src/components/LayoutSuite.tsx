@@ -59,21 +59,34 @@ export default function LayoutSuite({
   // Trigger sync OTA on-demand (con throttling lato server: max 1 ogni 5 min)
   useEffect(() => {
     if (!suitePriceId) return;
-    
-    // 1. Trigger sync in background (non blocca il caricamento)
-    fetch("/api/availability/sync", { method: "GET" }).catch(() => {
-      // Ignora errori: la sync è best-effort
-    });
 
-    // 2. Carica le date bloccate (include sia OTA che dirette)
-    fetch(`/api/availability/blocked?suiteId=${suitePriceId}`)
-      .then((r) => r.json())
-      .then((data: { blocked: string[] }) => {
-        setBlockedDates(new Set(data.blocked));
-      })
-      .catch(() => {
+    let active = true;
+
+    const loadBlockedDates = async () => {
+      try {
+        // 1) Prova prima a sincronizzare le OTA (throttled lato server)
+        await fetch("/api/availability/sync", { method: "GET" });
+      } catch {
+        // Best-effort: anche se la sync fallisce, proviamo comunque a leggere il calendario corrente.
+      }
+
+      try {
+        // 2) Legge le date bloccate aggiornate (OTA + dirette)
+        const res = await fetch(`/api/availability/blocked?suiteId=${suitePriceId}`);
+        const data = (await res.json()) as { blocked: string[] };
+        if (active) {
+          setBlockedDates(new Set(data.blocked));
+        }
+      } catch {
         // Fallback silenzioso: il calendario rimane navigabile
-      });
+      }
+    };
+
+    void loadBlockedDates();
+
+    return () => {
+      active = false;
+    };
   }, [suitePriceId]);
 
   const addMonths = (date: Date, amount: number) =>

@@ -23,8 +23,8 @@ export async function GET(req: NextRequest) {
     { suiteId, blocked },
     {
       headers: {
-        // Cache lato CDN per 30 minuti, stale-while-revalidate 1h
-        "Cache-Control": "public, s-maxage=1800, stale-while-revalidate=3600",
+        // Risposta sempre fresca: dopo una prenotazione le date devono riflettersi subito.
+        "Cache-Control": "no-store",
       },
     }
   );

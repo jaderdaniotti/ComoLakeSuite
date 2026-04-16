@@ -42,7 +42,7 @@ export async function GET(
   const allBookings = await readBookings();
   const suiteBookings = allBookings.filter((b) => b.suiteId === suiteId);
   const suiteLabel = SUITE_LABELS[suiteId] ?? suiteId;
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.comolakesuites.com";
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.comolakesuites.eu";
 
   const events = suiteBookings
     .map((b) => {

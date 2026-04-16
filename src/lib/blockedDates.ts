@@ -4,15 +4,26 @@ import path from "path";
 import fs from "fs/promises";
 import { get, put } from "@vercel/blob";
 
-/** Pathname nello store Blob (stesso file aggiornato da syncAllSuites). */
-const OTA_BLOB_PATHNAME = "availability/ota-dates.json";
+type BlobAccess = "public" | "private";
 
-function useOtaBlobStore(): boolean {
+/** Pathname nello store Blob. */
+const OTA_BLOB_PATHNAME = "availability/ota-dates.json";
+const DIRECT_BLOB_PATHNAME = "availability/direct-dates.json";
+
+function hasOtaBlobStore(): boolean {
   return Boolean(process.env.BLOB_READ_WRITE_TOKEN?.trim());
 }
 
+function getBlobAccessOption(): BlobAccess {
+  const raw = (process.env.BLOB_OBJECT_ACCESS ?? "").trim().toLowerCase();
+  if (raw === "public" || raw === "private") {
+    return raw;
+  }
+  return "private";
+}
+
 async function readOtaFromBlob(): Promise<BlockedDatesStore> {
-  const result = await get(OTA_BLOB_PATHNAME, { access: "public" });
+  const result = await get(OTA_BLOB_PATHNAME, { access: getBlobAccessOption() });
   if (!result || result.statusCode !== 200 || !result.stream) {
     return {};
   }
@@ -25,33 +36,34 @@ async function readOtaFromBlob(): Promise<BlockedDatesStore> {
 }
 
 async function writeOtaToBlob(data: BlockedDatesStore): Promise<void> {
+  const access = getBlobAccessOption();
   await put(OTA_BLOB_PATHNAME, JSON.stringify(data), {
-    access: "public",
+    access,
     allowOverwrite: true,
     contentType: "application/json",
   });
 }
 
-/** Legge la cache OTA: Blob su Vercel se configurato, altrimenti file locale. */
-async function readOtaStore(): Promise<BlockedDatesStore> {
-  if (useOtaBlobStore()) {
-    return readOtaFromBlob();
+async function readDirectFromBlob(): Promise<BlockedDatesStore> {
+  const result = await get(DIRECT_BLOB_PATHNAME, { access: getBlobAccessOption() });
+  if (!result || result.statusCode !== 200 || !result.stream) {
+    return {};
   }
-  return readStore(OTA_DATES_PATH);
+  const text = await new Response(result.stream).text();
+  try {
+    return JSON.parse(text) as BlockedDatesStore;
+  } catch {
+    return {};
+  }
 }
 
-/** Scrive la cache OTA: Blob se configurato, altrimenti public/ota-dates.json (solo dev / filesystem scrivibile). */
-async function writeOtaStore(data: BlockedDatesStore): Promise<void> {
-  if (useOtaBlobStore()) {
-    await writeOtaToBlob(data);
-    return;
-  }
-  if (process.env.VERCEL) {
-    throw new Error(
-      "Su Vercel la sync OTA non può scrivere su disco. Aggiungi lo store Blob: Vercel Dashboard → Storage → Blob, poi la variabile BLOB_READ_WRITE_TOKEN nel progetto (Production)."
-    );
-  }
-  await fs.writeFile(OTA_DATES_PATH, JSON.stringify(data, null, 2), "utf-8");
+async function writeDirectToBlob(data: BlockedDatesStore): Promise<void> {
+  const access = getBlobAccessOption();
+  await put(DIRECT_BLOB_PATHNAME, JSON.stringify(data), {
+    access,
+    allowOverwrite: true,
+    contentType: "application/json",
+  });
 }
 
 /** Mappa suiteId → feed iCal per OTA (solo variabili env configurate) */
@@ -104,6 +116,10 @@ const DIRECT_DATES_PATH = path.join(process.cwd(), "public", "blocked-dates.json
  */
 const OTA_DATES_PATH = path.join(process.cwd(), "public", "ota-dates.json");
 
+const THROTTLE_MS = 5 * 60 * 1000; // 5 minuti
+let lastSyncTime = 0;
+let lastSyncResult: SyncResult | null = null;
+
 /** Legge un file JSON dello store. Restituisce {} se non esiste. */
 async function readStore(filePath: string): Promise<BlockedDatesStore> {
   try {
@@ -115,12 +131,63 @@ async function readStore(filePath: string): Promise<BlockedDatesStore> {
 }
 
 /**
+ * Legge i blocchi OTA:
+ * - Blob se configurato
+ * - su Vercel senza Blob: sync live + cache in-memory
+ * - in locale: file public/ota-dates.json
+ */
+async function readOtaStore(): Promise<BlockedDatesStore> {
+  if (hasOtaBlobStore()) {
+    return readOtaFromBlob();
+  }
+  return readStore(OTA_DATES_PATH);
+}
+
+/**
+ * Legge i blocchi diretti (prenotazioni dal sito):
+ * - su Vercel: Blob `availability/direct-dates.json` se configurato
+ * - in locale: file public/blocked-dates.json
+ */
+async function readDirectStore(): Promise<BlockedDatesStore> {
+  if (hasOtaBlobStore()) {
+    return readDirectFromBlob();
+  }
+  return readStore(DIRECT_DATES_PATH);
+}
+
+async function writeOtaStore(data: BlockedDatesStore): Promise<void> {
+  if (hasOtaBlobStore()) {
+    await writeOtaToBlob(data);
+    return;
+  }
+  if (process.env.VERCEL) {
+    throw new Error(
+      "BLOB_READ_WRITE_TOKEN non configurato in Vercel: impossibile salvare ota-dates in produzione."
+    );
+  }
+  await fs.writeFile(OTA_DATES_PATH, JSON.stringify(data, null, 2), "utf-8");
+}
+
+async function writeDirectStore(data: BlockedDatesStore): Promise<void> {
+  if (hasOtaBlobStore()) {
+    await writeDirectToBlob(data);
+    return;
+  }
+  if (process.env.VERCEL) {
+    throw new Error(
+      "BLOB_READ_WRITE_TOKEN non configurato in Vercel: impossibile salvare direct-dates in produzione."
+    );
+  }
+  await fs.writeFile(DIRECT_DATES_PATH, JSON.stringify(data, null, 2), "utf-8");
+}
+
+/**
  * Legge e unisce le date dirette + OTA per tutte le suite.
  * Usato da /api/availability/blocked e /api/availability/check.
  */
 export async function readBlockedDates(): Promise<BlockedDatesStore> {
   const [direct, ota] = await Promise.all([
-    readStore(DIRECT_DATES_PATH),
+    readDirectStore(),
     readOtaStore(),
   ]);
 
@@ -137,7 +204,18 @@ export async function readBlockedDates(): Promise<BlockedDatesStore> {
  * NON tocca ota-dates.json.
  */
 export async function writeBlockedDates(data: BlockedDatesStore): Promise<void> {
-  await fs.writeFile(DIRECT_DATES_PATH, JSON.stringify(data, null, 2), "utf-8");
+  await writeDirectStore(data);
+}
+
+/** Aggiunge subito al calendario diretto le date di una nuova prenotazione. */
+export async function addDirectBookingDates(
+  suiteId: string,
+  dates: string[]
+): Promise<void> {
+  const direct = await readDirectStore();
+  const set = new Set([...(direct[suiteId] ?? []), ...dates]);
+  direct[suiteId] = Array.from(set).sort();
+  await writeDirectStore(direct);
 }
 
 export type SyncResult = {
@@ -147,9 +225,47 @@ export type SyncResult = {
   fromCache?: boolean; // true se restituito da cache (throttling attivo)
 };
 
-let lastSyncTime = 0;
-let lastSyncResult: SyncResult | null = null;
-const THROTTLE_MS = 5 * 60 * 1000; // 5 minuti
+async function fetchAllOtaSuites(): Promise<{
+  store: BlockedDatesStore;
+  synced: string[];
+  errors: string[];
+}> {
+  const previous = await readOtaStore();
+  const current: BlockedDatesStore = {};
+  const synced: string[] = [];
+  const errors: string[] = [];
+
+  for (const [suiteId, feeds] of Object.entries(ICAL_URLS)) {
+    const otaDates = new Set<string>();
+    let hasConfiguredFeed = false;
+    let hasSuccessfulFeed = false;
+
+    for (const [source, url] of Object.entries(feeds)) {
+      if (!url) continue;
+      hasConfiguredFeed = true;
+      try {
+        const dates = await fetchBlockedDates(url);
+        dates.forEach((d) => otaDates.add(d));
+        hasSuccessfulFeed = true;
+        synced.push(`${suiteId}:${source} (${dates.length} giorni)`);
+      } catch (err) {
+        const msg = err instanceof Error ? err.message : String(err);
+        errors.push(`${suiteId}:${source} -> ${msg}`);
+        console.error(`[ical-sync] ${suiteId}:${source}`, err);
+      }
+    }
+
+    // Se tutti i feed della suite falliscono, mantieni l'ultimo dato noto.
+    if (hasConfiguredFeed && !hasSuccessfulFeed) {
+      current[suiteId] = [...(previous[suiteId] ?? [])];
+      continue;
+    }
+
+    current[suiteId] = Array.from(otaDates).sort();
+  }
+
+  return { store: current, synced, errors };
+}
 
 /**
  * Scarica tutti i feed iCal OTA configurati e salva il risultato in ota-dates.json.
@@ -170,31 +286,8 @@ export async function syncAllSuites(force = false): Promise<SyncResult> {
 
   console.log(`[sync] 🔄 Nuova sincronizzazione: scarico feed iCal da Booking/Airbnb...`);
 
-  const current = await readOtaStore();
-  const synced: string[] = [];
-  const errors: string[] = [];
-
-  for (const [suiteId, feeds] of Object.entries(ICAL_URLS)) {
-    const otaDates = new Set<string>();
-
-    for (const [source, url] of Object.entries(feeds)) {
-      if (!url) continue;
-      try {
-        const dates = await fetchBlockedDates(url);
-        dates.forEach((d) => otaDates.add(d));
-        synced.push(`${suiteId}:${source} (${dates.length} giorni)`);
-      } catch (err) {
-        const msg = err instanceof Error ? err.message : String(err);
-        errors.push(`${suiteId}:${source} → ${msg}`);
-        console.error(`[ical-sync] ${suiteId}:${source}`, err);
-      }
-    }
-
-    // Aggiorna solo la suite corrente, mantieni le altre intatte
-    current[suiteId] = Array.from(otaDates).sort();
-  }
-
-  await writeOtaStore(current);
+  const { store, synced, errors } = await fetchAllOtaSuites();
+  await writeOtaStore(store);
 
   const result: SyncResult = { synced, errors, syncedAt: new Date().toISOString() };
   lastSyncResult = result;

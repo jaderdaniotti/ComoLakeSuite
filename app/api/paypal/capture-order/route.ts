@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { saveBooking, generateId, bookingToDates } from "@/src/lib/bookings";
-import { readBlockedDates, writeBlockedDates } from "@/src/lib/blockedDates";
+import { addDirectBookingDates } from "@/src/lib/blockedDates";
 import { sendBookingEmails } from "@/src/lib/mail";
 import { parseBookingPayPalMeta } from "@/src/lib/bookingPaypalMeta";
 
@@ -101,12 +101,8 @@ export async function POST(req: NextRequest) {
         // Salva il booking su Vercel Blob
         await saveBooking(booking);
 
-        // Aggiorna immediatamente blocked-dates.json senza aspettare il cron
-        const store = await readBlockedDates();
-        const existing = new Set(store[meta.suiteId] ?? []);
-        bookingToDates(booking).forEach((d) => existing.add(d));
-        store[meta.suiteId] = Array.from(existing).sort();
-        await writeBlockedDates(store);
+        // Aggiorna immediatamente il calendario diretto (persistente su Blob)
+        await addDirectBookingDates(meta.suiteId, bookingToDates(booking));
 
         void sendBookingEmails({
           suiteId: meta.suiteId,
