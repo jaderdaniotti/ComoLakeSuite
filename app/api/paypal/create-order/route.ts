@@ -127,7 +127,7 @@ export async function POST(req: NextRequest) {
         {
           amount: {
             currency_code: "EUR",
-            value: 0.01.toFixed(2),
+            value: amount.toFixed(2),
           },
           description,
           custom_id: stringifyBookingPayPalMeta(meta),
