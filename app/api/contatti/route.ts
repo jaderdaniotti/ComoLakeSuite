@@ -1,15 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import { sendContactFormEmails } from "@/src/lib/mail";
+import { isValidEmail } from "@/src/lib/email";
 
 const MAX_LEN = {
   nome: 200,
   email: 320,
   messaggio: 10000,
 };
-
-function isValidEmail(s: string): boolean {
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s);
-}
 
 /**
  * POST /api/contatti

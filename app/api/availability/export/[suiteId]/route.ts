@@ -34,14 +34,17 @@ export async function GET(
   { params }: { params: Promise<{ suiteId: string }> }
 ) {
   const { suiteId } = await params;
+  const normalizedSuiteId = suiteId.replace(/\.ics$/i, "");
 
-  if (!suiteId) {
+  if (!normalizedSuiteId) {
     return new NextResponse("suiteId mancante", { status: 400 });
   }
 
   const allBookings = await readBookings();
-  const suiteBookings = allBookings.filter((b) => b.suiteId === suiteId);
-  const suiteLabel = SUITE_LABELS[suiteId] ?? suiteId;
+  const suiteBookings = allBookings.filter(
+    (b) => b.suiteId === normalizedSuiteId
+  );
+  const suiteLabel = SUITE_LABELS[normalizedSuiteId] ?? normalizedSuiteId;
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.comolakesuites.eu";
 
   const events = suiteBookings
@@ -78,7 +81,7 @@ export async function GET(
   return new NextResponse(ical, {
     headers: {
       "Content-Type": "text/calendar; charset=utf-8",
-      "Content-Disposition": `attachment; filename="${suiteId}.ics"`,
+      "Content-Disposition": `attachment; filename="${normalizedSuiteId}.ics"`,
       // Gli OTA aggiornano i feed importati ogni 15-60 min: niente cache lato CDN
       "Cache-Control": "no-store",
     },

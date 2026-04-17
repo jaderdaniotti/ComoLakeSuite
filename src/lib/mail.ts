@@ -11,6 +11,7 @@
  */
 import nodemailer from "nodemailer";
 import { suiteDisplayName } from "@/src/lib/suiteLabels";
+import { isValidEmail } from "@/src/lib/email";
 
 const BRAND = "Como Lake Suites";
 const FOOTER_ADDRESS =
@@ -177,7 +178,8 @@ export async function sendBookingEmails(payload: BookingMailPayload): Promise<vo
   const total = formatEuro(payload.totalEuro);
   const payer = payload.payerEmail?.trim() || null;
   const bookerName = (payload.bookerName ?? "").trim();
-  const bookerEmail = (payload.bookerEmail ?? "").trim() || null;
+  const rawBookerEmail = (payload.bookerEmail ?? "").trim();
+  const bookerEmail = isValidEmail(rawBookerEmail) ? rawBookerEmail : null;
   const bookerPhone = (payload.bookerPhone ?? "").trim();
   const replyToAdmin = bookerEmail || payer || undefined;
 

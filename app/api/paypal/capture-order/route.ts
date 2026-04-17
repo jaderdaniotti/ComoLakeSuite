@@ -3,6 +3,7 @@ import { saveBooking, generateId, bookingToDates } from "@/src/lib/bookings";
 import { addDirectBookingDates } from "@/src/lib/blockedDates";
 import { sendBookingEmails } from "@/src/lib/mail";
 import { parseBookingPayPalMeta } from "@/src/lib/bookingPaypalMeta";
+import { isValidEmail } from "@/src/lib/email";
 
 async function getPayPalAccessToken(): Promise<string> {
   const clientId = process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID!;
@@ -81,6 +82,10 @@ export async function POST(req: NextRequest) {
     if (captureStatus === "COMPLETED" && customId) {
       try {
         const meta = parseBookingPayPalMeta(customId);
+        const bookerEmailStored =
+          isValidEmail(meta.bookerEmail) && meta.bookerEmail
+            ? meta.bookerEmail
+            : payerEmail?.trim() ?? "";
 
         const booking = {
           id: generateId(),
@@ -93,7 +98,7 @@ export async function POST(req: NextRequest) {
           paypalOrderId: captureData.id,
           payerEmail,
           bookerName: meta.bookerName,
-          bookerEmail: meta.bookerEmail,
+          bookerEmail: bookerEmailStored,
           bookerPhone: meta.bookerPhone,
           createdAt: new Date().toISOString(),
         };
@@ -104,19 +109,23 @@ export async function POST(req: NextRequest) {
         // Aggiorna immediatamente il calendario diretto (persistente su Blob)
         await addDirectBookingDates(meta.suiteId, bookingToDates(booking));
 
-        void sendBookingEmails({
-          suiteId: meta.suiteId,
-          checkIn: meta.checkIn,
-          checkOut: meta.checkOut,
-          adults: Number(meta.adults),
-          children: Number(meta.children),
-          totalEuro: amount ? parseFloat(amount) : 0,
-          paypalOrderId: captureData.id,
-          payerEmail,
-          bookerName: meta.bookerName,
-          bookerEmail: meta.bookerEmail,
-          bookerPhone: meta.bookerPhone,
-        }).catch((e) => console.error("capture-order: invio email:", e));
+        try {
+          await sendBookingEmails({
+            suiteId: meta.suiteId,
+            checkIn: meta.checkIn,
+            checkOut: meta.checkOut,
+            adults: Number(meta.adults),
+            children: Number(meta.children),
+            totalEuro: amount ? parseFloat(amount) : 0,
+            paypalOrderId: captureData.id,
+            payerEmail,
+            bookerName: meta.bookerName,
+            bookerEmail: bookerEmailStored,
+            bookerPhone: meta.bookerPhone,
+          });
+        } catch (e) {
+          console.error("capture-order: invio email:", e);
+        }
       } catch (err) {
         // Non bloccare la risposta al client per un errore di persistenza
         console.error("capture-order: errore salvataggio booking:", err);

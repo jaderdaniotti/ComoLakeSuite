@@ -3,6 +3,7 @@ import {
   stringifyBookingPayPalMeta,
   type BookingPayPalMeta,
 } from "@/src/lib/bookingPaypalMeta";
+import { isValidEmail } from "@/src/lib/email";
 
 /**
  * Ottieni un access token OAuth 2.0 da PayPal.
@@ -41,10 +42,6 @@ async function getPayPalAccessToken(): Promise<string> {
  * Body: { amount, suiteId, checkIn, checkOut, adults, children, bookerName, bookerEmail, bookerPhone? }
  * Response: { orderId: string }
  */
-function isValidEmail(s: string): boolean {
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s);
-}
-
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
