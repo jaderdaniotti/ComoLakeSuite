@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { cookies } from "next/headers";
+import Link from "next/link";
 import {
   CircleParking,
   Wifi,
@@ -525,7 +526,7 @@ export default async function ServiziPage() {
 
   return (
     <div className="">
-      <section className=" min-h-[600px] md:min-h-screen">
+      <section className="relative isolate overflow-hidden min-h-[70svh] md:min-h-screen">
         <Image
           src={images.serviziHero}
           alt={t(locale, "Servizi", "Services")}
@@ -534,17 +535,112 @@ export default async function ServiziPage() {
           priority
           sizes=""
         />
-        <div className="absolute inset-0 flex flex-col justify-center bg-linear-to-t items-center from-black/80 to-transparent p-6 md:p-10">
-          <p className="text-lg font-medium uppercase tracking-wide text-center text-bianco/70 ">
+        <div className="absolute inset-0 z-10 flex flex-col justify-center bg-linear-to-t items-center from-black/80 to-transparent px-4 py-10 md:p-10">
+          <p className="text-sm md:text-lg font-medium uppercase tracking-wide text-center text-bianco/70 ">
             {t(
               locale,
               "Tutto ciò che serve per un soggiorno indimenticabile.",
               "Everything you need for an unforgettable stay.",
             )}
           </p>
-          <h1 className="text-3xl font-extralight tracking-tighter text-bianco md:text-9xl">
+          <h1 className="text-4xl font-extralight tracking-tighter text-bianco md:text-9xl">
             {t(locale, "Servizi", "Services")}
           </h1>
+        </div>
+      </section>
+
+      <section className="bg-scuro py-12 md:py-24">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="mx-auto max-w-4xl text-center">
+            <p className="text-xs uppercase tracking-[0.2em] text-bianco/70">
+              {t(locale, "Tour Experience", "Tour Experience")}
+            </p>
+            <h2 className="mt-3 text-3xl font-light tracking-tight text-bianco md:text-5xl">
+              {t(
+                locale,
+                "Tour Lago di Como con private chauffeur",
+                "Como Lake tours with a private chauffeur",
+              )}
+            </h2>
+            <p className="mt-5 text-base leading-relaxed text-bianco/80 md:text-lg">
+              {t(
+                locale,
+                "Scopri i tour proposti da Como Private Driver: percorsi privati tra borghi iconici, panorami unici e soste personalizzabili in base ai tuoi tempi.",
+                "Discover tours by Como Private Driver: private routes through iconic villages, unique views, and customizable stops based on your timing.",
+              )}
+            </p>
+          </div>
+
+          <div className="mt-10 grid gap-4 md:grid-cols-3">
+            <article className="rounded-2xl border border-bianco/15 bg-bianco/5 p-6">
+              <p className="text-sm uppercase tracking-wide text-bianco/60">
+                {t(locale, "Itinerario 1", "Itinerary 1")}
+              </p>
+              <h3 className="mt-2 text-xl font-medium text-bianco">
+                {t(locale, "Natura e Romanticismo", "Nature and Romance")}
+              </h3>
+              <p className="mt-3 text-sm text-bianco/75">
+                {t(
+                  locale,
+                  "Orrido di Bellano, Varenna e Bellagio: dalla natura ai borghi piu suggestivi del lago.",
+                  "Orrido di Bellano, Varenna, and Bellagio: from natural wonders to the lake’s most charming villages.",
+                )}
+              </p>
+            </article>
+
+            <article className="rounded-2xl border border-bianco/15 bg-bianco/5 p-6">
+              <p className="text-sm uppercase tracking-wide text-bianco/60">
+                {t(locale, "Itinerario 2", "Itinerary 2")}
+              </p>
+              <h3 className="mt-2 text-xl font-medium text-bianco">
+                {t(
+                  locale,
+                  "Le Perle del Centro Lago",
+                  "The Pearls of the Central Lake",
+                )}
+              </h3>
+              <p className="mt-3 text-sm text-bianco/75">
+                {t(
+                  locale,
+                  "Lenno, Tremezzo e Bellagio con tappe tra ville storiche e traversate panoramiche.",
+                  "Lenno, Tremezzo, and Bellagio with stops among historic villas and scenic crossings.",
+                )}
+              </p>
+            </article>
+
+            <article className="rounded-2xl border border-bianco/15 bg-bianco/5 p-6">
+              <p className="text-sm uppercase tracking-wide text-bianco/60">
+                {t(locale, "Itinerario 3", "Itinerary 3")}
+              </p>
+              <h3 className="mt-2 text-xl font-medium text-bianco">
+                {t(locale, "Tra Italia e Svizzera", "Between Italy and Switzerland")}
+              </h3>
+              <p className="mt-3 text-sm text-bianco/75">
+                {t(
+                  locale,
+                  "Bellagio, Menaggio e Lugano: un tour internazionale tra eleganza, lago e cultura.",
+                  "Bellagio, Menaggio, and Lugano: an international tour blending elegance, lake views, and culture.",
+                )}
+              </p>
+            </article>
+          </div>
+
+          <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
+            <Link
+              href="https://www.comoprivatedriver.it/tour"
+              target="_blank"
+              className="rounded-full bg-bianco px-6 py-3 text-sm font-semibold text-scuro transition hover:bg-bianco/90"
+            >
+              {t(locale, "Scopri tutti i tour", "See all tours")}
+            </Link>
+            <Link
+              href="https://www.comoprivatedriver.it/"
+              target="_blank"
+              className="rounded-full border border-bianco/60 px-6 py-3 text-sm font-semibold text-bianco transition hover:bg-bianco/10"
+            >
+              {t(locale, "Visita Como Private Driver", "Visit Como Private Driver")}
+            </Link>
+          </div>
         </div>
       </section>
 
