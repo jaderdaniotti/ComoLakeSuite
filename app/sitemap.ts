@@ -18,6 +18,7 @@ const routes: SitemapEntry[] = [
   { pathname: "/le-suites/suite-dante", changeFrequency: "weekly", priority: 0.9 },
   { pathname: "/le-suites/suite-vista-duomo", changeFrequency: "weekly", priority: 0.9 },
   { pathname: "/i-nostri-servizi", changeFrequency: "monthly", priority: 0.85 },
+  { pathname: "/tour", changeFrequency: "monthly", priority: 0.86 },
   { pathname: "/contatti", changeFrequency: "monthly", priority: 0.8 },
   { pathname: "/prenota", changeFrequency: "weekly", priority: 0.8 },
 ];

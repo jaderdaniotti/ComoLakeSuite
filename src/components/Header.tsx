@@ -24,6 +24,7 @@ export default function Header() {
     home: "Home",
     suites: locale === "en" ? "Suites" : "Le Suites",
     services: locale === "en" ? "Services" : "Servizi",
+    tours: locale === "en" ? "Tours" : "Tour",
     contacts: locale === "en" ? "Contacts" : "Contatti",
     openMenu: locale === "en" ? "Open menu" : "Apri menu",
     closeMenu: locale === "en" ? "Close menu" : "Chiudi menu",
@@ -47,7 +48,7 @@ export default function Header() {
       <input id="drawer-nav" type="checkbox" className="drawer-toggle" />
       <div className="drawer-content flex flex-col">
         <header className=" w-full z-50 flex">
-          <div className=" flex w-full md:w-min items-center justify-between px-4 sm:px-6 lg:px-8">
+          <div className=" flex w-full lg:w-min items-center justify-between px-4 sm:px-6 lg:px-8">
             <Link href="/" className="flex items-center justify-center shrink-0" onClick={chiudiTutto}>
               <Image
                 src={images.logobianco}
@@ -59,12 +60,12 @@ export default function Header() {
             <label
               htmlFor="drawer-nav"
               aria-label={labels.openMenu}
-              className="btn btn-square btn-ghost md:hidden text-bianco hover:bg-bianco/10 hover:text-bianco"
+              className="btn btn-square btn-ghost lg:hidden text-bianco hover:bg-bianco/10 hover:text-bianco"
             >
               <Menu className="h-6 w-6" />
             </label>
           </div>
-            <nav className="hidden mx-auto md:flex md:items-center md:gap-8 font-light tracking-wide text-2xl">
+            <nav className="hidden mx-auto lg:flex md:items-center md:gap-8 font-light tracking-wide text-2xl">
               <Link href="/" className="link-nav text-bianco" onClick={chiudiTutto}>
                 {labels.home}
               </Link>
@@ -96,6 +97,9 @@ export default function Header() {
               <Link href="/i-nostri-servizi" className="link-nav text-bianco" onClick={chiudiTutto}>
                 {labels.services}
               </Link>
+              <Link href="/tour" className="link-nav text-bianco" onClick={chiudiTutto}>
+                {labels.tours}
+              </Link>
               <Link href="/contatti" className="link-nav text-bianco" onClick={chiudiTutto}>
                 {labels.contacts}
               </Link>
@@ -106,7 +110,7 @@ export default function Header() {
         </header>
       </div>
 
-      <div className="drawer-side w-full z-60 md:hidden">
+      <div className="drawer-side w-full z-60 lg:hidden">
         <label
           htmlFor="drawer-nav"
           aria-label={labels.closeMenu}
@@ -146,6 +150,15 @@ export default function Header() {
                 onClick={chiudiDrawer}
               >
                 {labels.services}
+              </Link>
+            </li>
+            <li>
+              <Link
+                href="/tour"
+                className="text-bianco rounded-none"
+                onClick={chiudiDrawer}
+              >
+                {labels.tours}
               </Link>
             </li>
             <li>
